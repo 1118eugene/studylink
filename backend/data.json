@@ -1,0 +1,79 @@
+{
+  "sessions": [
+    {
+      "id": 1,
+      "title": "Intro to Recursion",
+      "time": "09:00",
+      "location": "Science Block LT2",
+      "group": "CS101 Beginners Group",
+      "date": "18",
+      "dayOfWeek": "TOMORROW",
+      "status": "Upcoming",
+      "enrollments": []
+    },
+    {
+      "id": 2,
+      "title": "Binary Trees & Heaps Deep Dive",
+      "time": "15:30",
+      "location": "Library Room 3A",
+      "group": "Data Structures Study Circle",
+      "date": "19",
+      "dayOfWeek": "FRIDAY, JUNE 19",
+      "status": "Upcoming",
+      "enrollments": []
+    },
+    {
+      "id": 3,
+      "title": "APT3065 Sprint Review",
+      "time": "14:00",
+      "location": "Lab A",
+      "group": "APT3065 Project Team",
+      "date": "20",
+      "dayOfWeek": "SATURDAY, JUNE 20",
+      "status": "Upcoming",
+      "enrollments": []
+    }
+  ],
+  "groups": [
+    {
+      "id": 1,
+      "name": "CS101 Beginners Group",
+      "description": "Weekly study group for introductory CS",
+      "enrollments": []
+    },
+    {
+      "id": 2,
+      "name": "Data Structures Study Circle",
+      "description": "Deep dives into DS topics",
+      "enrollments": []
+    }
+  ],
+  "resources": [
+    {
+      "id": 1,
+      "title": "Recursion Notes",
+      "type": "pdf",
+      "url": "/assets/recursion.pdf",
+      "downloads": 0,
+      "enrollments": []
+    },
+    {
+      "id": 2,
+      "title": "Binary Trees Slides",
+      "type": "ppt",
+      "url": "/assets/trees.pptx",
+      "downloads": 0,
+      "enrollments": []
+    }
+  ],
+  "users": [
+    {
+      "email": "onyangoeugene@gmail.com",
+      "name": "Eugene onyango Juma"
+    },
+    {
+      "email": "eugeneonyango@gmail.com",
+      "name": "violet eugene"
+    }
+  ]
+}
