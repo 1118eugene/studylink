@@ -1,5 +1,6 @@
 import { useState, type ChangeEvent, type FormEvent } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { apiFetch } from '../assets/images/api';
 
 type SignUpProps = {
   onAuthSuccess: () => void;
@@ -13,6 +14,7 @@ function SignUp({ onAuthSuccess }: SignUpProps) {
   });
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const passwordTooShort = formData.password.length > 0 && formData.password.length < 8;
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -30,10 +32,14 @@ function SignUp({ onAuthSuccess }: SignUpProps) {
       return;
     }
 
+    if (formData.password.trim().length < 8) {
+      setError('Password must be at least 8 characters long.');
+      return;
+    }
+
     try {
-      const response = await fetch('/api/auth/signup', {
+      const response = await apiFetch('/api/auth/signup', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
 
@@ -96,8 +102,11 @@ function SignUp({ onAuthSuccess }: SignUpProps) {
                 value={formData.password}
                 onChange={handleChange}
                 className="form-input"
+                minLength={8}
                 required
               />
+              <p className="form-help">Use at least 8 characters for your password.</p>
+              {passwordTooShort ? <p className="form-error">Password is too short. Add at least 8 characters.</p> : null}
             </div>
 
             {error ? <p className="auth-error">{error}</p> : null}

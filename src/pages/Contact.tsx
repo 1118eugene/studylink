@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { apiFetch } from '../assets/images/api';
 
 function Contact() {
   const [name, setName] = useState('');
@@ -12,9 +13,8 @@ function Contact() {
     setStatus('Sending...');
 
     try {
-      const response = await fetch('/api/contact', {
+      const response = await apiFetch('/api/contact', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, subject, message }),
       });
 

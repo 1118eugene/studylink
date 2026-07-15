@@ -7,6 +7,7 @@ export default function Home() {
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
   const [signupForm, setSignupForm] = useState({ fullName: '', email: '', university: '', password: '' });
+  const signupPasswordTooShort = signupForm.password.length > 0 && signupForm.password.length < 8;
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -18,7 +19,7 @@ export default function Home() {
 
   const handleSignup = (e: React.FormEvent) => {
     e.preventDefault();
-    if (signupForm.fullName && signupForm.email && signupForm.university && signupForm.password) {
+    if (signupForm.fullName && signupForm.email && signupForm.university && signupForm.password.length >= 8) {
       localStorage.setItem('user', JSON.stringify({ email: signupForm.email, name: signupForm.fullName, university: signupForm.university, authenticated: true }));
       navigate('/dashboard');
     }
@@ -61,6 +62,7 @@ export default function Home() {
                     onChange={(e) => setLoginPassword(e.target.value)}
                     required
                   />
+                  <p className="form-help">Use the password you created during sign up.</p>
                 </div>
                 <button type="submit" className="button button-primary" style={{ width: '100%' }}>Sign In</button>
               </form>
@@ -111,8 +113,11 @@ export default function Home() {
                     className="form-input"
                     value={signupForm.password}
                     onChange={(e) => setSignupForm({ ...signupForm, password: e.target.value })}
+                    minLength={8}
                     required
                   />
+                  <p className="form-help">Password must be at least 8 characters long.</p>
+                  {signupPasswordTooShort ? <p className="form-error">Add at least 8 characters before continuing.</p> : null}
                 </div>
                 <button type="submit" className="button button-primary" style={{ width: '100%' }}>Create Account</button>
               </form>

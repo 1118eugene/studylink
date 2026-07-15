@@ -1,47 +1,59 @@
-# StudyLink: A Mobile-Based Student Study Group Coordination and Academic Networking System for University Students
+# StudyLink
 
-StudyLink is a polished React application designed to showcase a mobile-first academic networking platform for university students. The app is built with TypeScript, Vite, and React Router for a modern development workflow.
-## Visual Design
+StudyLink is a private student study-group coordination and academic networking app built with React, TypeScript, Vite, Express, and PostgreSQL.
 
-StudyLink includes a refined student learning visual theme with illustrative banners, study-focused page imagery, and polished layout styling for a professional academic presentation.
-## Features
+## What It Does
 
-- Responsive landing page with student-focused hero messaging
-- Study group coordination features and academic networking highlights
-- Contact and support sections for student inquiries
-- Professional styling with reusable components
-- Fully typed React components and routes
+The app supports authenticated dashboards, study groups, sessions, resources, live enrollment activity, and protected internal pages. The layout now uses a left sidebar so the app feels like a workspace instead of a public landing page.
 
-## Setup
+## Development
 
-1. Install dependencies:
+Install dependencies:
+
 ```bash
 npm install
 ```
 
-2. Run development server:
+Run the app:
+
 ```bash
 npm run dev
 ```
 
-3. Build for production:
+The dev launcher starts the backend, starts Vite on a free port, and opens the site in your browser.
+
+## Production
+
+Build the frontend:
+
 ```bash
 npm run build
 ```
 
-4. Preview the production build:
+Set `DATABASE_URL` for PostgreSQL and `CORS_ORIGIN` for the deployed frontend URL, then start the server with:
+
 ```bash
-npm run preview
+npm run server
 ```
+
+If you want a containerized deployment, build the included Docker image:
+
+```bash
+docker build -t studylink .
+docker run -p 4000:4000 -e DATABASE_URL=... -e CORS_ORIGIN=... studylink
+```
+
+The Node server will serve the built `dist/` frontend automatically when it is present.
 
 ## Project Structure
 
-- `src/` — main application source
-- `src/components/` — reusable React components
-- `src/pages/` — organized page-level views
-- `src/assets/images/` — custom illustrations and visuals
-- `src/data/` — sample property listing data
+- `src/` - frontend application source
+- `src/components/` - shared UI components
+- `src/pages/` - page-level screens
+- `backend/` - API server, auth, and database access
+- `backend/db/` - migrations and seed data
+- `scripts/` - development and migration scripts
 
 ## Notes
 
-This workspace is intended to be a complete React-first project, with full edit access to assets, routes, and UI content. Customize the listings and branding to fit a real apartment or property concept.
+The backend includes a local JSON fallback for development when `DATABASE_URL` is not available, but PostgreSQL is expected for production deployments.

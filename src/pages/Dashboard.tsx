@@ -1,52 +1,94 @@
 import { useEffect, useState } from 'react';
+import { apiFetch } from '../assets/images/api';
 
-interface SessionSummary {
-  id: number;
-  title?: string;
-  enrollments?: number;
+interface EnrollmentActivity {
+  sessionId: number;
+  sessionTitle: string;
+  courseCode: string;
+  name: string;
+  email: string;
+  enrolledAt: string;
 }
 
 function Dashboard() {
   const [sessions, setSessions] = useState<any[]>([]);
+  const [groups, setGroups] = useState<any[]>([]);
+  const [resources, setResources] = useState<any[]>([]);
+  const [activity, setActivity] = useState<EnrollmentActivity[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedSession, setSelectedSession] = useState<any | null>(null);
 
   useEffect(() => {
     let mounted = true;
-    Promise.all([
-      fetch('/api/sessions').then((r) => r.json()),
-      fetch('/api/groups').then((r) => r.json()),
-      fetch('/api/resources').then((r) => r.json()),
-    ])
-      .then(([sData, gData, rData]) => {
+    const loadDashboard = async () => {
+      try {
+        const [sessionsResponse, groupsResponse, resourcesResponse] = await Promise.all([
+          apiFetch('/api/sessions').then((r) => r.json()),
+          apiFetch('/api/groups').then((r) => r.json()),
+          apiFetch('/api/resources').then((r) => r.json()),
+        ]);
+
         if (!mounted) return;
-        setSessions(sData.sessions || []);
-        setGroups(gData.groups || []);
-        setResources(rData.resources || []);
-      })
-      .catch(() => {
+
+        const sessionList = sessionsResponse.sessions || [];
+        const groupList = groupsResponse.groups || [];
+        const resourceList = resourcesResponse.resources || [];
+
+        setSessions(sessionList);
+        setGroups(groupList);
+        setResources(resourceList);
+
+        const activityRows = await Promise.all(sessionList.map(async (session: any) => {
+          const detailResponse = await apiFetch(`/api/sessions/${session.id}`);
+          if (!detailResponse.ok) return [];
+          const detailData = await detailResponse.json();
+          return (detailData.session?.attendees || []).map((attendee: any) => ({
+            sessionId: session.id,
+            sessionTitle: session.title || detailData.session?.title || 'Session',
+            courseCode: session.courseCode || '',
+            name: attendee.name,
+            email: attendee.email,
+            enrolledAt: attendee.enrolledAt,
+          }));
+        }));
+
+        if (!mounted) return;
+
+        const flattened = activityRows
+          .flat()
+          .sort((left, right) => new Date(right.enrolledAt).getTime() - new Date(left.enrolledAt).getTime())
+          .slice(0, 6);
+
+        setActivity(flattened);
+      } catch {
         if (!mounted) return;
         setSessions([]);
         setGroups([]);
         setResources([]);
-      })
-      .finally(() => mounted && setLoading(false));
+        setActivity([]);
+      } finally {
+        if (mounted) {
+          setLoading(false);
+        }
+      }
+    };
+
+    loadDashboard();
 
     return () => {
       mounted = false;
     };
   }, []);
 
-  const [groups, setGroups] = useState<any[]>([]);
-  const [resources, setResources] = useState<any[]>([]);
-
   const totalEnrollments = sessions.reduce((sum, s) => sum + ((s.enrollments && s.enrollments.length) || 0), 0);
+  const totalGroups = groups.length;
+  const totalResources = resources.length;
 
   const stats = [
-    { label: 'Study Groups', value: '0' },
+    { label: 'Study Groups', value: String(totalGroups) },
     { label: 'Sessions', value: String(sessions.length) },
     { label: 'Enrolled Students', value: String(totalEnrollments) },
-    { label: 'Resources', value: '0' },
+    { label: 'Resources', value: String(totalResources) },
   ];
 
   const quickActions = [
@@ -58,7 +100,8 @@ function Dashboard() {
   return (
     <section className="dashboard-page">
       <div className="container">
-        <h1>Dashboard</h1>
+        <h1>Home</h1>
+        <p className="page-description">A private overview of live activity, academic groups, sessions, and resources.</p>
 
         <div className="stats-grid">
           {stats.map((stat) => (
@@ -73,6 +116,33 @@ function Dashboard() {
         </div>
 
         <div className="dashboard-sections">
+          <div className="dashboard-section dashboard-wide">
+            <div className="section-header">
+              <h2>Recent Enrollment Activity</h2>
+              <span className="view-all-link">Live from the database</span>
+            </div>
+
+            {loading ? (
+              <p>Loading activity…</p>
+            ) : activity.length === 0 ? (
+              <div className="empty-state">
+                <p className="empty-text">No enrollment activity yet</p>
+                <p className="empty-help">When someone enrols in a course, the event will appear here.</p>
+              </div>
+            ) : (
+              <div className="activity-feed">
+                {activity.map((item) => (
+                  <article key={`${item.sessionId}-${item.email}-${item.enrolledAt}`} className="activity-card">
+                    <div>
+                      <p className="activity-title">{item.name} enrolled in {item.sessionTitle}</p>
+                      <p className="activity-meta">{item.email} · {item.courseCode || 'No course code'} · {new Date(item.enrolledAt).toLocaleString()}</p>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            )}
+          </div>
+
           <div className="dashboard-section">
             <div className="section-header">
               <h2>Upcoming Sessions</h2>
@@ -92,7 +162,7 @@ function Dashboard() {
                 {sessions.slice(0, 3).map((s) => (
                   <div key={s.id} className="session-preview" onClick={async () => {
                     try {
-                      const res = await fetch(`/api/sessions/${s.id}`);
+                      const res = await apiFetch(`/api/sessions/${s.id}`);
                       if (!res.ok) throw new Error('Failed');
                       const data = await res.json();
                       setSelectedSession(data.session);
@@ -103,7 +173,7 @@ function Dashboard() {
                     }
                   }} style={{ cursor: 'pointer' }}>
                     <h4>{s.title || 'Session'}</h4>
-                    <p className="session-enroll">Enrolled: {(s.enrollments && s.enrollments.length) || 0}</p>
+                    <p className="session-enroll">Enrolled: {(s.enrolledCount ?? (s.enrollments && s.enrollments.length)) || 0}</p>
                   </div>
                 ))}
               </div>
@@ -116,7 +186,7 @@ function Dashboard() {
               {groups.slice(0, 3).map((g) => (
                 <div key={g.id} className="group-preview" onClick={async () => {
                   try {
-                    const res = await fetch(`/api/groups/${g.id}`);
+                    const res = await apiFetch(`/api/groups/${g.id}`);
                     if (!res.ok) throw new Error('Failed');
                     const data = await res.json();
                     setSelectedSession(data.group);
@@ -127,7 +197,7 @@ function Dashboard() {
                   }
                 }} style={{ cursor: 'pointer' }}>
                   <h4>{g.name}</h4>
-                  <p>Members: {(g.enrollments && g.enrollments.length) || 0}</p>
+                  <p>Members: {(g.members ?? (g.enrollments && g.enrollments.length)) || 0}</p>
                 </div>
               ))}
             </div>
@@ -139,7 +209,7 @@ function Dashboard() {
               {resources.slice(0, 3).map((r) => (
                 <div key={r.id} className="resource-preview" onClick={async () => {
                   try {
-                    const res = await fetch(`/api/resources/${r.id}`);
+                    const res = await apiFetch(`/api/resources/${r.id}`);
                     if (!res.ok) throw new Error('Failed');
                     const data = await res.json();
                     setSelectedSession(data.resource);
@@ -150,7 +220,7 @@ function Dashboard() {
                   }
                 }} style={{ cursor: 'pointer' }}>
                   <h4>{r.title}</h4>
-                  <p>Enrolled: {(r.enrollments && r.enrollments.length) || 0}</p>
+                  <p>Enrolled: {(r.downloads ?? (r.enrollments && r.enrollments.length)) || 0}</p>
                 </div>
               ))}
             </div>
@@ -175,12 +245,36 @@ function Dashboard() {
                   <button onClick={() => setSelectedSession(null)}>Close</button>
                 </div>
                 <div className="modal-body">
-                  <p><strong>Enrolled students ({(selectedSession.enrollments && selectedSession.enrollments.length) || 0}):</strong></p>
-                  <ul>
-                    {(selectedSession.enrollments || []).map((u: any) => (
-                      <li key={u.email}>{u.name} — {u.email}</li>
-                    ))}
-                  </ul>
+                  {selectedSession.enrollments && selectedSession.enrollments.length > 0 ? (
+                    <>
+                      <p><strong>Enrolled students ({selectedSession.enrollments.length}):</strong></p>
+                      <ul>
+                        {selectedSession.enrollments.map((u: any) => (
+                          <li key={u.email}>{u.name} — {u.email}</li>
+                        ))}
+                      </ul>
+                    </>
+                  ) : null}
+                  {selectedSession.membersList && selectedSession.membersList.length > 0 ? (
+                    <>
+                      <p><strong>Group members ({selectedSession.membersList.length}):</strong></p>
+                      <ul>
+                        {selectedSession.membersList.map((u: any) => (
+                          <li key={u.email}>{u.name} — {u.email}</li>
+                        ))}
+                      </ul>
+                    </>
+                  ) : null}
+                  {selectedSession.attendees && selectedSession.attendees.length > 0 ? (
+                    <>
+                      <p><strong>Session attendees ({selectedSession.attendees.length}):</strong></p>
+                      <ul>
+                        {selectedSession.attendees.map((u: any) => (
+                          <li key={u.email}>{u.name} — {u.email} — {new Date(u.enrolledAt).toLocaleString()}</li>
+                        ))}
+                      </ul>
+                    </>
+                  ) : null}
                 </div>
               </div>
             </div>

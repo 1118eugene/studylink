@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { apiFetch } from '../assets/images/api';
 
 interface StudyGroup {
   id: number;
@@ -10,11 +11,35 @@ interface StudyGroup {
   members: number;
   image: string;
   description?: string;
+  joinRequirements?: string[];
+  groupRules?: string[];
+  memberBenefits?: string[];
+  newMemberSteps?: string[];
+  whoCanJoin?: string;
+  communicationChannel?: string;
+  scheduleNotes?: string;
+  sessionCount?: number;
 }
 
 function StudyGroups() {
   const [selectedFilter, setSelectedFilter] = useState('All courses');
   const [joinedGroups, setJoinedGroups] = useState<number[]>([]);
+  const [editingGroupId, setEditingGroupId] = useState<number | null>(null);
+  const [groupForm, setGroupForm] = useState({
+    name: '',
+    description: '',
+    courseName: '',
+    courseCode: '',
+    meetingType: 'Hybrid',
+    imageUrl: '',
+    whoCanJoin: '',
+    joinRequirements: '',
+    groupRules: '',
+    memberBenefits: '',
+    newMemberSteps: '',
+    communicationChannel: '',
+    scheduleNotes: '',
+  });
 
   const defaultGroups: StudyGroup[] = [
     {
@@ -82,11 +107,10 @@ function StudyGroups() {
   const [groups, setGroups] = useState<StudyGroup[]>(defaultGroups);
 
   useEffect(() => {
-    fetch('/api/groups')
+    apiFetch('/api/groups')
       .then((r) => r.json())
       .then((data) => {
         if (data && data.groups) {
-          // merge server groups with defaults: keep images/descriptions from defaults when missing on server
           const server: any[] = data.groups;
           const merged = defaultGroups.map((d) => {
             const s = server.find((g) => g.id === d.id);
@@ -95,21 +119,40 @@ function StudyGroups() {
               ...d,
               name: s.name || d.name,
               description: s.description || d.description,
+              course: s.course || d.course,
+              courseCode: s.courseCode || d.courseCode,
+              meetingType: s.meetingType || d.meetingType,
               members: (s.enrollments && s.enrollments.length) || d.members,
+              image: s.image || d.image,
+              joinRequirements: s.joinRequirements || [],
+              groupRules: s.groupRules || [],
+              memberBenefits: s.memberBenefits || [],
+              newMemberSteps: s.newMemberSteps || [],
+              whoCanJoin: s.whoCanJoin || '',
+              communicationChannel: s.communicationChannel || '',
+              scheduleNotes: s.scheduleNotes || '',
+              sessionCount: s.sessionCount || 0,
             } as StudyGroup;
           });
-          // also append any server-only groups
           const serverOnly = server
             .filter((g) => !defaultGroups.some((d) => d.id === g.id))
             .map((g) => ({
               id: g.id,
               name: g.name,
-              course: g.description || '',
-              courseCode: '',
-              meetingType: 'Hybrid' as const,
+              course: g.course || g.description || '',
+              courseCode: g.courseCode || '',
+              meetingType: (g.meetingType || 'Hybrid') as 'In-Person' | 'Online' | 'Hybrid',
               members: (g.enrollments && g.enrollments.length) || 0,
-              image: '',
+              image: g.image || '',
               description: g.description || '',
+              joinRequirements: g.joinRequirements || [],
+              groupRules: g.groupRules || [],
+              memberBenefits: g.memberBenefits || [],
+              newMemberSteps: g.newMemberSteps || [],
+              whoCanJoin: g.whoCanJoin || '',
+              communicationChannel: g.communicationChannel || '',
+              scheduleNotes: g.scheduleNotes || '',
+              sessionCount: g.sessionCount || 0,
             } as StudyGroup));
 
           setGroups([...merged, ...serverOnly]);
@@ -122,11 +165,134 @@ function StudyGroups() {
 
   const filteredGroups = selectedFilter === 'All courses' ? groups : groups.filter((group) => group.courseCode === selectedFilter);
 
-  const handleJoinGroup = (groupId: number) => {
-    if (joinedGroups.includes(groupId)) {
-      setJoinedGroups(joinedGroups.filter((g) => g !== groupId));
-    } else {
-      setJoinedGroups([...joinedGroups, groupId]);
+  const resetGroupForm = () => {
+    setEditingGroupId(null);
+    setGroupForm({
+      name: '',
+      description: '',
+      courseName: '',
+      courseCode: '',
+      meetingType: 'Hybrid',
+      imageUrl: '',
+      whoCanJoin: '',
+      joinRequirements: '',
+      groupRules: '',
+      memberBenefits: '',
+      newMemberSteps: '',
+      communicationChannel: '',
+      scheduleNotes: '',
+    });
+  };
+
+  const loadGroupIntoForm = (group: StudyGroup) => {
+    setEditingGroupId(group.id);
+    setGroupForm({
+      name: group.name || '',
+      description: group.description || '',
+      courseName: group.course || '',
+      courseCode: group.courseCode || '',
+      meetingType: group.meetingType || 'Hybrid',
+      imageUrl: group.image || '',
+      whoCanJoin: group.whoCanJoin || '',
+      joinRequirements: (group.joinRequirements || []).join('\n'),
+      groupRules: (group.groupRules || []).join('\n'),
+      memberBenefits: (group.memberBenefits || []).join('\n'),
+      newMemberSteps: (group.newMemberSteps || []).join('\n'),
+      communicationChannel: group.communicationChannel || '',
+      scheduleNotes: group.scheduleNotes || '',
+    });
+  };
+
+  const saveGroup = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const payload = {
+      name: groupForm.name,
+      description: groupForm.description,
+      courseName: groupForm.courseName,
+      courseCode: groupForm.courseCode,
+      meetingType: groupForm.meetingType,
+      imageUrl: groupForm.imageUrl,
+      whoCanJoin: groupForm.whoCanJoin,
+      joinRequirements: groupForm.joinRequirements.split('\n').map((value) => value.trim()).filter(Boolean),
+      groupRules: groupForm.groupRules.split('\n').map((value) => value.trim()).filter(Boolean),
+      memberBenefits: groupForm.memberBenefits.split('\n').map((value) => value.trim()).filter(Boolean),
+      newMemberSteps: groupForm.newMemberSteps.split('\n').map((value) => value.trim()).filter(Boolean),
+      communicationChannel: groupForm.communicationChannel,
+      scheduleNotes: groupForm.scheduleNotes,
+    };
+
+    try {
+      const response = await apiFetch(editingGroupId ? `/api/groups/${editingGroupId}` : '/api/groups', {
+        method: editingGroupId ? 'PATCH' : 'POST',
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error('Unable to save group');
+      }
+
+      const data = await response.json();
+      const savedGroup = data.group;
+
+      setGroups((current) => {
+        if (editingGroupId) {
+          return current.map((group) => (group.id === savedGroup.id ? { ...group, ...savedGroup } : group));
+        }
+        return [savedGroup, ...current];
+      });
+      resetGroupForm();
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
+      alert('Could not save the group. Please try again.');
+    }
+  };
+
+  const deleteGroup = async (groupId: number) => {
+    if (!window.confirm('Delete this study group?')) {
+      return;
+    }
+
+    try {
+      const response = await apiFetch(`/api/groups/${groupId}`, { method: 'DELETE' });
+      if (!response.ok && response.status !== 204) {
+        throw new Error('Unable to delete group');
+      }
+
+      setGroups((current) => current.filter((group) => group.id !== groupId));
+      if (editingGroupId === groupId) {
+        resetGroupForm();
+      }
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
+      alert('Could not delete the group.');
+    }
+  };
+
+  const handleJoinGroup = async (groupId: number) => {
+    const raw = localStorage.getItem('user');
+    if (!raw || !localStorage.getItem('token')) {
+      window.location.href = '/login';
+      return;
+    }
+
+    try {
+      const res = await apiFetch(`/api/groups/${groupId}/enroll`, { method: 'POST' });
+      if (!res.ok) {
+        throw new Error('Join failed');
+      }
+
+      const data = await res.json();
+      setJoinedGroups((current) => (current.includes(groupId) ? current : [...current, groupId]));
+      if (data?.group) {
+        setGroups((current) => current.map((group) => (group.id === groupId ? { ...group, ...data.group } : group)));
+      }
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
+      alert('Failed to join the group. Please sign in again and try once more.');
     }
   };
 
@@ -138,7 +304,96 @@ function StudyGroups() {
             <h1>Study Groups</h1>
             <p className="page-description">Find a group for your course or start your own.</p>
           </div>
-          <button className="button button-primary">+ New group</button>
+          <button className="button button-primary" onClick={() => resetGroupForm()}>+ New group</button>
+        </div>
+
+        <div className="management-panel">
+          <div className="section-header">
+            <h2>{editingGroupId ? 'Edit Group' : 'Create Group'}</h2>
+            {editingGroupId ? <button className="text-button" onClick={resetGroupForm}>Cancel editing</button> : null}
+          </div>
+
+          <form className="management-form" onSubmit={saveGroup}>
+            <div className="form-grid form-grid-two">
+              <label>
+                <span>Group name</span>
+                <input value={groupForm.name} onChange={(e) => setGroupForm((current) => ({ ...current, name: e.target.value }))} required />
+              </label>
+              <label>
+                <span>Course code</span>
+                <input value={groupForm.courseCode} onChange={(e) => setGroupForm((current) => ({ ...current, courseCode: e.target.value }))} />
+              </label>
+            </div>
+
+            <label>
+              <span>Description</span>
+              <textarea value={groupForm.description} onChange={(e) => setGroupForm((current) => ({ ...current, description: e.target.value }))} rows={3} />
+            </label>
+
+            <div className="form-grid form-grid-two">
+              <label>
+                <span>Course name</span>
+                <input value={groupForm.courseName} onChange={(e) => setGroupForm((current) => ({ ...current, courseName: e.target.value }))} />
+              </label>
+              <label>
+                <span>Meeting type</span>
+                <select value={groupForm.meetingType} onChange={(e) => setGroupForm((current) => ({ ...current, meetingType: e.target.value }))}>
+                  <option>Hybrid</option>
+                  <option>In-Person</option>
+                  <option>Online</option>
+                </select>
+              </label>
+            </div>
+
+            <div className="form-grid form-grid-two">
+              <label>
+                <span>Image URL</span>
+                <input value={groupForm.imageUrl} onChange={(e) => setGroupForm((current) => ({ ...current, imageUrl: e.target.value }))} />
+              </label>
+              <label>
+                <span>Who can join</span>
+                <input value={groupForm.whoCanJoin} onChange={(e) => setGroupForm((current) => ({ ...current, whoCanJoin: e.target.value }))} />
+              </label>
+            </div>
+
+            <div className="form-grid form-grid-two">
+              <label>
+                <span>Join requirements</span>
+                <textarea value={groupForm.joinRequirements} onChange={(e) => setGroupForm((current) => ({ ...current, joinRequirements: e.target.value }))} rows={3} placeholder="One requirement per line" />
+              </label>
+              <label>
+                <span>Group rules</span>
+                <textarea value={groupForm.groupRules} onChange={(e) => setGroupForm((current) => ({ ...current, groupRules: e.target.value }))} rows={3} placeholder="One rule per line" />
+              </label>
+            </div>
+
+            <div className="form-grid form-grid-two">
+              <label>
+                <span>Member benefits</span>
+                <textarea value={groupForm.memberBenefits} onChange={(e) => setGroupForm((current) => ({ ...current, memberBenefits: e.target.value }))} rows={3} placeholder="One benefit per line" />
+              </label>
+              <label>
+                <span>New member steps</span>
+                <textarea value={groupForm.newMemberSteps} onChange={(e) => setGroupForm((current) => ({ ...current, newMemberSteps: e.target.value }))} rows={3} placeholder="One step per line" />
+              </label>
+            </div>
+
+            <div className="form-grid form-grid-two">
+              <label>
+                <span>Communication channel</span>
+                <input value={groupForm.communicationChannel} onChange={(e) => setGroupForm((current) => ({ ...current, communicationChannel: e.target.value }))} />
+              </label>
+              <label>
+                <span>Schedule notes</span>
+                <input value={groupForm.scheduleNotes} onChange={(e) => setGroupForm((current) => ({ ...current, scheduleNotes: e.target.value }))} />
+              </label>
+            </div>
+
+            <div className="form-actions">
+              <button type="submit" className="button button-primary">{editingGroupId ? 'Update group' : 'Create group'}</button>
+              {editingGroupId ? <button type="button" className="button button-secondary" onClick={resetGroupForm}>Reset</button> : null}
+            </div>
+          </form>
         </div>
 
         <select
@@ -170,10 +425,17 @@ function StudyGroups() {
                 </span>
               </div>
               <p className="group-description">{group.description}</p>
+              <div className="group-meta-snippet">
+                <p><strong>New member requirements:</strong> {(group.joinRequirements && group.joinRequirements[0]) || 'Read the welcome notes and attend the intro session.'}</p>
+                <p><strong>Rules:</strong> {(group.groupRules && group.groupRules[0]) || 'Stay respectful and keep discussion academic.'}</p>
+                <p><strong>Benefits:</strong> {(group.memberBenefits && group.memberBenefits[0]) || 'Shared study support and peer learning.'}</p>
+              </div>
                 <div className="group-footer">
                 <p className="group-members">{group.members} members</p>
                 <div className="group-actions">
                   <Link to={`/groups/${group.id}`} className="action-link">View</Link>
+                    <button type="button" className="action-link" onClick={() => loadGroupIntoForm(group)}>Edit</button>
+                    <button type="button" className="action-link action-danger" onClick={() => deleteGroup(group.id)}>Delete</button>
                   <button
                     onClick={() => handleJoinGroup(group.id)}
                     className={`button button-sm ${

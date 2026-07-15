@@ -49,19 +49,45 @@ function start(command, args, name, extraEnv = {}) {
   return child;
 }
 
+function openBrowser(url) {
+  const preferredBrowser = String(process.env.DEV_BROWSER || 'chrome').toLowerCase();
+  const browserCommand = process.platform === 'win32'
+    ? 'cmd'
+    : process.platform === 'darwin'
+      ? 'open'
+      : 'xdg-open';
+
+  const browserArgs = process.platform === 'win32'
+    ? ['/c', 'start', '', preferredBrowser === 'chrome' ? 'chrome' : preferredBrowser, url]
+    : process.platform === 'darwin'
+      ? ['-a', preferredBrowser === 'chrome' ? 'Google Chrome' : preferredBrowser, url]
+      : [url];
+
+  spawn(browserCommand, browserArgs, {
+    cwd: rootDir,
+    stdio: 'ignore',
+    detached: true,
+    shell: process.platform === 'win32',
+  }).unref();
+}
+
 async function main() {
   const preferredPort = Number(process.env.PORT || 4000);
   const backendPort = await getAvailablePort(preferredPort);
   const proxyTarget = `http://localhost:${backendPort}`;
+  const frontendPort = await getAvailablePort(Number(process.env.FRONTEND_PORT || 5180));
+  const frontendUrl = `http://localhost:${frontendPort}`;
 
   console.log(`Starting backend on ${proxyTarget}`);
 
-  const frontend = start(npmCommand, ['run', 'dev:frontend'], 'frontend', {
+  const frontend = start(npmCommand, ['run', 'dev:frontend', '--', '--host', 'localhost', '--port', String(frontendPort), '--strictPort'], 'frontend', {
     VITE_API_PROXY_TARGET: proxyTarget,
   });
   const backend = start(npmCommand, ['run', 'dev:backend'], 'backend', {
     PORT: String(backendPort),
   });
+
+  setTimeout(() => openBrowser(frontendUrl), 1500);
 
   function shutdown() {
     frontend.kill('SIGTERM');

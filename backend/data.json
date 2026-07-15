@@ -1,6 +1,7 @@
 {
   "sessions": [
     {
+      "enrollments": [],
       "id": 1,
       "title": "Intro to Recursion",
       "time": "09:00",
@@ -8,10 +9,10 @@
       "group": "CS101 Beginners Group",
       "date": "18",
       "dayOfWeek": "TOMORROW",
-      "status": "Upcoming",
-      "enrollments": []
+      "status": "Upcoming"
     },
     {
+      "enrollments": [],
       "id": 2,
       "title": "Binary Trees & Heaps Deep Dive",
       "time": "15:30",
@@ -19,10 +20,10 @@
       "group": "Data Structures Study Circle",
       "date": "19",
       "dayOfWeek": "FRIDAY, JUNE 19",
-      "status": "Upcoming",
-      "enrollments": []
+      "status": "Upcoming"
     },
     {
+      "enrollments": [],
       "id": 3,
       "title": "APT3065 Sprint Review",
       "time": "14:00",
@@ -30,50 +31,76 @@
       "group": "APT3065 Project Team",
       "date": "20",
       "dayOfWeek": "SATURDAY, JUNE 20",
-      "status": "Upcoming",
-      "enrollments": []
+      "status": "Upcoming"
     }
   ],
   "groups": [
     {
+      "enrollments": [
+        {
+          "user_id": 3,
+          "email": "eugenonyango@gmail.com",
+          "name": "eugen juma",
+          "joinedAt": 1783969952755
+        }
+      ],
       "id": 1,
       "name": "CS101 Beginners Group",
-      "description": "Weekly study group for introductory CS",
-      "enrollments": []
+      "description": "Weekly study group for introductory CS"
     },
     {
+      "enrollments": [],
       "id": 2,
       "name": "Data Structures Study Circle",
-      "description": "Deep dives into DS topics",
-      "enrollments": []
+      "description": "Deep dives into DS topics"
     }
   ],
   "resources": [
     {
+      "enrollments": [],
       "id": 1,
       "title": "Recursion Notes",
       "type": "pdf",
       "url": "/assets/recursion.pdf",
-      "downloads": 0,
-      "enrollments": []
+      "downloads": 0
     },
     {
+      "enrollments": [],
       "id": 2,
       "title": "Binary Trees Slides",
       "type": "ppt",
       "url": "/assets/trees.pptx",
-      "downloads": 0,
-      "enrollments": []
+      "downloads": 0
     }
   ],
   "users": [
     {
+      "id": 1,
       "email": "onyangoeugene@gmail.com",
-      "name": "Eugene onyango Juma"
+      "full_name": "Eugene onyango Juma",
+      "password_hash": "",
+      "university": "",
+      "role": "student"
     },
     {
+      "id": 2,
       "email": "eugeneonyango@gmail.com",
-      "name": "violet eugene"
+      "full_name": "violet eugene",
+      "password_hash": "",
+      "university": "",
+      "role": "student"
+    },
+    {
+      "id": 3,
+      "email": "eugenonyango@gmail.com",
+      "full_name": "eugen juma",
+      "password_hash": "",
+      "university": "",
+      "role": "student"
     }
-  ]
+  ],
+  "contact_messages": [],
+  "group_enrollments": [],
+  "session_enrollments": [],
+  "resource_enrollments": []
 }

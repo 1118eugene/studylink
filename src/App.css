@@ -979,6 +979,334 @@ nav {
   background: #f3f4f6;
 }
 
+/* Authenticated workspace */
+.authenticated-shell {
+  flex-direction: row;
+  align-items: stretch;
+  min-height: 100vh;
+}
+
+.authenticated-shell main {
+  flex: 1;
+  min-width: 0;
+}
+
+.app-content {
+  background: radial-gradient(circle at top right, rgba(37, 99, 235, 0.06), transparent 30%), #f7f8fc;
+}
+
+.sidebar-shell {
+  width: 280px;
+  min-height: 100vh;
+  position: sticky;
+  top: 0;
+  align-self: flex-start;
+  border-right: 1px solid #dbe4f0;
+  border-bottom: 0;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  background: linear-gradient(180deg, #0f172a 0%, #111b33 100%);
+  color: #e2e8f0;
+}
+
+.sidebar-shell .brand-name {
+  color: #ffffff;
+  font-size: 1.3rem;
+}
+
+.sidebar-shell .subtle,
+.sidebar-user span,
+.sidebar-user-label {
+  color: #94a3b8;
+}
+
+.sidebar-user {
+  padding: 1rem;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: grid;
+  gap: 0.3rem;
+}
+
+.sidebar-user strong {
+  color: #ffffff;
+}
+
+.sidebar-nav {
+  flex-direction: column;
+  gap: 0.5rem;
+  justify-content: flex-start;
+  overflow: visible;
+  padding-bottom: 0;
+}
+
+.sidebar-link {
+  background: transparent;
+  color: #cbd5e1;
+  justify-content: flex-start;
+  border: 1px solid transparent;
+  border-radius: 14px;
+  padding: 0.8rem 1rem;
+}
+
+.sidebar-link:hover,
+.sidebar-link.active {
+  background: rgba(59, 130, 246, 0.16);
+  color: #ffffff;
+  border-color: rgba(148, 163, 184, 0.18);
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.sidebar-profile-link,
+.sidebar-logout {
+  width: 100%;
+  justify-content: center;
+}
+
+.sidebar-profile-link {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+}
+
+.sidebar-logout {
+  background: #f97316;
+  border-color: #f97316;
+  color: #ffffff;
+}
+
+.public-content {
+  min-height: 100vh;
+}
+
+.dashboard-page,
+.discover-page,
+.courses-page,
+.groups-page,
+.sessions-page,
+.profile-page {
+  min-height: calc(100vh - 100px);
+  padding: 2rem 0 3rem;
+}
+
+.dashboard-wide {
+  grid-column: 1 / -1;
+}
+
+.activity-feed {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.activity-card {
+  padding: 1rem 1.1rem;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #eff6ff 0%, #ffffff 100%);
+  border: 1px solid #dbeafe;
+}
+
+.activity-title {
+  margin: 0 0 0.35rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.activity-meta {
+  margin: 0;
+  color: #64748b;
+  font-size: 0.95rem;
+}
+
+.management-panel {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  border-radius: 20px;
+  border: 1px solid #dbe4f0;
+  background: #ffffff;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.06);
+}
+
+.management-form {
+  display: grid;
+  gap: 1rem;
+}
+
+.form-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.form-grid-two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.management-form label {
+  display: grid;
+  gap: 0.55rem;
+  color: #0f172a;
+  font-weight: 600;
+}
+
+.management-form input,
+.management-form textarea,
+.management-form select {
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 14px;
+  padding: 0.9rem 1rem;
+  background: #ffffff;
+  color: #0f172a;
+  font: inherit;
+}
+
+.management-form textarea {
+  resize: vertical;
+}
+
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.text-button,
+.action-danger {
+  color: #b91c1c;
+}
+
+.text-button {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.action-danger {
+  border-color: #fecaca;
+  background: #fff1f2;
+}
+
+.group-actions,
+.session-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  align-items: center;
+}
+
+.sessions-list {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.session-group {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.session-card {
+  display: grid;
+  grid-template-columns: 88px minmax(0, 1fr) auto;
+  gap: 1rem;
+  align-items: start;
+  padding: 1.25rem;
+  border-radius: 20px;
+  border: 1px solid #dbe4f0;
+  background: #ffffff;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.05);
+}
+
+.session-date-block {
+  border-radius: 16px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  padding: 1rem;
+  text-align: center;
+  font-weight: 700;
+}
+
+.session-date-block p {
+  margin: 0;
+}
+
+.session-title,
+.group-title h3 {
+  margin-top: 0;
+}
+
+.session-notes,
+.enrolled-list {
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 14px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+}
+
+.session-notes ul,
+.enrolled-list ul {
+  margin: 0.65rem 0 0;
+  padding-left: 1.1rem;
+  color: #475569;
+}
+
+.session-status {
+  justify-self: end;
+  align-self: start;
+  padding: 0.45rem 0.8rem;
+  border-radius: 999px;
+  background: #ecfccb;
+  color: #3f6212;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+@media (max-width: 1080px) {
+  .authenticated-shell {
+    flex-direction: column;
+  }
+
+  .sidebar-shell {
+    width: 100%;
+    min-height: auto;
+    position: static;
+    border-right: 0;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+  }
+}
+
+@media (max-width: 720px) {
+  .form-grid-two,
+  .discover-filters,
+  .session-card {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-sections {
+    grid-template-columns: 1fr;
+  }
+
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .group-actions,
+  .session-actions,
+  .form-actions {
+    width: 100%;
+  }
+}
+
 .course-enroll-btn.enrolled {
   background: #2563eb;
   color: #ffffff;

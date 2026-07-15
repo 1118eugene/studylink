@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { apiFetch } from '../assets/images/api';
 
 function GroupDetail() {
   const { id } = useParams();
@@ -9,7 +10,7 @@ function GroupDetail() {
 
   useEffect(() => {
     if (!id) return;
-    fetch(`/api/groups/${id}`)
+    apiFetch(`/api/groups/${id}`)
       .then((r) => {
         if (!r.ok) throw new Error('Not found');
         return r.json();
@@ -21,15 +22,16 @@ function GroupDetail() {
 
   const handleJoin = async () => {
     const raw = localStorage.getItem('user');
-    if (!raw) {
+    if (!raw || !localStorage.getItem('token')) {
       navigate('/login');
       return;
     }
-    const user = JSON.parse(raw);
+
     try {
-      const res = await fetch(`/api/groups/${id}/enroll`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ user }) });
+      const res = await apiFetch(`/api/groups/${id}/enroll`, { method: 'POST' });
       if (!res.ok) throw new Error('Failed');
-      const data = await res.json();
+      const refreshed = await apiFetch(`/api/groups/${id}`);
+      const data = await refreshed.json();
       setGroup(data.group);
       alert('Joined group');
     } catch (err) {
@@ -50,8 +52,10 @@ function GroupDetail() {
       </div>
 
       <div className="group-meta">
-        <p><strong>Members:</strong> {(group.enrollments && group.enrollments.length) || 0}</p>
-        <p><strong>How we meet:</strong> {group.meeting || 'Hybrid / Check schedule'}</p>
+        <p><strong>Members:</strong> {group.members || (group.membersList && group.membersList.length) || 0}</p>
+        <p><strong>How we meet:</strong> {group.meetingType || 'Hybrid / Check schedule'}</p>
+        <p><strong>Who can join:</strong> {group.whoCanJoin || 'Students enrolled in the related course or approved by a moderator.'}</p>
+        <p><strong>Communication:</strong> {group.communicationChannel || 'Dashboard announcements and a shared study chat.'}</p>
       </div>
 
       <div className="group-actions">
@@ -61,20 +65,62 @@ function GroupDetail() {
       <section className="group-section">
         <h2>What to expect</h2>
         <p>
-          This group focuses on collaborative learning, regular practice sessions, and shared resources.
-          Before joining, expect weekly meetings, a shared channel for coordination, and a study plan.
+          {group.description || 'This group focuses on collaborative learning, regular practice sessions, and shared resources.'}
         </p>
         <p>
-          Specific meeting times and course tasks are posted by the group owner. Participation expectations and code of conduct
-          are maintained in the group's pinned notes.
+          {group.scheduleNotes || 'Specific meeting times, course tasks, and participation expectations are posted by the group owner.'}
         </p>
       </section>
 
       <section className="group-section">
-        <h2>Enrolled students</h2>
-        {group.enrollments && group.enrollments.length > 0 ? (
+        <h2>New member requirements</h2>
+        {group.joinRequirements && group.joinRequirements.length > 0 ? (
           <ul>
-            {group.enrollments.map((u: any) => (
+            {group.joinRequirements.map((item: string) => <li key={item}>{item}</li>)}
+          </ul>
+        ) : (
+          <p>Read the welcome notes, attend the orientation, and introduce yourself to the group.</p>
+        )}
+      </section>
+
+      <section className="group-section">
+        <h2>Rules and regulations</h2>
+        {group.groupRules && group.groupRules.length > 0 ? (
+          <ul>
+            {group.groupRules.map((item: string) => <li key={item}>{item}</li>)}
+          </ul>
+        ) : (
+          <p>Be respectful, keep discussions academic, and follow the moderator's instructions.</p>
+        )}
+      </section>
+
+      <section className="group-section">
+        <h2>What you get when you join</h2>
+        {group.memberBenefits && group.memberBenefits.length > 0 ? (
+          <ul>
+            {group.memberBenefits.map((item: string) => <li key={item}>{item}</li>)}
+          </ul>
+        ) : (
+          <p>Shared notes, peer support, scheduled sessions, and structured academic help.</p>
+        )}
+      </section>
+
+      <section className="group-section">
+        <h2>First week checklist</h2>
+        {group.newMemberSteps && group.newMemberSteps.length > 0 ? (
+          <ul>
+            {group.newMemberSteps.map((item: string) => <li key={item}>{item}</li>)}
+          </ul>
+        ) : (
+          <p>Introduce yourself, review the study plan, and join the first meeting.</p>
+        )}
+      </section>
+
+      <section className="group-section">
+        <h2>Enrolled students</h2>
+        {group.membersList && group.membersList.length > 0 ? (
+          <ul>
+            {group.membersList.map((u: any) => (
               <li key={u.email}>{u.name} — {u.email} — {new Date(u.enrolledAt).toLocaleString()}</li>
             ))}
           </ul>
@@ -85,32 +131,22 @@ function GroupDetail() {
 
       <section className="group-section">
         <h2>Related sessions</h2>
-        <RelatedSessions groupName={group.name} />
+        <RelatedSessions sessions={group.sessions || []} />
       </section>
     </section>
   );
 }
 
-function RelatedSessions({ groupName }: { groupName: string }) {
-  const [sessions, setSessions] = useState<any[]>([]);
-
-  useEffect(() => {
-    fetch('/api/sessions')
-      .then((r) => r.json())
-      .then((data) => {
-        if (data && data.sessions) {
-          setSessions(data.sessions.filter((s: any) => String(s.group || '').toLowerCase().includes(groupName.toLowerCase())));
-        }
-      })
-      .catch(() => setSessions([]));
-  }, [groupName]);
-
+function RelatedSessions({ sessions }: { sessions: any[] }) {
   if (!sessions.length) return <p>No related sessions found.</p>;
 
   return (
     <ul>
       {sessions.map((s) => (
-        <li key={s.id}>{s.title} — {s.time} — Enrolled: {(s.enrollments && s.enrollments.length) || 0}</li>
+        <li key={s.id}>
+          {s.title} — {s.time} — Enrolled: {s.enrolledCount || 0}
+          {s.prepNotes && s.prepNotes.length > 0 ? ` — Prep: ${s.prepNotes[0]}` : ''}
+        </li>
       ))}
     </ul>
   );

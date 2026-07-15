@@ -1,5 +1,6 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { apiFetch } from '../assets/images/api';
 type LoginProps = {
   onAuthSuccess: () => void;
 };
@@ -21,11 +22,8 @@ function Login({ onAuthSuccess }: LoginProps) {
     setError('');
 
     try {
-      const response = await fetch(
-  `${import.meta.env.VITE_API_BASE_URL}/api/auth/login`,
-  {
+      const response = await apiFetch('/api/auth/login', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: email.trim(), password }),
       });
 
@@ -75,6 +73,7 @@ function Login({ onAuthSuccess }: LoginProps) {
                 className="form-input"
                 required
               />
+              <p className="form-help">Use the password you created when you signed up.</p>
             </div>
 
             {error ? <p className="auth-error">{error}</p> : null}
