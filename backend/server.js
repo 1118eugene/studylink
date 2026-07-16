@@ -3,7 +3,17 @@ import cors from 'cors';
 import fs from 'fs';
 import path from 'path';
 import { createAuthToken, getBearerToken, hashPassword, verifyAuthToken, verifyPassword } from './lib/auth.js';
-import { healthcheck, isLocalStore, query } from './lib/db.js';
+import {
+  enrollInCourse,
+  healthcheck,
+  isLocalStore,
+  listClassmates,
+  listCourses,
+  loadCourseDetails,
+  loadUserProfile,
+  query,
+  updateUserProfile,
+} from './lib/db.js';
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -70,6 +80,9 @@ function toPublicUser(row) {
     name: row.full_name,
     university: row.university || '',
     role: row.role || 'student',
+    major: row.major || '',
+    yearOfStudy: row.year_of_study || '',
+    bio: row.bio || '',
   };
 }
 
@@ -121,7 +134,7 @@ function toResourceSummary(row) {
   return {
     id: row.id,
     title: row.title,
-    type: row.resource_type,
+    type: row.resource_type || row.type,
     url: row.url,
     description: row.description || '',
     usageNotes: row.usage_notes || '',
@@ -132,7 +145,7 @@ function toResourceSummary(row) {
 
 async function findUserByEmail(email) {
   const result = await query(
-    'SELECT id, email, full_name, university, role, password_hash FROM users WHERE lower(email) = lower($1) LIMIT 1;',
+    'SELECT id, email, full_name, university, role, password_hash, major, year_of_study, bio FROM users WHERE lower(email) = lower($1) LIMIT 1;',
     [email],
   );
   return result.rows[0] || null;
@@ -140,7 +153,7 @@ async function findUserByEmail(email) {
 
 async function findUserById(id) {
   const result = await query(
-    'SELECT id, email, full_name, university, role FROM users WHERE id = $1 LIMIT 1;',
+    'SELECT id, email, full_name, university, role, major, year_of_study, bio FROM users WHERE id = $1 LIMIT 1;',
     [id],
   );
   return result.rows[0] || null;
@@ -270,6 +283,57 @@ app.post('/api/auth/logout', (_req, res) => {
   return res.json({ message: 'Logged out successfully.' });
 });
 
+app.get('/api/profile', requireAuth, async (req, res) => {
+  const profile = await loadUserProfile(req.user.id);
+  if (!profile) {
+    return res.status(404).json({ message: 'Profile not found.' });
+  }
+
+  return res.json(profile);
+});
+
+app.patch('/api/profile', requireAuth, async (req, res) => {
+  const profile = await updateUserProfile(req.user.id, req.body || {});
+  if (!profile) {
+    return res.status(404).json({ message: 'Profile not found.' });
+  }
+
+  return res.json(profile);
+});
+
+app.get('/api/classmates', requireAuth, async (req, res) => {
+  const classmates = await listClassmates({
+    viewerUserId: req.user.id,
+    search: req.query.search || '',
+    courseCode: req.query.courseCode || '',
+  });
+
+  return res.json({ classmates });
+});
+
+app.get('/api/courses', requireAuth, async (req, res) => {
+  const courses = await listCourses(req.user.id);
+  return res.json({ courses });
+});
+
+app.get('/api/courses/:id', requireAuth, async (req, res) => {
+  const course = await loadCourseDetails(req.params.id, req.user.id);
+  if (!course) {
+    return res.status(404).json({ message: 'Course not found.' });
+  }
+
+  return res.json({ course });
+});
+
+app.post('/api/courses/:id/enroll', requireAuth, async (req, res) => {
+  const course = await enrollInCourse(Number(req.params.id), req.user.id);
+  if (!course) {
+    return res.status(404).json({ message: 'Course not found.' });
+  }
+
+  return res.json({ course });
+});
+
 app.post('/api/contact', async (req, res) => {
   const { name, email, subject, message } = req.body;
 
@@ -286,7 +350,7 @@ app.post('/api/contact', async (req, res) => {
   return res.json({ message: 'Contact request received. Our team will follow up shortly.' });
 });
 
-app.get('/api/groups', async (_req, res) => {
+app.get('/api/groups', requireAuth, async (_req, res) => {
   const result = await query(
     `SELECT
       g.*,
@@ -299,7 +363,7 @@ app.get('/api/groups', async (_req, res) => {
   return res.json({ groups: result.rows.map(toGroupSummary) });
 });
 
-app.get('/api/groups/:id', async (req, res) => {
+app.get('/api/groups/:id', requireAuth, async (req, res) => {
   const id = Number(req.params.id);
   const groupRow = await loadGroupById(id);
   if (!groupRow) {
@@ -505,7 +569,7 @@ app.post('/api/groups/:id/enroll', requireAuth, async (req, res) => {
   return res.json({ group: toGroupSummary(updated) });
 });
 
-app.get('/api/sessions', async (_req, res) => {
+app.get('/api/sessions', requireAuth, async (_req, res) => {
   const result = await query(
     `SELECT
       s.*,
@@ -520,7 +584,7 @@ app.get('/api/sessions', async (_req, res) => {
   return res.json({ sessions: result.rows.map(toSessionSummary) });
 });
 
-app.get('/api/sessions/:id', async (req, res) => {
+app.get('/api/sessions/:id', requireAuth, async (req, res) => {
   const id = Number(req.params.id);
   const sessionRow = await loadSessionById(id);
   if (!sessionRow) {
@@ -686,7 +750,7 @@ app.post('/api/sessions/:id/enroll', requireAuth, async (req, res) => {
   return res.json({ session: toSessionSummary(updated) });
 });
 
-app.get('/api/resources', async (_req, res) => {
+app.get('/api/resources', requireAuth, async (_req, res) => {
   const result = await query(
     `SELECT
       r.*,
@@ -698,7 +762,7 @@ app.get('/api/resources', async (_req, res) => {
   return res.json({ resources: result.rows.map(toResourceSummary) });
 });
 
-app.get('/api/resources/:id', async (req, res) => {
+app.get('/api/resources/:id', requireAuth, async (req, res) => {
   const id = Number(req.params.id);
   const resourceRow = await loadResourceById(id);
   if (!resourceRow) {
@@ -837,9 +901,13 @@ app.post('/api/resources/:id/enroll', requireAuth, async (req, res) => {
 app.get('/api/health', async (_req, res) => {
   try {
     await healthcheck();
-    res.json({ status: 'ok', database: 'connected' });
+    if (isLocalStore()) {
+      return res.json({ status: 'degraded', database: 'local-fallback' });
+    }
+
+    return res.json({ status: 'ok', database: 'connected' });
   } catch {
-    res.status(503).json({ status: 'degraded', database: 'unavailable' });
+    return res.status(503).json({ status: 'degraded', database: 'unavailable' });
   }
 });
 
@@ -867,6 +935,14 @@ app.use((_req, res) => {
 });
 
 async function start() {
+  if (process.env.NODE_ENV === 'production' && isLocalStore()) {
+    throw new Error('DATABASE_URL is required in production. Refusing to start with the local fallback store.');
+  }
+
+  if (process.env.NODE_ENV === 'production' && (!process.env.AUTH_SECRET || process.env.AUTH_SECRET === 'dev-auth-secret-change-me')) {
+    throw new Error('AUTH_SECRET must be configured in production.');
+  }
+
   await healthcheck();
   app.listen(PORT, () => {
     // eslint-disable-next-line no-console

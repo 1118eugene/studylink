@@ -1,6 +1,7 @@
 import { useState, type ChangeEvent, type FormEvent } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { apiFetch } from '../assets/images/api';
+import { setStoredAuth } from '../lib/session';
 
 type SignUpProps = {
   onAuthSuccess: () => void;
@@ -10,6 +11,7 @@ function SignUp({ onAuthSuccess }: SignUpProps) {
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
+    university: '',
     password: '',
   });
   const [error, setError] = useState('');
@@ -27,7 +29,7 @@ function SignUp({ onAuthSuccess }: SignUpProps) {
     e.preventDefault();
     setError('');
 
-    if (!formData.fullName.trim() || !formData.email.trim() || !formData.password.trim()) {
+    if (!formData.fullName.trim() || !formData.email.trim() || !formData.university.trim() || !formData.password.trim()) {
       setError('Please fill in all fields to continue.');
       return;
     }
@@ -50,8 +52,7 @@ function SignUp({ onAuthSuccess }: SignUpProps) {
       }
 
       const data = await response.json();
-      localStorage.setItem('user', JSON.stringify(data.user));
-      localStorage.setItem('token', data.token);
+      setStoredAuth(data.user, data.token);
       onAuthSuccess();
       navigate('/dashboard');
     } catch (err) {
@@ -87,6 +88,19 @@ function SignUp({ onAuthSuccess }: SignUpProps) {
                 name="email"
                 placeholder="Enter your email"
                 value={formData.email}
+                onChange={handleChange}
+                className="form-input"
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label>University</label>
+              <input
+                type="text"
+                name="university"
+                placeholder="USIU-Africa"
+                value={formData.university}
                 onChange={handleChange}
                 className="form-input"
                 required

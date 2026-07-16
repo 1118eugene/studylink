@@ -42,6 +42,12 @@
           "email": "eugenonyango@gmail.com",
           "name": "eugen juma",
           "joinedAt": 1783969952755
+        },
+        {
+          "user_id": 4,
+          "email": "simeonodhiambo57@gmail.com",
+          "name": "simeon",
+          "joinedAt": 1784137730084
         }
       ],
       "id": 1,
@@ -53,6 +59,39 @@
       "id": 2,
       "name": "Data Structures Study Circle",
       "description": "Deep dives into DS topics"
+    },
+    {
+      "id": 3,
+      "name": "test",
+      "description": "test",
+      "course_name": "test",
+      "course_code": "1200",
+      "meeting_type": "In-Person",
+      "image_url": null,
+      "who_can_join": "anyone",
+      "join_requirements": [
+        "test"
+      ],
+      "group_rules": [
+        "test"
+      ],
+      "member_benefits": [
+        "test"
+      ],
+      "new_member_steps": [
+        "test"
+      ],
+      "communication_channel": "watsapp",
+      "schedule_notes": "test",
+      "owner_user_id": 4,
+      "enrollments": [
+        {
+          "user_id": 4,
+          "email": "simeonodhiambo57@gmail.com",
+          "name": "simeon",
+          "joinedAt": 1784137825849
+        }
+      ]
     }
   ],
   "resources": [
@@ -95,6 +134,14 @@
       "email": "eugenonyango@gmail.com",
       "full_name": "eugen juma",
       "password_hash": "",
+      "university": "",
+      "role": "student"
+    },
+    {
+      "id": 4,
+      "email": "simeonodhiambo57@gmail.com",
+      "full_name": "simeon",
+      "password_hash": "scrypt$9ad3ce0156815401215f7af27914f222$8bb2f06ede245bf95cfc77481d11e1ff643962e08872ef5cb742828fae25b8918a0d09901010e234e90288be88a7a2f14caead81d3cd39b716a81fa8fd156461",
       "university": "",
       "role": "student"
     }

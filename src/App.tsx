@@ -6,32 +6,33 @@ import SignUp from './pages/SignUp';
 import Dashboard from './pages/Dashboard';
 import DiscoverClassmates from './pages/DiscoverClassmates';
 import Courses from './pages/Courses';
+import CourseDetail from './pages/CourseDetail';
 import StudyGroups from './pages/StudyGroups';
 import Sessions from './pages/Sessions';
 import Profile from './pages/Profile';
 import GroupDetail from './pages/GroupDetail';
+import Resources from './pages/Resources';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import './App.css';
+import './workspace.css';
+import { getStoredUser } from './lib/session';
 
 type ProtectedRouteProps = {
   children: ReactNode;
 };
 
 function ProtectedRoute({ children }: ProtectedRouteProps) {
-  return localStorage.getItem('user') ? <>{children}</> : <Navigate to="/login" replace />;
+  return getStoredUser() ? <>{children}</> : <Navigate to="/login" replace />;
 }
 
 function App() {
   const location = useLocation();
-  const [isAuthenticated, setIsAuthenticated] = useState(() => !!localStorage.getItem('user'));
+  const [isAuthenticated, setIsAuthenticated] = useState(() => !!getStoredUser());
 
   useEffect(() => {
-    setIsAuthenticated(!!localStorage.getItem('user'));
+    setIsAuthenticated(!!getStoredUser());
   }, [location.pathname]);
-
-  const isAuthPage = ['/login', '/signup'].includes(location.pathname);
-  const isProtectedPage = ['/dashboard', '/discover', '/courses', '/groups', '/sessions', '/profile', '/about', '/contact'].includes(location.pathname);
 
   return (
     <div className={`app-shell ${isAuthenticated ? 'authenticated-shell' : 'public-shell'}`}>
@@ -51,9 +52,11 @@ function App() {
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/discover" element={<ProtectedRoute><DiscoverClassmates /></ProtectedRoute>} />
           <Route path="/courses" element={<ProtectedRoute><Courses /></ProtectedRoute>} />
+          <Route path="/courses/:id" element={<ProtectedRoute><CourseDetail /></ProtectedRoute>} />
           <Route path="/groups" element={<ProtectedRoute><StudyGroups /></ProtectedRoute>} />
           <Route path="/groups/:id" element={<ProtectedRoute><GroupDetail /></ProtectedRoute>} />
           <Route path="/sessions" element={<ProtectedRoute><Sessions /></ProtectedRoute>} />
+          <Route path="/resources" element={<ProtectedRoute><Resources /></ProtectedRoute>} />
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           <Route path="*" element={<Navigate to={isAuthenticated ? '/dashboard' : '/login'} replace />} />
         </Routes>

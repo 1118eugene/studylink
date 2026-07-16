@@ -1,6 +1,7 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { apiFetch } from '../assets/images/api';
+import { getStoredUser, setStoredAuth } from '../lib/session';
 type LoginProps = {
   onAuthSuccess: () => void;
 };
@@ -12,7 +13,7 @@ function Login({ onAuthSuccess }: LoginProps) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (localStorage.getItem('user')) {
+    if (getStoredUser()) {
       navigate('/dashboard');
     }
   }, [navigate]);
@@ -34,8 +35,7 @@ function Login({ onAuthSuccess }: LoginProps) {
       }
 
       const data = await response.json();
-      localStorage.setItem('user', JSON.stringify(data.user));
-      localStorage.setItem('token', data.token);
+      setStoredAuth(data.user, data.token);
       onAuthSuccess();
       navigate('/dashboard');
     } catch (err) {

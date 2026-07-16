@@ -1,9 +1,9 @@
 import { NavLink, useNavigate } from 'react-router-dom';
+import { clearStoredAuth, getStoredUser, getInitials } from '../lib/session';
 
 function AuthHeader() {
   const navigate = useNavigate();
-  const storedUser = localStorage.getItem('user');
-  const user = storedUser ? JSON.parse(storedUser) : null;
+  const user = getStoredUser();
 
   const navLinks = [
     { label: 'Home', path: '/dashboard' },
@@ -11,12 +11,13 @@ function AuthHeader() {
     { label: 'Courses', path: '/courses' },
     { label: 'Groups', path: '/groups' },
     { label: 'Sessions', path: '/sessions' },
+    { label: 'Resources', path: '/resources' },
     { label: 'About', path: '/about' },
     { label: 'Contact', path: '/contact' },
   ];
 
   const handleLogout = () => {
-    localStorage.removeItem('user');
+    clearStoredAuth();
     navigate('/');
   };
 
@@ -29,6 +30,7 @@ function AuthHeader() {
 
       <div className="sidebar-user">
         <p className="sidebar-user-label">Signed in as</p>
+        <div className="sidebar-user-badge">{getInitials(user?.name || 'Student')}</div>
         <strong>{user?.name || 'Student'}</strong>
         <span>{user?.email || 'No email found'}</span>
       </div>

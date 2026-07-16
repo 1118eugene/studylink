@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { apiFetch } from '../assets/images/api';
 
 function GroupDetail() {
@@ -9,11 +9,16 @@ function GroupDetail() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!id) return;
+    if (!id) {
+      return;
+    }
+
     apiFetch(`/api/groups/${id}`)
-      .then((r) => {
-        if (!r.ok) throw new Error('Not found');
-        return r.json();
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Not found');
+        }
+        return response.json();
       })
       .then((data) => setGroup(data.group))
       .catch(() => setGroup(null))
@@ -21,134 +26,160 @@ function GroupDetail() {
   }, [id]);
 
   const handleJoin = async () => {
-    const raw = localStorage.getItem('user');
-    if (!raw || !localStorage.getItem('token')) {
-      navigate('/login');
-      return;
-    }
-
     try {
-      const res = await apiFetch(`/api/groups/${id}/enroll`, { method: 'POST' });
-      if (!res.ok) throw new Error('Failed');
+      const response = await apiFetch(`/api/groups/${id}/enroll`, { method: 'POST' });
+      if (!response.ok) {
+        throw new Error('Failed');
+      }
+
       const refreshed = await apiFetch(`/api/groups/${id}`);
       const data = await refreshed.json();
       setGroup(data.group);
-      alert('Joined group');
-    } catch (err) {
+    } catch (error) {
       // eslint-disable-next-line no-console
-      console.error(err);
-      alert('Failed to join group');
+      console.error(error);
+      navigate('/login');
     }
   };
 
-  if (loading) return <div className="container"><p>Loading group…</p></div>;
-  if (!group) return <div className="container"><p>Group not found.</p></div>;
+  if (loading) {
+    return (
+      <section className="workspace-page">
+        <div className="container workspace-loading-card">
+          <p>Loading group...</p>
+        </div>
+      </section>
+    );
+  }
+
+  if (!group) {
+    return (
+      <section className="workspace-page">
+        <div className="container workspace-loading-card">
+          <p>Group not found.</p>
+        </div>
+      </section>
+    );
+  }
 
   return (
-    <section className="group-detail container">
-      <div className="page-header">
-        <h1>{group.name}</h1>
-        <p className="page-description">{group.description}</p>
+    <section className="workspace-page">
+      <div className="container workspace-stack">
+        <section className="detail-hero-card">
+          <img src={group.image || 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1200&q=80'} alt={group.name} className="detail-hero-image" />
+          <div className="detail-hero-copy">
+            <p className="workspace-eyebrow">{group.courseCode || 'Study Group'}</p>
+            <h1>{group.name}</h1>
+            <p className="workspace-lead">{group.description}</p>
+
+            <div className="detail-chip-row">
+              <span className="detail-chip">{group.meetingType || 'Hybrid'}</span>
+              <span className="detail-chip">{group.members || group.membersList?.length || 0} members</span>
+              <span className="detail-chip">{group.sessions?.length || 0} linked sessions</span>
+            </div>
+
+            <div className="detail-action-row">
+              <button className="button button-primary" onClick={handleJoin}>Join this group</button>
+              {group.courseCode ? <Link to="/courses" className="button button-secondary">Open courses</Link> : null}
+            </div>
+          </div>
+        </section>
+
+        <div className="detail-layout">
+          <section className="detail-panel">
+            <h2>How this group runs</h2>
+            <div className="detail-copy-stack">
+              <p><strong>Who can join:</strong> {group.whoCanJoin || 'Students enrolled in the related course or approved by a moderator.'}</p>
+              <p><strong>Communication:</strong> {group.communicationChannel || 'Dashboard announcements and a shared study chat.'}</p>
+              <p><strong>Schedule notes:</strong> {group.scheduleNotes || 'Specific meeting times and participation expectations are posted by the group owner.'}</p>
+            </div>
+          </section>
+
+          <section className="detail-panel">
+            <h2>New member checklist</h2>
+            <ul className="detail-list">
+              {(group.newMemberSteps && group.newMemberSteps.length > 0
+                ? group.newMemberSteps
+                : ['Introduce yourself to the group.', 'Review the shared study plan.', 'Join the next live session.'])
+                .map((item: string) => <li key={item}>{item}</li>)}
+            </ul>
+          </section>
+        </div>
+
+        <div className="detail-layout">
+          <section className="detail-panel">
+            <h2>Requirements and rules</h2>
+            <div className="detail-card-grid">
+              <article className="detail-summary-card">
+                <strong>Join requirements</strong>
+                <ul className="detail-list compact-list">
+                  {(group.joinRequirements && group.joinRequirements.length > 0 ? group.joinRequirements : ['Read the welcome notes and attend the intro session.'])
+                    .map((item: string) => <li key={item}>{item}</li>)}
+                </ul>
+              </article>
+              <article className="detail-summary-card">
+                <strong>Group rules</strong>
+                <ul className="detail-list compact-list">
+                  {(group.groupRules && group.groupRules.length > 0 ? group.groupRules : ['Stay respectful and keep discussion academic.'])
+                    .map((item: string) => <li key={item}>{item}</li>)}
+                </ul>
+              </article>
+              <article className="detail-summary-card">
+                <strong>Member benefits</strong>
+                <ul className="detail-list compact-list">
+                  {(group.memberBenefits && group.memberBenefits.length > 0 ? group.memberBenefits : ['Shared notes, peer support, and structured academic help.'])
+                    .map((item: string) => <li key={item}>{item}</li>)}
+                </ul>
+              </article>
+            </div>
+          </section>
+
+          <section className="detail-panel">
+            <div className="section-header">
+              <h2>Current members</h2>
+              <span className="panel-pill">{group.membersList?.length || 0} saved</span>
+            </div>
+            {group.membersList && group.membersList.length > 0 ? (
+              <div className="member-list">
+                {group.membersList.map((member: any) => (
+                  <article key={member.email} className="member-list-card">
+                    <div>
+                      <strong>{member.name}</strong>
+                      <p>{member.email}</p>
+                    </div>
+                    <div className="member-list-meta">
+                      <span>{new Date(member.enrolledAt).toLocaleString()}</span>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            ) : (
+              <p>No members yet. Be the first to join.</p>
+            )}
+          </section>
+        </div>
+
+        <section className="detail-panel">
+          <div className="section-header">
+            <h2>Related sessions</h2>
+            <span className="panel-pill">{group.sessions?.length || 0} sessions</span>
+          </div>
+          <div className="detail-card-grid">
+            {(group.sessions || []).length > 0 ? (
+              group.sessions.map((session: any) => (
+                <article key={session.id} className="detail-summary-card">
+                  <strong>{session.title}</strong>
+                  <p>{session.startsAt ? new Date(session.startsAt).toLocaleString() : session.time || 'Time to be confirmed'}</p>
+                  <span>{session.enrolledCount || 0} enrolled</span>
+                </article>
+              ))
+            ) : (
+              <p>No related sessions found.</p>
+            )}
+          </div>
+        </section>
       </div>
-
-      <div className="group-meta">
-        <p><strong>Members:</strong> {group.members || (group.membersList && group.membersList.length) || 0}</p>
-        <p><strong>How we meet:</strong> {group.meetingType || 'Hybrid / Check schedule'}</p>
-        <p><strong>Who can join:</strong> {group.whoCanJoin || 'Students enrolled in the related course or approved by a moderator.'}</p>
-        <p><strong>Communication:</strong> {group.communicationChannel || 'Dashboard announcements and a shared study chat.'}</p>
-      </div>
-
-      <div className="group-actions">
-        <button className="button button-primary" onClick={handleJoin}>Join this group</button>
-      </div>
-
-      <section className="group-section">
-        <h2>What to expect</h2>
-        <p>
-          {group.description || 'This group focuses on collaborative learning, regular practice sessions, and shared resources.'}
-        </p>
-        <p>
-          {group.scheduleNotes || 'Specific meeting times, course tasks, and participation expectations are posted by the group owner.'}
-        </p>
-      </section>
-
-      <section className="group-section">
-        <h2>New member requirements</h2>
-        {group.joinRequirements && group.joinRequirements.length > 0 ? (
-          <ul>
-            {group.joinRequirements.map((item: string) => <li key={item}>{item}</li>)}
-          </ul>
-        ) : (
-          <p>Read the welcome notes, attend the orientation, and introduce yourself to the group.</p>
-        )}
-      </section>
-
-      <section className="group-section">
-        <h2>Rules and regulations</h2>
-        {group.groupRules && group.groupRules.length > 0 ? (
-          <ul>
-            {group.groupRules.map((item: string) => <li key={item}>{item}</li>)}
-          </ul>
-        ) : (
-          <p>Be respectful, keep discussions academic, and follow the moderator's instructions.</p>
-        )}
-      </section>
-
-      <section className="group-section">
-        <h2>What you get when you join</h2>
-        {group.memberBenefits && group.memberBenefits.length > 0 ? (
-          <ul>
-            {group.memberBenefits.map((item: string) => <li key={item}>{item}</li>)}
-          </ul>
-        ) : (
-          <p>Shared notes, peer support, scheduled sessions, and structured academic help.</p>
-        )}
-      </section>
-
-      <section className="group-section">
-        <h2>First week checklist</h2>
-        {group.newMemberSteps && group.newMemberSteps.length > 0 ? (
-          <ul>
-            {group.newMemberSteps.map((item: string) => <li key={item}>{item}</li>)}
-          </ul>
-        ) : (
-          <p>Introduce yourself, review the study plan, and join the first meeting.</p>
-        )}
-      </section>
-
-      <section className="group-section">
-        <h2>Enrolled students</h2>
-        {group.membersList && group.membersList.length > 0 ? (
-          <ul>
-            {group.membersList.map((u: any) => (
-              <li key={u.email}>{u.name} — {u.email} — {new Date(u.enrolledAt).toLocaleString()}</li>
-            ))}
-          </ul>
-        ) : (
-          <p>No members yet. Be the first to join.</p>
-        )}
-      </section>
-
-      <section className="group-section">
-        <h2>Related sessions</h2>
-        <RelatedSessions sessions={group.sessions || []} />
-      </section>
     </section>
-  );
-}
-
-function RelatedSessions({ sessions }: { sessions: any[] }) {
-  if (!sessions.length) return <p>No related sessions found.</p>;
-
-  return (
-    <ul>
-      {sessions.map((s) => (
-        <li key={s.id}>
-          {s.title} — {s.time} — Enrolled: {s.enrolledCount || 0}
-          {s.prepNotes && s.prepNotes.length > 0 ? ` — Prep: ${s.prepNotes[0]}` : ''}
-        </li>
-      ))}
-    </ul>
   );
 }
 

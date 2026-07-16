@@ -1,70 +1,147 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { apiFetch } from '../assets/images/api';
 
-interface EnrollmentActivity {
-  sessionId: number;
-  sessionTitle: string;
-  courseCode: string;
-  name: string;
-  email: string;
-  enrolledAt: string;
+interface ActivityItem {
+  id: string;
+  title: string;
+  meta: string;
+  occurredAt: string;
+  href: string;
 }
 
 function Dashboard() {
+  const [courses, setCourses] = useState<any[]>([]);
   const [sessions, setSessions] = useState<any[]>([]);
   const [groups, setGroups] = useState<any[]>([]);
   const [resources, setResources] = useState<any[]>([]);
-  const [activity, setActivity] = useState<EnrollmentActivity[]>([]);
+  const [classmates, setClassmates] = useState<any[]>([]);
+  const [activity, setActivity] = useState<ActivityItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedSession, setSelectedSession] = useState<any | null>(null);
 
   useEffect(() => {
     let mounted = true;
+
     const loadDashboard = async () => {
       try {
-        const [sessionsResponse, groupsResponse, resourcesResponse] = await Promise.all([
-          apiFetch('/api/sessions').then((r) => r.json()),
-          apiFetch('/api/groups').then((r) => r.json()),
-          apiFetch('/api/resources').then((r) => r.json()),
+        const [coursesData, sessionsData, groupsData, resourcesData, classmatesData] = await Promise.all([
+          apiFetch('/api/courses').then((response) => response.json()),
+          apiFetch('/api/sessions').then((response) => response.json()),
+          apiFetch('/api/groups').then((response) => response.json()),
+          apiFetch('/api/resources').then((response) => response.json()),
+          apiFetch('/api/classmates').then((response) => response.json()),
         ]);
 
-        if (!mounted) return;
+        if (!mounted) {
+          return;
+        }
 
-        const sessionList = sessionsResponse.sessions || [];
-        const groupList = groupsResponse.groups || [];
-        const resourceList = resourcesResponse.resources || [];
+        const courseList = coursesData.courses || [];
+        const sessionList = sessionsData.sessions || [];
+        const groupList = groupsData.groups || [];
+        const resourceList = resourcesData.resources || [];
+        const classmatesList = classmatesData.classmates || [];
 
+        setCourses(courseList);
         setSessions(sessionList);
         setGroups(groupList);
         setResources(resourceList);
+        setClassmates(classmatesList);
 
-        const activityRows = await Promise.all(sessionList.map(async (session: any) => {
-          const detailResponse = await apiFetch(`/api/sessions/${session.id}`);
-          if (!detailResponse.ok) return [];
-          const detailData = await detailResponse.json();
-          return (detailData.session?.attendees || []).map((attendee: any) => ({
-            sessionId: session.id,
-            sessionTitle: session.title || detailData.session?.title || 'Session',
-            courseCode: session.courseCode || '',
-            name: attendee.name,
-            email: attendee.email,
-            enrolledAt: attendee.enrolledAt,
-          }));
-        }));
+        const [courseDetails, groupDetails, sessionDetails, resourceDetails] = await Promise.all([
+          Promise.all(courseList.slice(0, 6).map(async (course: any) => {
+            const response = await apiFetch(`/api/courses/${course.id}`);
+            if (!response.ok) {
+              return null;
+            }
+            const data = await response.json();
+            return data.course;
+          })),
+          Promise.all(groupList.slice(0, 6).map(async (group: any) => {
+            const response = await apiFetch(`/api/groups/${group.id}`);
+            if (!response.ok) {
+              return null;
+            }
+            const data = await response.json();
+            return data.group;
+          })),
+          Promise.all(sessionList.slice(0, 6).map(async (session: any) => {
+            const response = await apiFetch(`/api/sessions/${session.id}`);
+            if (!response.ok) {
+              return null;
+            }
+            const data = await response.json();
+            return data.session;
+          })),
+          Promise.all(resourceList.slice(0, 4).map(async (resource: any) => {
+            const response = await apiFetch(`/api/resources/${resource.id}`);
+            if (!response.ok) {
+              return null;
+            }
+            const data = await response.json();
+            return data.resource;
+          })),
+        ]);
 
-        if (!mounted) return;
+        if (!mounted) {
+          return;
+        }
 
-        const flattened = activityRows
-          .flat()
-          .sort((left, right) => new Date(right.enrolledAt).getTime() - new Date(left.enrolledAt).getTime())
-          .slice(0, 6);
+        const courseActivity = courseDetails.flatMap((course: any) =>
+          (course?.students || []).map((student: any) => ({
+            id: `course-${course.id}-${student.id}-${student.enrolledAt}`,
+            title: `${student.name} enrolled in ${course.code}`,
+            meta: `${course.title} · ${student.email}`,
+            occurredAt: student.enrolledAt,
+            href: `/courses/${course.id}`,
+          })),
+        );
 
-        setActivity(flattened);
+        const groupActivity = groupDetails.flatMap((group: any) =>
+          (group?.membersList || []).map((member: any) => ({
+            id: `group-${group.id}-${member.email}-${member.enrolledAt}`,
+            title: `${member.name} joined ${group.name}`,
+            meta: `${group.courseCode || 'Study Group'} · ${member.email}`,
+            occurredAt: member.enrolledAt,
+            href: `/groups/${group.id}`,
+          })),
+        );
+
+        const sessionActivity = sessionDetails.flatMap((session: any) =>
+          (session?.attendees || []).map((attendee: any) => ({
+            id: `session-${session.id}-${attendee.email}-${attendee.enrolledAt}`,
+            title: `${attendee.name} enrolled in ${session.title}`,
+            meta: `${session.group || 'Study Session'} · ${attendee.email}`,
+            occurredAt: attendee.enrolledAt,
+            href: '/sessions',
+          })),
+        );
+
+        const resourceActivity = resourceDetails.flatMap((resource: any) =>
+          (resource?.accesses || []).map((access: any) => ({
+            id: `resource-${resource.id}-${access.email}-${access.enrolledAt}`,
+            title: `${access.name} opened ${resource.title}`,
+            meta: `${resource.type || 'Resource'} · ${access.email}`,
+            occurredAt: access.enrolledAt,
+            href: '/resources',
+          })),
+        );
+
+        setActivity(
+          [...courseActivity, ...groupActivity, ...sessionActivity, ...resourceActivity]
+            .sort((left, right) => new Date(right.occurredAt).getTime() - new Date(left.occurredAt).getTime())
+            .slice(0, 6),
+        );
       } catch {
-        if (!mounted) return;
+        if (!mounted) {
+          return;
+        }
+
+        setCourses([]);
         setSessions([]);
         setGroups([]);
         setResources([]);
+        setClassmates([]);
         setActivity([]);
       } finally {
         if (mounted) {
@@ -80,205 +157,163 @@ function Dashboard() {
     };
   }, []);
 
-  const totalEnrollments = sessions.reduce((sum, s) => sum + ((s.enrollments && s.enrollments.length) || 0), 0);
-  const totalGroups = groups.length;
-  const totalResources = resources.length;
-
   const stats = [
-    { label: 'Study Groups', value: String(totalGroups) },
-    { label: 'Sessions', value: String(sessions.length) },
-    { label: 'Enrolled Students', value: String(totalEnrollments) },
-    { label: 'Resources', value: String(totalResources) },
+    { label: 'Courses enrolled', value: String(courses.filter((course) => course.isEnrolled).length), href: '/courses' },
+    { label: 'Study groups', value: String(groups.length), href: '/groups' },
+    { label: 'Upcoming sessions', value: String(sessions.length), href: '/sessions' },
+    { label: 'Classmate matches', value: String(classmates.filter((student) => student.sharedCourses?.length > 0).length), href: '/discover' },
   ];
 
-  const quickActions = [
-    { label: 'Browse study groups', href: '/groups' },
-    { label: 'Discover classmates', href: '/discover' },
-    { label: 'Enrol in courses', href: '/courses' },
+  const spotlightLinks = [
+    { title: 'Study groups', description: 'Open saved group rosters, requirements, and member counts.', href: '/groups' },
+    { title: 'Courses', description: 'Review enrolled students, related groups, and linked sessions.', href: '/courses' },
+    { title: 'Sessions', description: 'Track attendance and run better-prepared study meetings.', href: '/sessions' },
+    { title: 'Resources', description: 'Share reusable study material with visible access history.', href: '/resources' },
   ];
 
   return (
-    <section className="dashboard-page">
-      <div className="container">
-        <h1>Home</h1>
-        <p className="page-description">A private overview of live activity, academic groups, sessions, and resources.</p>
+    <section className="dashboard-page workspace-page">
+      <div className="container workspace-stack">
+        <section className="workspace-hero workspace-hero-dashboard">
+          <div>
+            <p className="workspace-eyebrow">Dashboard</p>
+            <h1>Your academic workspace now keeps courses, groups, sessions, and enrollments in one persistent flow.</h1>
+            <p className="workspace-lead">
+              This home view is no longer powered by temporary browser-only data. The sections below reflect saved
+              memberships, enrollments, and activity that remain available after logout.
+            </p>
+          </div>
+          <div className="hero-action-stack">
+            <Link to="/courses" className="button button-primary">Open course directory</Link>
+            <Link to="/groups" className="button button-secondary">Manage study groups</Link>
+          </div>
+        </section>
 
-        <div className="stats-grid">
+        <div className="stats-grid polished-stats-grid">
           {stats.map((stat) => (
-            <div key={stat.label} className="stat-card">
-              <div className="stat-icon" aria-hidden="true">•</div>
+            <Link key={stat.label} to={stat.href} className="stat-card stat-card-link">
               <div className="stat-content">
                 <p className="stat-label">{stat.label}</p>
                 <p className="stat-value">{stat.value}</p>
               </div>
-            </div>
+              <span className="stat-link-arrow">View</span>
+            </Link>
           ))}
         </div>
 
-        <div className="dashboard-sections">
-          <div className="dashboard-section dashboard-wide">
+        <div className="dashboard-layout">
+          <section className="dashboard-section dashboard-primary-panel">
             <div className="section-header">
-              <h2>Recent Enrollment Activity</h2>
-              <span className="view-all-link">Live from the database</span>
+              <h2>Recent activity</h2>
+              <span className="panel-pill">Saved events</span>
             </div>
 
             {loading ? (
-              <p>Loading activity…</p>
+              <p>Loading dashboard activity...</p>
             ) : activity.length === 0 ? (
               <div className="empty-state">
-                <p className="empty-text">No enrollment activity yet</p>
-                <p className="empty-help">When someone enrols in a course, the event will appear here.</p>
+                <p className="empty-text">No saved activity yet</p>
+                <p className="empty-help">Enroll in courses, groups, sessions, or resources to start building a visible history.</p>
               </div>
             ) : (
               <div className="activity-feed">
                 {activity.map((item) => (
-                  <article key={`${item.sessionId}-${item.email}-${item.enrolledAt}`} className="activity-card">
+                  <Link key={item.id} to={item.href} className="activity-card activity-card-link">
                     <div>
-                      <p className="activity-title">{item.name} enrolled in {item.sessionTitle}</p>
-                      <p className="activity-meta">{item.email} · {item.courseCode || 'No course code'} · {new Date(item.enrolledAt).toLocaleString()}</p>
+                      <p className="activity-title">{item.title}</p>
+                      <p className="activity-meta">{item.meta}</p>
                     </div>
-                  </article>
+                    <span className="activity-time">{new Date(item.occurredAt).toLocaleString()}</span>
+                  </Link>
                 ))}
               </div>
             )}
-          </div>
+          </section>
 
-          <div className="dashboard-section">
+          <section className="dashboard-section">
             <div className="section-header">
-              <h2>Upcoming Sessions</h2>
-              <a href="/sessions" className="view-all-link">View all →</a>
+              <h2>Workspace shortcuts</h2>
             </div>
-
-            {loading ? (
-              <p>Loading sessions…</p>
-            ) : sessions.length === 0 ? (
-              <div className="empty-state">
-                <p className="empty-icon" aria-hidden="true">•</p>
-                <p className="empty-text">No upcoming sessions</p>
-                <p className="empty-help">Join a group to get started</p>
-              </div>
-            ) : (
-              <div className="session-previews">
-                {sessions.slice(0, 3).map((s) => (
-                  <div key={s.id} className="session-preview" onClick={async () => {
-                    try {
-                      const res = await apiFetch(`/api/sessions/${s.id}`);
-                      if (!res.ok) throw new Error('Failed');
-                      const data = await res.json();
-                      setSelectedSession(data.session);
-                    } catch (err) {
-                      // eslint-disable-next-line no-console
-                      console.error(err);
-                      alert('Failed to load session details');
-                    }
-                  }} style={{ cursor: 'pointer' }}>
-                    <h4>{s.title || 'Session'}</h4>
-                    <p className="session-enroll">Enrolled: {(s.enrolledCount ?? (s.enrollments && s.enrollments.length)) || 0}</p>
+            <div className="quick-actions quick-actions-grid">
+              {spotlightLinks.map((item) => (
+                <Link key={item.title} to={item.href} className="quick-action-btn quick-action-card">
+                  <div>
+                    <strong>{item.title}</strong>
+                    <p>{item.description}</p>
                   </div>
-                ))}
-              </div>
-            )}
-          </div>
-
-          <div className="dashboard-section">
-            <div className="section-header"><h2>Study Groups</h2></div>
-            <div className="group-previews">
-              {groups.slice(0, 3).map((g) => (
-                <div key={g.id} className="group-preview" onClick={async () => {
-                  try {
-                    const res = await apiFetch(`/api/groups/${g.id}`);
-                    if (!res.ok) throw new Error('Failed');
-                    const data = await res.json();
-                    setSelectedSession(data.group);
-                  } catch (err) {
-                    // eslint-disable-next-line no-console
-                    console.error(err);
-                    alert('Failed to load group details');
-                  }
-                }} style={{ cursor: 'pointer' }}>
-                  <h4>{g.name}</h4>
-                  <p>Members: {(g.members ?? (g.enrollments && g.enrollments.length)) || 0}</p>
-                </div>
+                  <span className="action-icon">Go</span>
+                </Link>
               ))}
             </div>
-          </div>
+          </section>
+        </div>
 
-          <div className="dashboard-section">
-            <div className="section-header"><h2>Resources</h2></div>
-            <div className="resource-previews">
-              {resources.slice(0, 3).map((r) => (
-                <div key={r.id} className="resource-preview" onClick={async () => {
-                  try {
-                    const res = await apiFetch(`/api/resources/${r.id}`);
-                    if (!res.ok) throw new Error('Failed');
-                    const data = await res.json();
-                    setSelectedSession(data.resource);
-                  } catch (err) {
-                    // eslint-disable-next-line no-console
-                    console.error(err);
-                    alert('Failed to load resource details');
-                  }
-                }} style={{ cursor: 'pointer' }}>
-                  <h4>{r.title}</h4>
-                  <p>Enrolled: {(r.downloads ?? (r.enrollments && r.enrollments.length)) || 0}</p>
-                </div>
+        <div className="dashboard-layout">
+          <section className="dashboard-section">
+            <div className="section-header">
+              <h2>Course spotlight</h2>
+              <Link to="/courses" className="view-all-link">Open all courses</Link>
+            </div>
+            <div className="detail-card-grid">
+              {courses.slice(0, 3).map((course) => (
+                <Link key={course.id} to={`/courses/${course.id}`} className="detail-summary-card">
+                  <strong>{course.code}</strong>
+                  <p>{course.title}</p>
+                  <span>{course.enrolledCount} students · {course.relatedGroupCount} groups</span>
+                </Link>
               ))}
             </div>
-          </div>
+          </section>
 
-          <div className="dashboard-section">
-            <h2>Quick Actions</h2>
-            <div className="quick-actions">
-              {quickActions.map((action) => (
-                <a key={action.label} href={action.href} className="quick-action-btn">
-                  <span className="action-icon" aria-hidden="true">→</span>
-                  <span>{action.label}</span>
-                </a>
+          <section className="dashboard-section">
+            <div className="section-header">
+              <h2>Study groups</h2>
+              <Link to="/groups" className="view-all-link">Open groups</Link>
+            </div>
+            <div className="detail-card-grid">
+              {groups.slice(0, 3).map((group) => (
+                <Link key={group.id} to={`/groups/${group.id}`} className="detail-summary-card">
+                  <strong>{group.name}</strong>
+                  <p>{group.courseCode || 'Study Group'}</p>
+                  <span>{group.members} members · {group.sessionCount || 0} sessions</span>
+                </Link>
               ))}
             </div>
-          </div>
-          {selectedSession ? (
-            <div className="modal-overlay" onClick={() => setSelectedSession(null)}>
-              <div className="modal" onClick={(e) => e.stopPropagation()}>
-                <div className="modal-header">
-                  <h3>{selectedSession.title}</h3>
-                  <button onClick={() => setSelectedSession(null)}>Close</button>
-                </div>
-                <div className="modal-body">
-                  {selectedSession.enrollments && selectedSession.enrollments.length > 0 ? (
-                    <>
-                      <p><strong>Enrolled students ({selectedSession.enrollments.length}):</strong></p>
-                      <ul>
-                        {selectedSession.enrollments.map((u: any) => (
-                          <li key={u.email}>{u.name} — {u.email}</li>
-                        ))}
-                      </ul>
-                    </>
-                  ) : null}
-                  {selectedSession.membersList && selectedSession.membersList.length > 0 ? (
-                    <>
-                      <p><strong>Group members ({selectedSession.membersList.length}):</strong></p>
-                      <ul>
-                        {selectedSession.membersList.map((u: any) => (
-                          <li key={u.email}>{u.name} — {u.email}</li>
-                        ))}
-                      </ul>
-                    </>
-                  ) : null}
-                  {selectedSession.attendees && selectedSession.attendees.length > 0 ? (
-                    <>
-                      <p><strong>Session attendees ({selectedSession.attendees.length}):</strong></p>
-                      <ul>
-                        {selectedSession.attendees.map((u: any) => (
-                          <li key={u.email}>{u.name} — {u.email} — {new Date(u.enrolledAt).toLocaleString()}</li>
-                        ))}
-                      </ul>
-                    </>
-                  ) : null}
-                </div>
-              </div>
+          </section>
+        </div>
+
+        <div className="dashboard-layout">
+          <section className="dashboard-section">
+            <div className="section-header">
+              <h2>Upcoming sessions</h2>
+              <Link to="/sessions" className="view-all-link">Open sessions</Link>
             </div>
-          ) : null}
+            <div className="detail-card-grid">
+              {sessions.slice(0, 3).map((session) => (
+                <article key={session.id} className="detail-summary-card">
+                  <strong>{session.title}</strong>
+                  <p>{session.group || 'Study Session'}</p>
+                  <span>{session.startsAt ? new Date(session.startsAt).toLocaleString() : session.time || 'Time pending'}</span>
+                </article>
+              ))}
+            </div>
+          </section>
+
+          <section className="dashboard-section">
+            <div className="section-header">
+              <h2>Classmates to reconnect with</h2>
+              <Link to="/discover" className="view-all-link">Open classmates</Link>
+            </div>
+            <div className="detail-card-grid">
+              {classmates.slice(0, 3).map((classmate) => (
+                <article key={classmate.id} className="detail-summary-card">
+                  <strong>{classmate.name}</strong>
+                  <p>{classmate.major || 'Student'} · {classmate.university || 'University'}</p>
+                  <span>{classmate.sharedCourses?.length || 0} shared courses</span>
+                </article>
+              ))}
+            </div>
+          </section>
         </div>
       </div>
     </section>

@@ -1,17 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { apiFetch } from '../assets/images/api';
-
-interface EnrolledUser {
-  email: string;
-  name?: string;
-  enrolledAt?: string | number;
-}
 
 interface Session {
   id: number;
   title: string;
-  time?: string;
   startsAt?: string;
+  time?: string;
   location?: string;
   group?: string;
   groupId?: number;
@@ -20,7 +14,6 @@ interface Session {
   dayOfWeek?: string;
   month?: string;
   status?: 'Upcoming' | string;
-  enrollments?: EnrolledUser[];
   agenda?: string[];
   prepNotes?: string[];
   attendanceRules?: string[];
@@ -43,21 +36,30 @@ function Sessions() {
     attendanceRules: '',
   });
 
+  const loadSessions = async () => {
+    try {
+      const [sessionsResponse, groupsResponse] = await Promise.all([
+        apiFetch('/api/sessions').then((response) => response.json()),
+        apiFetch('/api/groups').then((response) => response.json()),
+      ]);
+      setSessions(sessionsResponse.sessions || []);
+      setGroups(groupsResponse.groups || []);
+    } catch {
+      setSessions([]);
+      setGroups([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    Promise.all([
-      apiFetch('/api/sessions').then((r) => r.json()),
-      apiFetch('/api/groups').then((r) => r.json()),
-    ])
-      .then(([sessionsData, groupsData]) => {
-        setSessions(sessionsData.sessions || []);
-        setGroups(groupsData.groups || []);
-      })
-      .catch(() => {
-        setSessions([]);
-        setGroups([]);
-      })
-      .finally(() => setLoading(false));
+    loadSessions();
   }, []);
+
+  const upcomingCount = useMemo(
+    () => sessions.filter((session) => session.status !== 'Completed').length,
+    [sessions],
+  );
 
   const resetSessionForm = () => {
     setEditingSessionId(null);
@@ -111,15 +113,7 @@ function Sessions() {
         throw new Error('Unable to save session');
       }
 
-      const data = await response.json();
-      const savedSession = data.session;
-
-      setSessions((current) => {
-        if (editingSessionId) {
-          return current.map((session) => (session.id === savedSession.id ? { ...session, ...savedSession } : session));
-        }
-        return [savedSession, ...current];
-      });
+      await loadSessions();
       resetSessionForm();
     } catch (error) {
       // eslint-disable-next-line no-console
@@ -139,7 +133,7 @@ function Sessions() {
         throw new Error('Unable to delete session');
       }
 
-      setSessions((current) => current.filter((session) => session.id !== sessionId));
+      await loadSessions();
       if (editingSessionId === sessionId) {
         resetSessionForm();
       }
@@ -151,31 +145,47 @@ function Sessions() {
   };
 
   const handleEnroll = async (id: number) => {
-    const raw = localStorage.getItem('user');
-    if (!raw || !localStorage.getItem('token')) {
-      alert('Please sign in to enroll in a session.');
-      return;
-    }
-
     try {
-      const res = await apiFetch(`/api/sessions/${id}/enroll`, { method: 'POST' });
-      if (!res.ok) throw new Error('Enroll failed');
-      const data = await res.json();
-      setSessions((prev) => prev.map((s) => (s.id === id ? { ...s, ...data.session } : s)));
-    } catch (err) {
+      const response = await apiFetch(`/api/sessions/${id}/enroll`, { method: 'POST' });
+      if (!response.ok) {
+        throw new Error('Enroll failed');
+      }
+
+      await loadSessions();
+    } catch (error) {
       // eslint-disable-next-line no-console
-      console.error(err);
+      console.error(error);
       alert('Failed to enroll. Please try again.');
     }
   };
 
   return (
-    <section className="sessions-page">
-      <div className="container">
-        <div className="page-header">
-          <h1>Upcoming Sessions</h1>
-          <p className="page-description">All scheduled study sessions across your groups.</p>
-        </div>
+    <section className="sessions-page workspace-page">
+      <div className="container workspace-stack">
+        <section className="workspace-hero workspace-hero-sessions">
+          <div>
+            <p className="workspace-eyebrow">Study Sessions</p>
+            <h1>Schedule sharper sessions with real attendance counts and better study context.</h1>
+            <p className="workspace-lead">
+              Session enrollments are now saved, so this board keeps its attendance numbers and meeting plans
+              even after everyone logs out and returns.
+            </p>
+          </div>
+          <div className="hero-stat-grid">
+            <article className="hero-stat-card">
+              <span className="hero-stat-value">{sessions.length}</span>
+              <span className="hero-stat-label">Total sessions</span>
+            </article>
+            <article className="hero-stat-card">
+              <span className="hero-stat-value">{upcomingCount}</span>
+              <span className="hero-stat-label">Upcoming and open</span>
+            </article>
+            <article className="hero-stat-card">
+              <span className="hero-stat-value">{sessions.reduce((sum, session) => sum + (session.enrolledCount || 0), 0)}</span>
+              <span className="hero-stat-label">Saved enrollments</span>
+            </article>
+          </div>
+        </section>
 
         <div className="management-panel">
           <div className="section-header">
@@ -187,18 +197,16 @@ function Sessions() {
             <div className="form-grid form-grid-two">
               <label>
                 <span>Group</span>
-                <select value={sessionForm.groupId} onChange={(e) => setSessionForm((current) => ({ ...current, groupId: e.target.value }))} required>
+                <select value={sessionForm.groupId} onChange={(event) => setSessionForm((current) => ({ ...current, groupId: event.target.value }))} required>
                   <option value="">Select a group</option>
                   {groups.map((group) => (
-                    <option key={group.id} value={group.id}>
-                      {group.name}
-                    </option>
+                    <option key={group.id} value={group.id}>{group.name}</option>
                   ))}
                 </select>
               </label>
               <label>
                 <span>Status</span>
-                <select value={sessionForm.status} onChange={(e) => setSessionForm((current) => ({ ...current, status: e.target.value }))}>
+                <select value={sessionForm.status} onChange={(event) => setSessionForm((current) => ({ ...current, status: event.target.value }))}>
                   <option>Upcoming</option>
                   <option>Open</option>
                   <option>Full</option>
@@ -210,33 +218,33 @@ function Sessions() {
             <div className="form-grid form-grid-two">
               <label>
                 <span>Title</span>
-                <input value={sessionForm.title} onChange={(e) => setSessionForm((current) => ({ ...current, title: e.target.value }))} required />
+                <input value={sessionForm.title} onChange={(event) => setSessionForm((current) => ({ ...current, title: event.target.value }))} required />
               </label>
               <label>
                 <span>Start time</span>
-                <input type="datetime-local" value={sessionForm.startsAt} onChange={(e) => setSessionForm((current) => ({ ...current, startsAt: e.target.value }))} required />
+                <input type="datetime-local" value={sessionForm.startsAt} onChange={(event) => setSessionForm((current) => ({ ...current, startsAt: event.target.value }))} required />
               </label>
             </div>
 
             <div className="form-grid form-grid-two">
               <label>
                 <span>Location</span>
-                <input value={sessionForm.location} onChange={(e) => setSessionForm((current) => ({ ...current, location: e.target.value }))} />
+                <input value={sessionForm.location} onChange={(event) => setSessionForm((current) => ({ ...current, location: event.target.value }))} />
               </label>
               <label>
                 <span>Agenda</span>
-                <textarea value={sessionForm.agenda} onChange={(e) => setSessionForm((current) => ({ ...current, agenda: e.target.value }))} rows={3} placeholder="One agenda item per line" />
+                <textarea value={sessionForm.agenda} onChange={(event) => setSessionForm((current) => ({ ...current, agenda: event.target.value }))} rows={3} placeholder="One agenda item per line" />
               </label>
             </div>
 
             <div className="form-grid form-grid-two">
               <label>
                 <span>Prep notes</span>
-                <textarea value={sessionForm.prepNotes} onChange={(e) => setSessionForm((current) => ({ ...current, prepNotes: e.target.value }))} rows={3} placeholder="One prep note per line" />
+                <textarea value={sessionForm.prepNotes} onChange={(event) => setSessionForm((current) => ({ ...current, prepNotes: event.target.value }))} rows={3} placeholder="One prep note per line" />
               </label>
               <label>
                 <span>Attendance rules</span>
-                <textarea value={sessionForm.attendanceRules} onChange={(e) => setSessionForm((current) => ({ ...current, attendanceRules: e.target.value }))} rows={3} placeholder="One rule per line" />
+                <textarea value={sessionForm.attendanceRules} onChange={(event) => setSessionForm((current) => ({ ...current, attendanceRules: event.target.value }))} rows={3} placeholder="One rule per line" />
               </label>
             </div>
 
@@ -248,68 +256,64 @@ function Sessions() {
         </div>
 
         {loading ? (
-          <p>Loading sessions…</p>
+          <div className="workspace-loading-card">
+            <p>Loading sessions...</p>
+          </div>
         ) : (
-          <div className="sessions-list">
+          <div className="sessions-list session-board">
             {sessions.map((session) => (
-              <div key={session.id} className="session-group">
-                <h3 className="session-date-header">{session.dayOfWeek}</h3>
-                <div className="session-card">
-                  <div className="session-date-block">
-                    <p className="session-month">{session.month || 'Jun'}</p>
-                    <p className="session-day">{session.date}</p>
-                  </div>
-                  <div className="session-content">
-                    <h4 className="session-title">{session.title}</h4>
-                    <div className="session-meta">
-                      <span className="session-time">⏰ {session.time}</span>
-                      <span className="session-location">📍 {session.location}</span>
-                      <span className="session-group">👥 {session.group}</span>
-                    </div>
-                      <p className="session-enroll">Enrolled: {session.enrolledCount ?? session.enrollments?.length ?? 0}</p>
-                      {session.prepNotes && session.prepNotes.length > 0 ? (
-                        <div className="session-notes">
-                          <strong>Prep notes:</strong>
-                          <ul>
-                            {session.prepNotes.map((note) => <li key={note}>{note}</li>)}
-                          </ul>
-                        </div>
-                      ) : null}
-                      {session.agenda && session.agenda.length > 0 ? (
-                        <div className="session-notes">
-                          <strong>Agenda:</strong>
-                          <ul>
-                            {session.agenda.map((item) => <li key={item}>{item}</li>)}
-                          </ul>
-                        </div>
-                      ) : null}
-                      {session.attendanceRules && session.attendanceRules.length > 0 ? (
-                        <div className="session-notes">
-                          <strong>Attendance rules:</strong>
-                          <ul>
-                            {session.attendanceRules.map((rule) => <li key={rule}>{rule}</li>)}
-                          </ul>
-                        </div>
-                      ) : null}
-                      {session.enrollments && session.enrollments.length > 0 ? (
-                      <div className="enrolled-list">
-                        <strong>Enrolled students:</strong>
-                        <ul>
-                          {session.enrollments.map((u: any) => (
-                            <li key={u.email}>{u.name} — {new Date(u.enrolledAt).toLocaleString()}</li>
-                          ))}
-                        </ul>
-                      </div>
-                    ) : null}
-                  </div>
-                  <div className="session-actions">
-                    <button className="button" onClick={() => handleEnroll(session.id)}>Enroll</button>
-                    <button type="button" className="button button-secondary" onClick={() => loadSessionIntoForm(session)}>Edit</button>
-                    <button type="button" className="button button-secondary action-danger" onClick={() => deleteSession(session.id)}>Delete</button>
-                  </div>
-                  <span className="session-status">{session.status}</span>
+              <article key={session.id} className="session-card polished-session-card">
+                <div className="session-date-block">
+                  <p className="session-month">{session.month || new Date(session.startsAt || Date.now()).toLocaleDateString(undefined, { month: 'short' })}</p>
+                  <p className="session-day">{session.date || new Date(session.startsAt || Date.now()).getDate()}</p>
                 </div>
-              </div>
+
+                <div className="session-content">
+                  <div className="session-heading-row">
+                    <div>
+                      <p className="session-course-tag">{session.courseCode || 'Study Session'}</p>
+                      <h3 className="session-title">{session.title}</h3>
+                    </div>
+                    <span className="session-status session-status-badge">{session.status}</span>
+                  </div>
+
+                  <div className="session-meta">
+                    <span>{session.startsAt ? new Date(session.startsAt).toLocaleString() : session.time}</span>
+                    <span>{session.location || 'Location pending'}</span>
+                    <span>{session.group || 'Group pending'}</span>
+                  </div>
+
+                  <div className="session-detail-grid">
+                    <article>
+                      <span className="mini-label">Enrolled</span>
+                      <strong>{session.enrolledCount ?? 0}</strong>
+                    </article>
+                    <article>
+                      <span className="mini-label">Prep notes</span>
+                      <strong>{session.prepNotes?.length || 0}</strong>
+                    </article>
+                    <article>
+                      <span className="mini-label">Agenda items</span>
+                      <strong>{session.agenda?.length || 0}</strong>
+                    </article>
+                  </div>
+
+                  {session.prepNotes && session.prepNotes.length > 0 ? (
+                    <div className="session-notes">
+                      <strong>Prep notes</strong>
+                      <ul>
+                        {session.prepNotes.map((note) => <li key={note}>{note}</li>)}
+                      </ul>
+                    </div>
+                  ) : null}
+                </div>
+
+                <div className="session-actions session-actions-column">
+                  <button className="button button-primary" onClick={() => handleEnroll(session.id)}>Enroll</button>
+                  <button type="button" className="button button-secondary" onClick={() => loadSessionIntoForm(session)}>Edit</button>
+                  <button type="button" className="button button-secondary action-danger" onClick={() => deleteSession(session.id)}>Delete</button>
+                </div>
+              </article>
             ))}
           </div>
         )}
