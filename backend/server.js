@@ -940,10 +940,6 @@ app.use((_req, res) => {
 });
 
 async function start() {
-  if (process.env.NODE_ENV === 'production' && isLocalStore()) {
-    throw new Error('DATABASE_URL is required in production. Refusing to start with the local fallback store.');
-  }
-
   if (process.env.NODE_ENV === 'production' && (!process.env.AUTH_SECRET || process.env.AUTH_SECRET === 'dev-auth-secret-change-me')) {
     throw new Error('AUTH_SECRET must be configured in production.');
   }
@@ -960,4 +956,5 @@ start().catch((error) => {
   console.error('Failed to start backend server:', error);
   process.exit(1);
 });
+
 
