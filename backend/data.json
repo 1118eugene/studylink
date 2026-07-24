@@ -1,7 +1,14 @@
 {
   "sessions": [
     {
-      "enrollments": [],
+      "enrollments": [
+        {
+          "user_id": 4,
+          "email": "simeonodhiambo57@gmail.com",
+          "name": "simeon",
+          "enrolledAt": 1784731115734
+        }
+      ],
       "id": 1,
       "title": "Intro to Recursion",
       "time": "09:00",
@@ -61,6 +68,14 @@
       "description": "Deep dives into DS topics"
     },
     {
+      "enrollments": [
+        {
+          "user_id": 4,
+          "email": "simeonodhiambo57@gmail.com",
+          "name": "simeon",
+          "joinedAt": 1784137825849
+        }
+      ],
       "id": 3,
       "name": "test",
       "description": "test",
@@ -83,20 +98,46 @@
       ],
       "communication_channel": "watsapp",
       "schedule_notes": "test",
+      "owner_user_id": 4
+    },
+    {
+      "id": 4,
+      "name": "business management",
+      "description": "the course introduces basics concepts of business and basic understanding on how businesses are managed",
+      "course_name": "BUS",
+      "course_code": "1010",
+      "meeting_type": "Online",
+      "image_url": "none",
+      "who_can_join": "anybody",
+      "join_requirements": [
+        "working internet",
+        "cooperation"
+      ],
+      "group_rules": [
+        "be ready to learn",
+        "join the group in time",
+        "participate fully"
+      ],
+      "member_benefits": [
+        "you will learn beyond imagination"
+      ],
+      "new_member_steps": [],
+      "communication_channel": "whatsapp",
+      "schedule_notes": "will be in pdf",
       "owner_user_id": 4,
+      "enrollments": []
+    }
+  ],
+  "resources": [
+    {
       "enrollments": [
         {
           "user_id": 4,
           "email": "simeonodhiambo57@gmail.com",
           "name": "simeon",
-          "joinedAt": 1784137825849
+          "enrolledAt": 1784730391588
         }
-      ]
-    }
-  ],
-  "resources": [
-    {
-      "enrollments": [],
+      ],
       "id": 1,
       "title": "Recursion Notes",
       "type": "pdf",
@@ -104,7 +145,14 @@
       "downloads": 0
     },
     {
-      "enrollments": [],
+      "enrollments": [
+        {
+          "user_id": 4,
+          "email": "simeonodhiambo57@gmail.com",
+          "name": "simeon",
+          "enrolledAt": 1784730414809
+        }
+      ],
       "id": 2,
       "title": "Binary Trees Slides",
       "type": "ppt",
@@ -119,7 +167,10 @@
       "full_name": "Eugene onyango Juma",
       "password_hash": "",
       "university": "",
-      "role": "student"
+      "role": "student",
+      "major": "",
+      "year_of_study": "",
+      "bio": ""
     },
     {
       "id": 2,
@@ -127,7 +178,10 @@
       "full_name": "violet eugene",
       "password_hash": "",
       "university": "",
-      "role": "student"
+      "role": "student",
+      "major": "",
+      "year_of_study": "",
+      "bio": ""
     },
     {
       "id": 3,
@@ -135,7 +189,10 @@
       "full_name": "eugen juma",
       "password_hash": "",
       "university": "",
-      "role": "student"
+      "role": "student",
+      "major": "",
+      "year_of_study": "",
+      "bio": ""
     },
     {
       "id": 4,
@@ -143,7 +200,139 @@
       "full_name": "simeon",
       "password_hash": "scrypt$9ad3ce0156815401215f7af27914f222$8bb2f06ede245bf95cfc77481d11e1ff643962e08872ef5cb742828fae25b8918a0d09901010e234e90288be88a7a2f14caead81d3cd39b716a81fa8fd156461",
       "university": "",
-      "role": "student"
+      "role": "student",
+      "major": "",
+      "year_of_study": "",
+      "bio": ""
+    }
+  ],
+  "courses": [
+    {
+      "id": 1,
+      "code": "APT3065",
+      "category": "Applied Technology",
+      "title": "Mid-Term Project",
+      "description": "Collaborative project planning, research methods, and presentation preparation.",
+      "image_url": "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=900&q=80",
+      "level": "Year 3",
+      "delivery_mode": "Project Studio"
+    },
+    {
+      "id": 2,
+      "code": "BUS101",
+      "category": "Business",
+      "title": "Introduction to Business",
+      "description": "Understand entrepreneurship, operations, and strategic decision-making.",
+      "image_url": "https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=900&q=80",
+      "level": "Year 1",
+      "delivery_mode": "Blended"
+    },
+    {
+      "id": 3,
+      "code": "CS101",
+      "category": "Computer Science",
+      "title": "Introduction to Computer Science",
+      "description": "Build a strong foundation in programming logic, problem solving, and algorithms.",
+      "image_url": "https://images.unsplash.com/photo-1516321497487-e288fb19713f?auto=format&fit=crop&w=900&q=80",
+      "level": "Year 1",
+      "delivery_mode": "Hybrid"
+    },
+    {
+      "id": 4,
+      "code": "CS201",
+      "category": "Computer Science",
+      "title": "Data Structures & Algorithms",
+      "description": "Explore efficient data handling, sorting, and optimization techniques.",
+      "image_url": "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=900&q=80",
+      "level": "Year 2",
+      "delivery_mode": "In-Person"
+    },
+    {
+      "id": 5,
+      "code": "CS301",
+      "category": "Computer Science",
+      "title": "Database Systems",
+      "description": "Learn data modeling, SQL, and database design for modern applications.",
+      "image_url": "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=900&q=80",
+      "level": "Year 3",
+      "delivery_mode": "Lab + Lecture"
+    },
+    {
+      "id": 6,
+      "code": "CS401",
+      "category": "Computer Science",
+      "title": "Software Engineering",
+      "description": "Practice team-based development, software architecture, and quality assurance.",
+      "image_url": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=900&q=80",
+      "level": "Year 4",
+      "delivery_mode": "Studio"
+    },
+    {
+      "id": 7,
+      "code": "ENG201",
+      "category": "Communication",
+      "title": "Academic Writing",
+      "description": "Strengthen essay drafting, research, editing, and formal communication skills.",
+      "image_url": "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=900&q=80",
+      "level": "Year 2",
+      "delivery_mode": "Workshop"
+    },
+    {
+      "id": 8,
+      "code": "MATH101",
+      "category": "Mathematics",
+      "title": "Calculus I",
+      "description": "Review limits, derivatives, and real-world applications in science.",
+      "image_url": "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=900&q=80",
+      "level": "Year 1",
+      "delivery_mode": "Lecture"
+    }
+  ],
+  "course_enrollments": [
+    {
+      "course_id": 1,
+      "user_id": 1,
+      "enrolled_at": "2026-06-08T08:30:00.000Z"
+    },
+    {
+      "course_id": 1,
+      "user_id": 3,
+      "enrolled_at": "2026-06-10T11:00:00.000Z"
+    },
+    {
+      "course_id": 3,
+      "user_id": 1,
+      "enrolled_at": "2026-06-06T09:10:00.000Z"
+    },
+    {
+      "course_id": 3,
+      "user_id": 2,
+      "enrolled_at": "2026-06-11T13:20:00.000Z"
+    },
+    {
+      "course_id": 4,
+      "user_id": 2,
+      "enrolled_at": "2026-06-12T15:45:00.000Z"
+    },
+    {
+      "course_id": 4,
+      "user_id": 3,
+      "enrolled_at": "2026-06-13T10:05:00.000Z"
+    },
+    {
+      "course_id": 6,
+      "user_id": 1,
+      "enrolled_at": "2026-06-09T14:15:00.000Z"
+    },
+    {
+      "course_id": 6,
+      "user_id": 4,
+      "enrolled_at": "2026-06-14T07:50:00.000Z"
+    },
+    {
+      "course_id": 8,
+      "user_id": 4,
+      "enrolled_at": "2026-06-15T12:00:00.000Z"
     }
   ],
   "contact_messages": [],

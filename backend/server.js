@@ -16,6 +16,11 @@ import {
 } from './lib/db.js';
 
 const app = express();
+
+app.get('/', (req, res) => {
+  res.send('STUDYLINK backend is running!');
+});
+
 const PORT = process.env.PORT || 4000;
 const clientDistPath = path.resolve(process.cwd(), 'dist');
 const clientIndexPath = path.join(clientDistPath, 'index.html');
@@ -955,3 +960,4 @@ start().catch((error) => {
   console.error('Failed to start backend server:', error);
   process.exit(1);
 });
+
