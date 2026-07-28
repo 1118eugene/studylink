@@ -25,6 +25,7 @@ function Sessions() {
   const [groups, setGroups] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingSessionId, setEditingSessionId] = useState<number | null>(null);
+  const [showSessionForm, setShowSessionForm] = useState(false);
   const [sessionForm, setSessionForm] = useState({
     groupId: '',
     title: '',
@@ -63,6 +64,7 @@ function Sessions() {
 
   const resetSessionForm = () => {
     setEditingSessionId(null);
+    setShowSessionForm(false);
     setSessionForm({
       groupId: '',
       title: '',
@@ -166,10 +168,6 @@ function Sessions() {
           <div>
             <p className="workspace-eyebrow">Study Sessions</p>
             <h1>Schedule sharper sessions with real attendance counts and better study context.</h1>
-            <p className="workspace-lead">
-              Session enrollments are now saved, so this board keeps its attendance numbers and meeting plans
-              even after everyone logs out and returns.
-            </p>
           </div>
           <div className="hero-stat-grid">
             <article className="hero-stat-card">
@@ -187,13 +185,24 @@ function Sessions() {
           </div>
         </section>
 
-        <div className="management-panel">
-          <div className="section-header">
-            <h2>{editingSessionId ? 'Edit Session' : 'Create Session'}</h2>
-            {editingSessionId ? <button className="text-button" onClick={resetSessionForm}>Cancel editing</button> : null}
+        <div className="groups-header">
+          <div className="page-header">
+            <h2>Schedule sessions</h2>
+            <p className="page-description">Only open the session form when you're ready to create or edit a schedule.</p>
           </div>
+          <button className="button button-primary" onClick={() => setShowSessionForm(true)}>
+            {editingSessionId ? 'Edit session' : 'New session'}
+          </button>
+        </div>
 
-          <form className="management-form" onSubmit={saveSession}>
+        {showSessionForm ? (
+          <div className="management-panel">
+            <div className="section-header">
+              <h2>{editingSessionId ? 'Edit Session' : 'Create Session'}</h2>
+              <button className="text-button" onClick={resetSessionForm}>{editingSessionId ? 'Cancel editing' : 'Close form'}</button>
+            </div>
+
+            <form className="management-form" onSubmit={saveSession}>
             <div className="form-grid form-grid-two">
               <label>
                 <span>Group</span>
@@ -254,6 +263,7 @@ function Sessions() {
             </div>
           </form>
         </div>
+        ) : null}
 
         {loading ? (
           <div className="workspace-loading-card">

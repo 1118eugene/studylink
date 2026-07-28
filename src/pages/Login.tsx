@@ -10,6 +10,7 @@ function Login({ onAuthSuccess }: LoginProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [invalidFields, setInvalidFields] = useState<{ email?: boolean; password?: boolean }>({});
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -21,6 +22,7 @@ function Login({ onAuthSuccess }: LoginProps) {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError('');
+    setInvalidFields({});
 
     try {
       const response = await apiFetch('/api/auth/login', {
@@ -30,7 +32,13 @@ function Login({ onAuthSuccess }: LoginProps) {
 
       if (!response.ok) {
         const data = await response.json();
-        setError(data.message || 'Login failed');
+        const message = data.message || 'Login failed';
+        setError(message);
+        if (response.status === 401) {
+          setInvalidFields({ email: true, password: true });
+        } else if (response.status === 400) {
+          setInvalidFields({ email: !email.trim(), password: !password });
+        }
         return;
       }
 
@@ -57,8 +65,13 @@ function Login({ onAuthSuccess }: LoginProps) {
                 type="email"
                 placeholder="Enter your email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="form-input"
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  if (invalidFields.email) {
+                    setInvalidFields((current) => ({ ...current, email: false }));
+                  }
+                }}
+                className={`form-input ${invalidFields.email ? 'input-invalid' : ''}`}
                 required
               />
             </div>
@@ -69,8 +82,13 @@ function Login({ onAuthSuccess }: LoginProps) {
                 type="password"
                 placeholder="Enter your password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="form-input"
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  if (invalidFields.password) {
+                    setInvalidFields((current) => ({ ...current, password: false }));
+                  }
+                }}
+                className={`form-input ${invalidFields.password ? 'input-invalid' : ''}`}
                 required
               />
               <p className="form-help">Use the password you created when you signed up.</p>

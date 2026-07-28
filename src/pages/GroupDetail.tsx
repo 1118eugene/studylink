@@ -1,12 +1,17 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import Modal from '../components/Modal';
 import { apiFetch } from '../assets/images/api';
+import { addNotification } from '../lib/notifications';
 
 function GroupDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [group, setGroup] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
+  const [pendingJoinGroup, setPendingJoinGroup] = useState<any | null>(null);
+  const [acceptedRequirements, setAcceptedRequirements] = useState(false);
+  const [joinError, setJoinError] = useState('');
 
   useEffect(() => {
     if (!id) {
@@ -25,21 +30,67 @@ function GroupDetail() {
       .finally(() => setLoading(false));
   }, [id]);
 
-  const handleJoin = async () => {
+  const joinGroup = async (targetGroup: any) => {
     try {
-      const response = await apiFetch(`/api/groups/${id}/enroll`, { method: 'POST' });
+      const response = await apiFetch(`/api/groups/${targetGroup.id}/enroll`, { method: 'POST' });
       if (!response.ok) {
-        throw new Error('Failed');
+        const message = response.status === 403
+          ? 'You do not meet the access requirements for this group.'
+          : 'Unable to join the group right now.';
+        throw new Error(message);
       }
 
-      const refreshed = await apiFetch(`/api/groups/${id}`);
+      const refreshed = await apiFetch(`/api/groups/${targetGroup.id}`);
       const data = await refreshed.json();
       setGroup(data.group);
+      addNotification({
+        id: `join-detail-${targetGroup.id}-${Date.now()}`,
+        title: 'Group joined',
+        message: `You successfully joined ${targetGroup.name}.`,
+        createdAt: new Date().toISOString(),
+      });
+      setPendingJoinGroup(null);
+      setAcceptedRequirements(false);
+      setJoinError('');
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error);
-      navigate('/login');
+      setJoinError(error instanceof Error ? error.message : 'Failed to join this group.');
     }
+  };
+
+  const handleJoin = () => {
+    if (!group) {
+      return;
+    }
+
+    if (group.joinRequirements && group.joinRequirements.length > 0) {
+      setPendingJoinGroup(group);
+      setAcceptedRequirements(false);
+      setJoinError('');
+      return;
+    }
+
+    joinGroup(group);
+  };
+
+  const confirmJoinGroup = async () => {
+    if (!pendingJoinGroup) {
+      return;
+    }
+
+    if (pendingJoinGroup.joinRequirements && pendingJoinGroup.joinRequirements.length > 0 && !acceptedRequirements) {
+      setJoinError('Please confirm that you meet the join requirements.');
+      return;
+    }
+
+    await joinGroup(pendingJoinGroup);
+  };
+
+  const closeJoinModal = () => {
+    setPendingJoinGroup(null);
+    setAcceptedRequirements(false);
+    setJoinError('');
   };
 
   if (loading) {
@@ -179,6 +230,39 @@ function GroupDetail() {
           </div>
         </section>
       </div>
+
+      <Modal
+        open={Boolean(pendingJoinGroup)}
+        title="Confirm group join"
+        secondaryActionLabel="Cancel"
+        onClose={closeJoinModal}
+        onSecondaryAction={closeJoinModal}
+      >
+        <div className="modal-note">
+          Before joining, please confirm you meet the listed requirements for this study group.
+        </div>
+        {pendingJoinGroup?.joinRequirements && pendingJoinGroup.joinRequirements.length > 0 ? (
+          <ul className="detail-list compact-list">
+            {pendingJoinGroup.joinRequirements.map((requirement: string) => (
+              <li key={requirement}>{requirement}</li>
+            ))}
+          </ul>
+        ) : (
+          <p>No special requirements are configured for this group.</p>
+        )}
+        <label className="checkbox-control">
+          <input
+            type="checkbox"
+            checked={acceptedRequirements}
+            onChange={(event) => { setAcceptedRequirements(event.target.checked); setJoinError(''); }}
+          />
+          I confirm I meet the join requirements.
+        </label>
+        {joinError ? <p className="form-error">{joinError}</p> : null}
+        <button type="button" className="button button-primary" onClick={confirmJoinGroup}>
+          Confirm and join
+        </button>
+      </Modal>
     </section>
   );
 }

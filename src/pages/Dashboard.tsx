@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { apiFetch } from '../assets/images/api';
+import { getCourses as getAcademicCourses } from '../lib/academic';
 
 interface ActivityItem {
   id: string;
@@ -93,7 +94,14 @@ function Dashboard() {
             title: `${student.name} enrolled in ${course.code}`,
             meta: `${course.title} · ${student.email}`,
             occurredAt: student.enrolledAt,
-            href: `/courses/${course.id}`,
+            href: (() => {
+              try {
+                const found = getAcademicCourses().find((c: any) => c.code === course.code);
+                return found ? `/course-hub/${found.id}` : `/courses/${course.id}`;
+              } catch {
+                return `/courses/${course.id}`;
+              }
+            })(),
           })),
         );
 
@@ -178,10 +186,6 @@ function Dashboard() {
           <div>
             <p className="workspace-eyebrow">Dashboard</p>
             <h1>Your academic workspace now keeps courses, groups, sessions, and enrollments in one persistent flow.</h1>
-            <p className="workspace-lead">
-              This home view is no longer powered by temporary browser-only data. The sections below reflect saved
-              memberships, enrollments, and activity that remain available after logout.
-            </p>
           </div>
           <div className="hero-action-stack">
             <Link to="/courses" className="button button-primary">Open course directory</Link>
@@ -255,13 +259,23 @@ function Dashboard() {
               <Link to="/courses" className="view-all-link">Open all courses</Link>
             </div>
             <div className="detail-card-grid">
-              {courses.slice(0, 3).map((course) => (
-                <Link key={course.id} to={`/courses/${course.id}`} className="detail-summary-card">
-                  <strong>{course.code}</strong>
-                  <p>{course.title}</p>
-                  <span>{course.enrolledCount} students · {course.relatedGroupCount} groups</span>
-                </Link>
-              ))}
+              {courses.slice(0, 3).map((course) => {
+                let href = `/courses/${course.id}`;
+                try {
+                  const found = getAcademicCourses().find((c: any) => c.code === course.code);
+                  if (found) href = `/course-hub/${found.id}`;
+                } catch {
+                  // ignore
+                }
+
+                return (
+                  <Link key={course.id} to={href} className="detail-summary-card">
+                    <strong>{course.code}</strong>
+                    <p>{course.title}</p>
+                    <span>{course.enrolledCount} students · {course.relatedGroupCount} groups</span>
+                  </Link>
+                );
+              })}
             </div>
           </section>
 

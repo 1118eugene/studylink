@@ -7,6 +7,12 @@
           "email": "simeonodhiambo57@gmail.com",
           "name": "simeon",
           "enrolledAt": 1784731115734
+        },
+        {
+          "user_id": 3,
+          "email": "eugenonyango@gmail.com",
+          "name": "eugen juma",
+          "enrolledAt": 1785170231359
         }
       ],
       "id": 1,
@@ -19,7 +25,14 @@
       "status": "Upcoming"
     },
     {
-      "enrollments": [],
+      "enrollments": [
+        {
+          "user_id": 3,
+          "email": "eugenonyango@gmail.com",
+          "name": "eugen juma",
+          "enrolledAt": 1785274482554
+        }
+      ],
       "id": 2,
       "title": "Binary Trees & Heaps Deep Dive",
       "time": "15:30",
@@ -30,7 +43,14 @@
       "status": "Upcoming"
     },
     {
-      "enrollments": [],
+      "enrollments": [
+        {
+          "user_id": 3,
+          "email": "eugenonyango@gmail.com",
+          "name": "eugen juma",
+          "enrolledAt": 1784974105750
+        }
+      ],
       "id": 3,
       "title": "APT3065 Sprint Review",
       "time": "14:00",
@@ -62,7 +82,14 @@
       "description": "Weekly study group for introductory CS"
     },
     {
-      "enrollments": [],
+      "enrollments": [
+        {
+          "user_id": 3,
+          "email": "eugenonyango@gmail.com",
+          "name": "eugen juma",
+          "joinedAt": 1785170026333
+        }
+      ],
       "id": 2,
       "name": "Data Structures Study Circle",
       "description": "Deep dives into DS topics"
@@ -74,6 +101,12 @@
           "email": "simeonodhiambo57@gmail.com",
           "name": "simeon",
           "joinedAt": 1784137825849
+        },
+        {
+          "user_id": 3,
+          "email": "eugenonyango@gmail.com",
+          "name": "eugen juma",
+          "joinedAt": 1785170054265
         }
       ],
       "id": 3,
@@ -101,6 +134,14 @@
       "owner_user_id": 4
     },
     {
+      "enrollments": [
+        {
+          "user_id": 3,
+          "email": "eugenonyango@gmail.com",
+          "name": "eugen juma",
+          "joinedAt": 1785170069450
+        }
+      ],
       "id": 4,
       "name": "business management",
       "description": "the course introduces basics concepts of business and basic understanding on how businesses are managed",
@@ -124,8 +165,81 @@
       "new_member_steps": [],
       "communication_channel": "whatsapp",
       "schedule_notes": "will be in pdf",
-      "owner_user_id": 4,
-      "enrollments": []
+      "owner_user_id": 4
+    },
+    {
+      "enrollments": [
+        {
+          "user_id": 3,
+          "email": "eugenonyango@gmail.com",
+          "name": "eugen juma",
+          "joinedAt": 1785170068034
+        }
+      ],
+      "id": 5,
+      "name": "apt3067",
+      "description": "the course is about projects",
+      "course_name": "project course",
+      "course_code": "3067",
+      "meeting_type": "Online",
+      "image_url": null,
+      "who_can_join": "anyone can join",
+      "join_requirements": [
+        "stable internet"
+      ],
+      "group_rules": [
+        "active participations"
+      ],
+      "member_benefits": [
+        "you learn beyond what you know"
+      ],
+      "new_member_steps": [],
+      "communication_channel": "whatsapp",
+      "schedule_notes": null,
+      "owner_user_id": 3
+    },
+    {
+      "enrollments": [
+        {
+          "user_id": 3,
+          "email": "eugenonyango@gmail.com",
+          "name": "eugen juma",
+          "joinedAt": 1785170064259
+        }
+      ],
+      "id": 6,
+      "name": "Test",
+      "description": "test",
+      "course_name": "bus",
+      "course_code": "1121",
+      "meeting_type": "Online",
+      "image_url": null,
+      "who_can_join": "anyone",
+      "join_requirements": [],
+      "group_rules": [],
+      "member_benefits": [],
+      "new_member_steps": [],
+      "communication_channel": null,
+      "schedule_notes": null,
+      "owner_user_id": 3
+    },
+    {
+      "enrollments": [],
+      "id": 7,
+      "name": "math class",
+      "description": "math classs",
+      "course_name": "math",
+      "course_code": "121212",
+      "meeting_type": "Hybrid",
+      "image_url": "https://www.pexels.com/photo/scenic-view-of-lake-como-from-a-ferry-in-lombardy-37687576/",
+      "who_can_join": null,
+      "join_requirements": [],
+      "group_rules": [],
+      "member_benefits": [],
+      "new_member_steps": [],
+      "communication_channel": null,
+      "schedule_notes": null,
+      "owner_user_id": 5
     }
   ],
   "resources": [
@@ -136,6 +250,12 @@
           "email": "simeonodhiambo57@gmail.com",
           "name": "simeon",
           "enrolledAt": 1784730391588
+        },
+        {
+          "user_id": 3,
+          "email": "eugenonyango@gmail.com",
+          "name": "eugen juma",
+          "enrolledAt": 1784971209893
         }
       ],
       "id": 1,
@@ -151,6 +271,12 @@
           "email": "simeonodhiambo57@gmail.com",
           "name": "simeon",
           "enrolledAt": 1784730414809
+        },
+        {
+          "user_id": 3,
+          "email": "eugenonyango@gmail.com",
+          "name": "eugen juma",
+          "enrolledAt": 1784971429401
         }
       ],
       "id": 2,
@@ -200,6 +326,17 @@
       "full_name": "simeon",
       "password_hash": "scrypt$9ad3ce0156815401215f7af27914f222$8bb2f06ede245bf95cfc77481d11e1ff643962e08872ef5cb742828fae25b8918a0d09901010e234e90288be88a7a2f14caead81d3cd39b716a81fa8fd156461",
       "university": "",
+      "role": "student",
+      "major": "",
+      "year_of_study": "",
+      "bio": ""
+    },
+    {
+      "id": 5,
+      "email": "simeonanyal@gmail.com",
+      "full_name": "simeon",
+      "password_hash": "scrypt$bc29b9c0df2a58075adf0c090c2c3e98$9801546c5be8fb791f85ec86c45b33cfeb2abbce69ad4794a43dfcbb50317ee9aba2007df32d78898c274e199ba46dc7ddabb5307b69f3069f7a11f9c448fccb",
+      "university": "usiu africa",
       "role": "student",
       "major": "",
       "year_of_study": "",
@@ -333,6 +470,21 @@
       "course_id": 8,
       "user_id": 4,
       "enrolled_at": "2026-06-15T12:00:00.000Z"
+    },
+    {
+      "course_id": 2,
+      "user_id": 3,
+      "enrolled_at": "2026-07-25T10:05:00.984Z"
+    },
+    {
+      "course_id": 8,
+      "user_id": 3,
+      "enrolled_at": "2026-07-25T10:09:22.442Z"
+    },
+    {
+      "course_id": 3,
+      "user_id": 3,
+      "enrolled_at": "2026-07-27T16:28:30.256Z"
     }
   ],
   "contact_messages": [],

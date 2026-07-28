@@ -1,129 +1,33 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import HeroSection from '../components/HeroSection';
+import { Link } from 'react-router-dom';
 
 export default function Home() {
-  const navigate = useNavigate();
-  const [loginEmail, setLoginEmail] = useState('');
-  const [loginPassword, setLoginPassword] = useState('');
-  const [signupForm, setSignupForm] = useState({ fullName: '', email: '', university: '', password: '' });
-  const signupPasswordTooShort = signupForm.password.length > 0 && signupForm.password.length < 8;
-
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (loginEmail && loginPassword) {
-      localStorage.setItem('user', JSON.stringify({ email: loginEmail, authenticated: true }));
-      navigate('/dashboard');
-    }
-  };
-
-  const handleSignup = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (signupForm.fullName && signupForm.email && signupForm.university && signupForm.password.length >= 8) {
-      localStorage.setItem('user', JSON.stringify({ email: signupForm.email, name: signupForm.fullName, university: signupForm.university, authenticated: true }));
-      navigate('/dashboard');
-    }
-  };
-
   return (
     <div className="home-page">
       <HeroSection />
 
-      <section className="login-section-landing">
-        <div className="container">
-          <div className="landing-intro">
-            <h2 className="section-title">Create your account to unlock StudyLink</h2>
-            <p className="section-copy">
-              The public landing experience is intentionally focused on sign up and sign in. Once you enter the platform, you can access home, about, contact, courses, groups, sessions, and your dashboard.
-            </p>
-          </div>
-          <div className="login-grid">
-            <div className="login-card">
-              <h3>Sign In to Your Account</h3>
-              <form onSubmit={handleLogin} className="auth-form">
-                <div className="form-group">
-                  <label>Email Address</label>
-                  <input
-                    type="email"
-                    placeholder="Enter your email"
-                    className="form-input"
-                    value={loginEmail}
-                    onChange={(e) => setLoginEmail(e.target.value)}
-                    required
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Password</label>
-                  <input
-                    type="password"
-                    placeholder="Enter your password"
-                    className="form-input"
-                    value={loginPassword}
-                    onChange={(e) => setLoginPassword(e.target.value)}
-                    required
-                  />
-                  <p className="form-help">Use the password you created during sign up.</p>
-                </div>
-                <button type="submit" className="button button-primary" style={{ width: '100%' }}>Sign In</button>
-              </form>
-              <p className="form-footer">New to StudyLink? <span className="auth-link" onClick={() => document.getElementById('signup-form')?.scrollIntoView({ behavior: 'smooth' })}>Create an account</span></p>
-            </div>
+      <section className="home-features container">
+        <div className="home-features-grid">
+          <article className="feature-card">
+            <h2>Collaborate smarter on campus.</h2>
+            <p>Connect with classmates, organize study groups, and manage session plans in a unified student workspace.</p>
+          </article>
 
-            <div className="signup-card" id="signup-form">
-              <h3>Create Your Account</h3>
-              <form onSubmit={handleSignup} className="auth-form">
-                <div className="form-group">
-                  <label>Full Name</label>
-                  <input
-                    type="text"
-                    placeholder="Your full name"
-                    className="form-input"
-                    value={signupForm.fullName}
-                    onChange={(e) => setSignupForm({ ...signupForm, fullName: e.target.value })}
-                    required
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Email Address</label>
-                  <input
-                    type="email"
-                    placeholder="Enter your email"
-                    className="form-input"
-                    value={signupForm.email}
-                    onChange={(e) => setSignupForm({ ...signupForm, email: e.target.value })}
-                    required
-                  />
-                </div>
-                <div className="form-group">
-                  <label>University</label>
-                  <input
-                    type="text"
-                    placeholder="Your university"
-                    className="form-input"
-                    value={signupForm.university}
-                    onChange={(e) => setSignupForm({ ...signupForm, university: e.target.value })}
-                    required
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Password</label>
-                  <input
-                    type="password"
-                    placeholder="Create a password"
-                    className="form-input"
-                    value={signupForm.password}
-                    onChange={(e) => setSignupForm({ ...signupForm, password: e.target.value })}
-                    minLength={8}
-                    required
-                  />
-                  <p className="form-help">Password must be at least 8 characters long.</p>
-                  {signupPasswordTooShort ? <p className="form-error">Add at least 8 characters before continuing.</p> : null}
-                </div>
-                <button type="submit" className="button button-primary" style={{ width: '100%' }}>Create Account</button>
-              </form>
-              <p className="form-footer">Already have an account? <span className="auth-link" onClick={() => document.getElementById('signup-form')?.scrollIntoView({ behavior: 'smooth' })}>Sign in</span></p>
-            </div>
-          </div>
+          <article className="feature-card">
+            <h3>Courses, groups, sessions, and resources</h3>
+            <p>Every academic interaction is visible, persistent, and designed for fast student collaboration.</p>
+          </article>
+
+          <article className="feature-card">
+            <h3>Secure access and clear workflows</h3>
+            <p>Sign in with a university-ready account, track your memberships, and join groups with easy requirement checks.</p>
+          </article>
+        </div>
+
+        <div className="home-cta-row">
+          <Link to="/signup" className="button button-primary button-lg">Get started</Link>
+          <Link to="/login" className="button button-secondary button-lg">Sign in</Link>
         </div>
       </section>
     </div>

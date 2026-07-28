@@ -1,5 +1,6 @@
-import { NavLink, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { clearStoredAuth, getStoredUser, getInitials } from '../lib/session';
+import logo from '../assets/images/studylinklogo.png';
 
 function AuthHeader() {
   const navigate = useNavigate();
@@ -24,7 +25,10 @@ function AuthHeader() {
   return (
     <aside className="auth-header sidebar-shell">
       <div className="sidebar-brand">
-        <span className="brand-name">StudyLink</span>
+        <Link to="/dashboard" className="logo-brand sidebar-logo-link">
+          <img src={logo} alt="StudyLink logo" className="brand-image sidebar-brand-image" />
+          <span className="brand-text">StudyLink</span>
+        </Link>
         <p className="subtle">Student coordination workspace</p>
       </div>
 

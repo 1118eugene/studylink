@@ -46,7 +46,7 @@ app.use(
     origin: allowedOrigins.length > 0 ? allowedOrigins : true,
   }),
 );
-app.use(express.json({ limit: '1mb' }));
+app.use(express.json({ limit: '50mb' }));
 
 function toArray(value) {
   return Array.isArray(value) ? value : [];
@@ -795,6 +795,26 @@ app.get('/api/resources/:id', requireAuth, async (req, res) => {
   });
 });
 
+// Get current user's saved resources (personal library)
+app.get('/api/my/resources', requireAuth, async (req, res) => {
+  const result = await query(
+    `SELECT r.* FROM resources r
+     JOIN resource_enrollments re ON re.resource_id = r.id
+     WHERE re.user_id = $1
+     ORDER BY re.accessed_at DESC NULLS LAST, r.id DESC;`,
+    [req.user.id],
+  );
+
+  return res.json({ resources: result.rows.map(toResourceSummary) });
+});
+
+// Remove a resource from current user's library
+app.delete('/api/my/resources/:id', requireAuth, async (req, res) => {
+  const resourceId = Number(req.params.id);
+  await query('DELETE FROM resource_enrollments WHERE resource_id = $1 AND user_id = $2;', [resourceId, req.user.id]);
+  return res.status(204).send();
+});
+
 app.post('/api/resources', requireAuth, async (req, res) => {
   const { title, resourceType, url, description, usageNotes, audience } = req.body;
 
@@ -903,6 +923,108 @@ app.post('/api/resources/:id/enroll', requireAuth, async (req, res) => {
   return res.json({ resource: toResourceSummary(updated) });
 });
 
+// Academic management endpoints (schools / programs / courses)
+app.get('/api/academic/schools', requireAuth, async (_req, res) => {
+  const result = await query('SELECT id, name, short_code FROM schools ORDER BY name ASC;');
+  return res.json({ schools: result.rows });
+});
+
+app.post('/api/academic/schools', requireAuth, async (req, res) => {
+  if (req.user.role !== 'admin') {
+    return res.status(403).json({ message: 'Admin permission required.' });
+  }
+
+  const { name, shortCode } = req.body || {};
+  if (!name) return res.status(400).json({ message: 'School name is required.' });
+
+  const result = await query(
+    'INSERT INTO schools (name, short_code) VALUES ($1, $2) RETURNING id, name, short_code;',
+    [String(name).trim(), shortCode ? String(shortCode).trim() : null],
+  );
+
+  return res.status(201).json({ school: result.rows[0] });
+});
+
+app.get('/api/academic/programs', requireAuth, async (req, res) => {
+  const schoolId = req.query.schoolId ? Number(req.query.schoolId) : null;
+  let result;
+  if (schoolId) {
+    result = await query('SELECT id, school_id, name, code FROM programs WHERE school_id = $1 ORDER BY name ASC;', [schoolId]);
+  } else {
+    result = await query('SELECT id, school_id, name, code FROM programs ORDER BY name ASC;');
+  }
+
+  return res.json({ programs: result.rows });
+});
+
+app.post('/api/academic/programs', requireAuth, async (req, res) => {
+  if (req.user.role !== 'admin') {
+    return res.status(403).json({ message: 'Admin permission required.' });
+  }
+
+  const { schoolId, name, code } = req.body || {};
+  if (!schoolId || !name) return res.status(400).json({ message: 'School and program name are required.' });
+
+  const result = await query(
+    'INSERT INTO programs (school_id, name, code) VALUES ($1, $2, $3) RETURNING id, school_id, name, code;'
+    , [Number(schoolId), String(name).trim(), code ? String(code).trim() : null],
+  );
+
+  return res.status(201).json({ program: result.rows[0] });
+});
+
+app.get('/api/academic/courses', requireAuth, async (req, res) => {
+  const programId = req.query.programId ? Number(req.query.programId) : null;
+  let result;
+  if (programId) {
+    result = await query(
+      'SELECT id, program_id, semester_id, code, title, description FROM courses WHERE program_id = $1 ORDER BY code ASC;'
+      , [programId],
+    );
+  } else {
+    result = await query('SELECT id, program_id, semester_id, code, title, description FROM courses ORDER BY code ASC;');
+  }
+
+  return res.json({ courses: result.rows });
+});
+
+app.post('/api/academic/courses', requireAuth, async (req, res) => {
+  if (req.user.role !== 'admin') {
+    return res.status(403).json({ message: 'Admin permission required.' });
+  }
+
+  const { programId, semesterId, code, title, description } = req.body || {};
+  if (!code || !title) return res.status(400).json({ message: 'Course code and title are required.' });
+
+  const result = await query(
+    `INSERT INTO courses (program_id, semester_id, code, title, description, created_by_user_id)
+     VALUES ($1, $2, $3, $4, $5, $6)
+     RETURNING id, program_id, semester_id, code, title, description;`,
+    [programId ? Number(programId) : null, semesterId ? Number(semesterId) : null, String(code).trim(), String(title).trim(), description ? String(description).trim() : null, req.user.id],
+  );
+
+  return res.status(201).json({ course: result.rows[0] });
+});
+
+app.get('/api/academic/courses/:id/resources', requireAuth, async (req, res) => {
+  const id = Number(req.params.id);
+  const result = await query('SELECT id, title, url, resource_type FROM course_resources WHERE course_id = $1 ORDER BY created_at DESC;', [id]);
+  return res.json({ resources: result.rows });
+});
+
+app.post('/api/academic/courses/:id/resources', requireAuth, async (req, res) => {
+  const id = Number(req.params.id);
+  const { title, url, resourceType } = req.body || {};
+  if (!title || !url) return res.status(400).json({ message: 'Title and URL are required.' });
+
+  const result = await query(
+    'INSERT INTO course_resources (course_id, title, url, resource_type, created_by_user_id) VALUES ($1, $2, $3, $4, $5) RETURNING id, title, url, resource_type;'
+    , [id, String(title).trim(), String(url).trim(), resourceType ? String(resourceType).trim() : null, req.user.id],
+  );
+
+  return res.status(201).json({ resource: result.rows[0] });
+});
+
 app.get('/api/health', async (_req, res) => {
   try {
     await healthcheck();
@@ -934,6 +1056,34 @@ if (hasClientBuild) {
     res.sendFile(clientIndexPath);
   });
 }
+
+// Serve uploaded files
+const uploadsPath = path.join(process.cwd(), 'public', 'uploads');
+if (!fs.existsSync(uploadsPath)) {
+  fs.mkdirSync(uploadsPath, { recursive: true });
+}
+app.use('/uploads', express.static(uploadsPath));
+
+// Simple base64 upload endpoint (authenticated)
+app.post('/api/uploads', requireAuth, async (req, res) => {
+  const { filename, data } = req.body || {};
+  if (!filename || !data) {
+    return res.status(400).json({ message: 'Filename and base64 data are required.' });
+  }
+
+  try {
+    const buffer = Buffer.from(String(data), 'base64');
+    const safeName = `${Date.now()}_${path.basename(String(filename)).replace(/[^a-zA-Z0-9_.-]/g, '_')}`;
+    const outPath = path.join(uploadsPath, safeName);
+    fs.writeFileSync(outPath, buffer);
+    const url = `/uploads/${safeName}`;
+    return res.json({ url });
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('Upload failed', error);
+    return res.status(500).json({ message: 'Failed to store uploaded file.' });
+  }
+});
 
 app.use((_req, res) => {
   res.status(404).json({ message: 'Route not found. Use /api/health or the frontend app.' });

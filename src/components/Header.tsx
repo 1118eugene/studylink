@@ -1,4 +1,5 @@
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
+import logo from '../assets/images/studylinklogo.png';
 
 const links = [
   { label: 'Home', path: '/' },
@@ -8,13 +9,17 @@ const links = [
 
 function Header() {
   return (
-    <header className="site-header">
+    <header className="site-header public-header">
       <div className="container header-inner">
-        <div>
-          <span className="brand">StudyLink</span>
-          <p className="subtle">Student Study Group Coordination</p>
+        <div className="header-brand">
+          <div className="logo-brand">
+            <img src={logo} alt="StudyLink logo" className="brand-image header-brand-image" />
+            <span className="brand-text">StudyLink</span>
+          </div>
+          <p className="subtle">University collaboration for students.</p>
         </div>
-        <nav>
+
+        <nav className="public-nav">
           {links.map((link) => (
             <NavLink
               key={link.path}
@@ -25,6 +30,11 @@ function Header() {
             </NavLink>
           ))}
         </nav>
+
+        <div className="public-actions">
+          <Link to="/login" className="button button-secondary button-sm">Sign in</Link>
+          <Link to="/signup" className="button button-primary button-sm">Sign up</Link>
+        </div>
       </div>
     </header>
   );

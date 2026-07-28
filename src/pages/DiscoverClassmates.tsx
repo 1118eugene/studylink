@@ -49,10 +49,6 @@ function DiscoverClassmates() {
           <div>
             <p className="workspace-eyebrow">Classmate Network</p>
             <h1>Discover real classmates connected by actual course enrollments.</h1>
-            <p className="workspace-lead">
-              This directory is now driven by the database, so the students you see here are tied to saved
-              course choices instead of temporary browser data.
-            </p>
           </div>
           <div className="hero-stat-grid">
             <article className="hero-stat-card">

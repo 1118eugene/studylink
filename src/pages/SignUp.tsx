@@ -13,41 +13,64 @@ function SignUp({ onAuthSuccess }: SignUpProps) {
     email: '',
     university: '',
     password: '',
+    confirmPassword: '',
   });
   const [error, setError] = useState('');
+  const [invalidFields, setInvalidFields] = useState<{ password?: boolean; confirmPassword?: boolean; email?: boolean }>({});
   const navigate = useNavigate();
   const passwordTooShort = formData.password.length > 0 && formData.password.length < 8;
+  const passwordMismatch = formData.confirmPassword.length > 0 && formData.password !== formData.confirmPassword;
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
+    if (invalidFields[e.target.name as 'password' | 'confirmPassword' | 'email']) {
+      setInvalidFields((current) => ({ ...current, [e.target.name]: false }));
+    }
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError('');
+    setInvalidFields({});
 
-    if (!formData.fullName.trim() || !formData.email.trim() || !formData.university.trim() || !formData.password.trim()) {
+    if (!formData.fullName.trim() || !formData.email.trim() || !formData.university.trim() || !formData.password.trim() || !formData.confirmPassword.trim()) {
       setError('Please fill in all fields to continue.');
       return;
     }
 
     if (formData.password.trim().length < 8) {
       setError('Password must be at least 8 characters long.');
+      setInvalidFields({ password: true });
+      return;
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      setError('Passwords do not match.');
+      setInvalidFields({ password: true, confirmPassword: true });
       return;
     }
 
     try {
       const response = await apiFetch('/api/auth/signup', {
         method: 'POST',
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          fullName: formData.fullName.trim(),
+          email: formData.email.trim(),
+          university: formData.university.trim(),
+          password: formData.password,
+        }),
       });
 
       if (!response.ok) {
         const data = await response.json();
-        setError(data.message || 'Signup failed');
+        const message = data.message || 'Signup failed';
+        setError(message);
+        if (response.status === 409) {
+          setInvalidFields({ email: true });
+        }
         return;
       }
 
@@ -89,7 +112,7 @@ function SignUp({ onAuthSuccess }: SignUpProps) {
                 placeholder="Enter your email"
                 value={formData.email}
                 onChange={handleChange}
-                className="form-input"
+                className={`form-input ${invalidFields.email ? 'input-invalid' : ''}`}
                 required
               />
             </div>
@@ -115,12 +138,26 @@ function SignUp({ onAuthSuccess }: SignUpProps) {
                 placeholder="Create a password"
                 value={formData.password}
                 onChange={handleChange}
-                className="form-input"
+                className={`form-input ${invalidFields.password ? 'input-invalid' : ''}`}
                 minLength={8}
                 required
               />
               <p className="form-help">Use at least 8 characters for your password.</p>
               {passwordTooShort ? <p className="form-error">Password is too short. Add at least 8 characters.</p> : null}
+            </div>
+
+            <div className="form-group">
+              <label>Confirm password</label>
+              <input
+                type="password"
+                name="confirmPassword"
+                placeholder="Confirm your password"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                className={`form-input ${invalidFields.confirmPassword || passwordMismatch ? 'input-invalid' : ''}`}
+                required
+              />
+              {passwordMismatch ? <p className="form-error">The passwords do not match.</p> : null}
             </div>
 
             {error ? <p className="auth-error">{error}</p> : null}

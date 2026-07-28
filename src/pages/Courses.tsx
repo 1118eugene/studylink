@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { apiFetch } from '../assets/images/api';
+import { getCourses as getAcademicCourses } from '../lib/academic';
 
 type Course = {
   id: number;
@@ -65,10 +66,6 @@ function Courses() {
           <div>
             <p className="workspace-eyebrow">Course Directory</p>
             <h1>Enroll once, keep your academic progress saved, and open the right study spaces faster.</h1>
-            <p className="workspace-lead">
-              Every course below is now connected to the backend, so enrollments, related study groups,
-              and classmate discovery remain available even after you sign out.
-            </p>
           </div>
           <div className="hero-stat-grid">
             <article className="hero-stat-card">
@@ -143,9 +140,15 @@ function Courses() {
                   </div>
 
                   <div className="course-card-actions">
-                    <Link to={`/courses/${course.id}`} className="button button-secondary">
-                      View details
-                    </Link>
+                    {(() => {
+                      const academic = getAcademicCourses().find((c) => c.code === course.code);
+                      const href = academic ? `/course-hub/${academic.id}` : `/courses/${course.id}`;
+                      return (
+                        <Link to={href} className="button button-secondary">
+                          View details
+                        </Link>
+                      );
+                    })()}
                     <button
                       type="button"
                       onClick={() => handleEnroll(course.id)}

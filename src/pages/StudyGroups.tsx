@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
+import Modal from '../components/Modal';
 import { apiFetch } from '../assets/images/api';
+import { addNotification } from '../lib/notifications';
 
 interface StudyGroup {
   id: number;
@@ -21,11 +23,19 @@ interface StudyGroup {
   sessionCount?: number;
 }
 
-function StudyGroups() {
+type StudyGroupsProps = {
+  initialShowForm?: boolean;
+};
+
+function StudyGroups({ initialShowForm = false }: StudyGroupsProps) {
   const [groups, setGroups] = useState<StudyGroup[]>([]);
   const [selectedFilter, setSelectedFilter] = useState('All courses');
   const [editingGroupId, setEditingGroupId] = useState<number | null>(null);
+  const [showGroupForm, setShowGroupForm] = useState(initialShowForm);
   const [loading, setLoading] = useState(true);
+  const [pendingJoinGroup, setPendingJoinGroup] = useState<StudyGroup | null>(null);
+  const [acceptedRequirements, setAcceptedRequirements] = useState(false);
+  const [joinError, setJoinError] = useState('');
   const [groupForm, setGroupForm] = useState({
     name: '',
     description: '',
@@ -58,6 +68,10 @@ function StudyGroups() {
     loadGroups();
   }, []);
 
+  useEffect(() => {
+    setShowGroupForm(initialShowForm);
+  }, [initialShowForm]);
+
   const filterOptions = useMemo(
     () => ['All courses', ...Array.from(new Set(groups.map((group) => group.courseCode).filter(Boolean)))],
     [groups],
@@ -69,6 +83,7 @@ function StudyGroups() {
 
   const resetGroupForm = () => {
     setEditingGroupId(null);
+    setShowGroupForm(false);
     setGroupForm({
       name: '',
       description: '',
@@ -88,6 +103,7 @@ function StudyGroups() {
 
   const loadGroupIntoForm = (group: StudyGroup) => {
     setEditingGroupId(group.id);
+    setShowGroupForm(true);
     setGroupForm({
       name: group.name || '',
       description: group.description || '',
@@ -165,19 +181,61 @@ function StudyGroups() {
     }
   };
 
-  const handleJoinGroup = async (groupId: number) => {
+  const joinGroup = async (group: StudyGroup) => {
     try {
-      const response = await apiFetch(`/api/groups/${groupId}/enroll`, { method: 'POST' });
+      const response = await apiFetch(`/api/groups/${group.id}/enroll`, { method: 'POST' });
       if (!response.ok) {
-        throw new Error('Join failed');
+        const message = response.status === 403
+          ? 'You do not meet this group’s access requirements.'
+          : 'Join failed. Please try again later.';
+        throw new Error(message);
       }
 
       await loadGroups();
+      addNotification({
+        id: `join-${group.id}-${Date.now()}`,
+        title: 'Joined group',
+        message: `You are now enrolled in ${group.name}.`,
+        createdAt: new Date().toISOString(),
+      });
+      setPendingJoinGroup(null);
+      setAcceptedRequirements(false);
+      setJoinError('');
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error);
-      alert('Failed to join the group. Please sign in again and try once more.');
+      setJoinError(error instanceof Error ? error.message : 'Failed to join this group.');
     }
+  };
+
+  const handleJoinGroup = (group: StudyGroup) => {
+    if (group.joinRequirements && group.joinRequirements.length > 0) {
+      setPendingJoinGroup(group);
+      setAcceptedRequirements(false);
+      setJoinError('');
+      return;
+    }
+
+    joinGroup(group);
+  };
+
+  const confirmJoinGroup = async () => {
+    if (!pendingJoinGroup) {
+      return;
+    }
+
+    if (pendingJoinGroup.joinRequirements && pendingJoinGroup.joinRequirements.length > 0 && !acceptedRequirements) {
+      setJoinError('Please confirm that you meet the join requirements.');
+      return;
+    }
+
+    await joinGroup(pendingJoinGroup);
+  };
+
+  const closeJoinModal = () => {
+    setPendingJoinGroup(null);
+    setAcceptedRequirements(false);
+    setJoinError('');
   };
 
   return (
@@ -187,10 +245,7 @@ function StudyGroups() {
           <div>
             <p className="workspace-eyebrow">Study Groups</p>
             <h1>Build structured learning circles with saved members, rules, and session plans.</h1>
-            <p className="workspace-lead">
-              Group memberships now stay in the database, so the member counts and detailed rosters you see here
-              remain available whenever students return.
-            </p>
+            {/* hero lead removed per request */}
           </div>
           <div className="hero-stat-grid">
             <article className="hero-stat-card">
@@ -209,14 +264,15 @@ function StudyGroups() {
             <h2>Create or manage groups</h2>
             <p className="page-description">Keep your study structure professional with requirements, rules, and scheduling notes.</p>
           </div>
-          <button className="button button-primary" onClick={resetGroupForm}>New group</button>
+          <Link to="/groups/new" className="button button-primary">New group</Link>
         </div>
 
-        <div className="management-panel">
-          <div className="section-header">
-            <h2>{editingGroupId ? 'Edit Group' : 'Create Group'}</h2>
-            {editingGroupId ? <button className="text-button" onClick={resetGroupForm}>Cancel editing</button> : null}
-          </div>
+        {showGroupForm ? (
+          <div className="management-panel">
+            <div className="section-header">
+              <h2>{editingGroupId ? 'Edit Group' : 'Create Group'}</h2>
+              <button className="text-button" onClick={resetGroupForm}>{editingGroupId ? 'Cancel editing' : 'Close form'}</button>
+            </div>
 
           <form className="management-form" onSubmit={saveGroup}>
             <div className="form-grid form-grid-two">
@@ -253,13 +309,24 @@ function StudyGroups() {
             <div className="form-grid form-grid-two">
               <label>
                 <span>Image URL</span>
-                <input value={groupForm.imageUrl} onChange={(event) => setGroupForm((current) => ({ ...current, imageUrl: event.target.value }))} />
+                <input value={groupForm.imageUrl} onChange={(event) => setGroupForm((current) => ({ ...current, imageUrl: event.target.value }))} placeholder="https://example.com/group-artwork.png" />
               </label>
               <label>
                 <span>Who can join</span>
                 <input value={groupForm.whoCanJoin} onChange={(event) => setGroupForm((current) => ({ ...current, whoCanJoin: event.target.value }))} />
               </label>
             </div>
+            {groupForm.imageUrl ? (
+              <div className="image-preview-card">
+                <strong>Artwork preview</strong>
+                <img
+                  className="image-preview"
+                  src={groupForm.imageUrl}
+                  alt="Group artwork preview"
+                  onError={(event) => { (event.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=80'; }}
+                />
+              </div>
+            ) : null}
 
             <div className="form-grid form-grid-two">
               <label>
@@ -300,6 +367,7 @@ function StudyGroups() {
             </div>
           </form>
         </div>
+        ) : null}
 
         <section className="workspace-toolbar">
           <div>
@@ -321,7 +389,11 @@ function StudyGroups() {
           <div className="groups-grid elevated-groups-grid">
             {filteredGroups.map((group) => (
               <article key={group.id} className="group-card polished-group-card">
-                <img className="group-image" src={group.image} alt={group.name} loading="lazy" />
+                {group.image ? (
+                  <img className="group-image" src={group.image} alt={group.name} loading="lazy" />
+                ) : (
+                  <div className="group-image-placeholder">No image yet</div>
+                )}
                 <div className="group-header-content">
                   <div className="group-title">
                     <h3>{group.name}</h3>
@@ -343,7 +415,7 @@ function StudyGroups() {
                     <button type="button" className="action-link" onClick={() => loadGroupIntoForm(group)}>Edit</button>
                     <button type="button" className="action-link action-danger" onClick={() => deleteGroup(group.id)}>Delete</button>
                   </div>
-                  <button onClick={() => handleJoinGroup(group.id)} className="button button-primary button-sm">
+                  <button onClick={() => handleJoinGroup(group)} className="button button-primary button-sm">
                     Join group
                   </button>
                 </div>
@@ -352,6 +424,39 @@ function StudyGroups() {
           </div>
         )}
       </div>
+
+      <Modal
+        open={Boolean(pendingJoinGroup)}
+        title="Confirm group join"
+        secondaryActionLabel="Cancel"
+        onClose={closeJoinModal}
+        onSecondaryAction={closeJoinModal}
+      >
+        <div className="modal-note">
+          Before joining, please confirm you meet the listed requirements for this study group.
+        </div>
+        {pendingJoinGroup?.joinRequirements && pendingJoinGroup.joinRequirements.length > 0 ? (
+          <ul className="detail-list compact-list">
+            {pendingJoinGroup.joinRequirements.map((requirement) => (
+              <li key={requirement}>{requirement}</li>
+            ))}
+          </ul>
+        ) : (
+          <p>No special requirements are configured for this group.</p>
+        )}
+        <label className="checkbox-control">
+          <input
+            type="checkbox"
+            checked={acceptedRequirements}
+            onChange={(event) => { setAcceptedRequirements(event.target.checked); setJoinError(''); }}
+          />
+          I confirm I meet the join requirements.
+        </label>
+        {joinError ? <p className="form-error">{joinError}</p> : null}
+        <button type="button" className="button button-primary" onClick={confirmJoinGroup}>
+          Confirm and join
+        </button>
+      </Modal>
     </section>
   );
 }

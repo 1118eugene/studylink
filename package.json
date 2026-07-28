@@ -11,6 +11,8 @@
     "server": "node backend/server.js",
     "db:migrate": "node scripts/migrate.js",
     "db:seed": "node scripts/migrate.js --seed",
+    "db:migrate:pg": "node scripts/migrate-pg.js",
+    "db:seed:pg": "node scripts/migrate-pg.js --seed",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit"
