@@ -35,14 +35,49 @@ function ProtectedRoute({ children }: ProtectedRouteProps) {
 function App() {
   const location = useLocation();
   const [isAuthenticated, setIsAuthenticated] = useState(() => !!getStoredUser());
+  const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' ? window.innerWidth <= 1080 : false);
 
   useEffect(() => {
     setIsAuthenticated(!!getStoredUser());
   }, [location.pathname]);
 
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 1080);
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const mobileNavLinks = [
+    { label: 'Dashboard', path: '/dashboard' },
+    { label: 'Groups', path: '/groups' },
+    { label: 'Sessions', path: '/sessions' },
+    { label: 'Courses', path: '/courses' },
+    { label: 'Resources', path: '/resources' },
+    { label: 'Library', path: '/library' },
+  ];
+
   return (
     <div className={`app-shell ${isAuthenticated ? 'authenticated-shell' : 'public-shell'}`}>
       {isAuthenticated ? <Sidebar /> : <Header />}
+      {isAuthenticated && isMobile ? (
+        <div className="mobile-auth-nav">
+          <div className="mobile-auth-nav-links">
+            {mobileNavLinks.map((link) => (
+              <Link
+                key={link.path}
+                to={link.path}
+                className={location.pathname === link.path ? 'mobile-auth-nav-link active' : 'mobile-auth-nav-link'}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
+        </div>
+      ) : null}
       <main className={isAuthenticated ? 'app-content' : 'app-content public-content'}>
         <Routes>
           <Route path="/" element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <Home />} />

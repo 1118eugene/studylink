@@ -1270,6 +1270,10 @@ nav {
     display: block;
   }
 
+  .sidebar-collapsed .sidebar-link .nav-label {
+    display: inline;
+  }
+
   .app-shell {
     overflow-x: hidden;
   }
@@ -1739,6 +1743,42 @@ nav {
     padding-top: 0.75rem;
     margin-top: 0.75rem;
     border-top: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .mobile-auth-nav {
+    width: 100%;
+    background: #111b33;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    position: sticky;
+    top: 0;
+    z-index: 15;
+  }
+
+  .mobile-auth-nav-links {
+    display: flex;
+    gap: 0.75rem;
+    padding: 0.85rem 1rem;
+    overflow-x: auto;
+    scrollbar-width: thin;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .mobile-auth-nav-link {
+    flex-shrink: 0;
+    white-space: nowrap;
+    padding: 0.7rem 1rem;
+    border-radius: 999px;
+    color: #f8fafc;
+    background: rgba(255, 255, 255, 0.08);
+    text-decoration: none;
+    font-weight: 600;
+    transition: background 0.2s ease;
+  }
+
+  .mobile-auth-nav-link.active,
+  .mobile-auth-nav-link:hover {
+    background: rgba(37, 99, 235, 0.95);
+    color: #ffffff;
   }
 
   .sidebar-toggle {
