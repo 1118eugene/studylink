@@ -2,11 +2,12 @@ import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import logo from '../assets/images/studylinklogo.png';
 import NotificationBell from './NotificationBell';
-import { clearStoredAuth } from '../lib/session';
+import { clearStoredAuth, getStoredUser } from '../lib/session';
 
 function Sidebar() {
   const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
+  const currentUser = getStoredUser();
 
   const handleLogout = () => {
     clearStoredAuth();
@@ -46,12 +47,20 @@ function Sidebar() {
         <NavLink to="/discover" className={({ isActive }) => (isActive ? 'sidebar-link active' : 'sidebar-link')}>
           <span className="nav-label">Classmates</span>
         </NavLink>
+        <NavLink to="/resources" className={({ isActive }) => (isActive ? 'sidebar-link active' : 'sidebar-link')}>
+          <span className="nav-label">Resources</span>
+        </NavLink>
         <NavLink to="/profile" className={({ isActive }) => (isActive ? 'sidebar-link active' : 'sidebar-link')}>
           <span className="nav-label">Profile</span>
         </NavLink>
-          <NavLink to="/library" className={({ isActive }) => (isActive ? 'sidebar-link active' : 'sidebar-link')}>
-            <span className="nav-label">Library</span>
+        <NavLink to="/library" className={({ isActive }) => (isActive ? 'sidebar-link active' : 'sidebar-link')}>
+          <span className="nav-label">Library</span>
+        </NavLink>
+        {currentUser?.role === 'admin' ? (
+          <NavLink to="/admin/academic" className={({ isActive }) => (isActive ? 'sidebar-link active' : 'sidebar-link')}>
+            <span className="nav-label">Academic Admin</span>
           </NavLink>
+        ) : null}
       </nav>
 
       <div className="sidebar-footer">

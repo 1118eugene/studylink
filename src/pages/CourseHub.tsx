@@ -1,7 +1,26 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getCourseById, Course } from '../lib/academic';
 import { apiFetch } from '../assets/images/api';
+import { getCourseById } from '../lib/academic';
+
+type CourseHubCourse = {
+  id: number | string;
+  code: string;
+  title: string;
+  description?: string;
+  name?: string;
+  overview?: string;
+  resources?: Array<{ id: number | string; title: string; url: string; resource_type?: string }>;
+};
+
+function normalizeCourse(course: any): CourseHubCourse {
+  return {
+    ...course,
+    title: course.title || course.name || '',
+    overview: course.description || course.overview || '',
+    resources: course.resources || [],
+  };
+};
 
 function PdfPreview({ url }: { url: string }) {
   if (!url) return null;
@@ -19,7 +38,7 @@ function PdfPreview({ url }: { url: string }) {
 
 function CourseHub() {
   const { id } = useParams();
-  const [course, setCourse] = useState<Course | undefined>(undefined);
+  const [course, setCourse] = useState<CourseHubCourse | null>(null);
   const [newTitle, setNewTitle] = useState('');
   const [newUrl, setNewUrl] = useState('');
   const [newFile, setNewFile] = useState<File | null>(null);
@@ -27,18 +46,33 @@ function CourseHub() {
 
   useEffect(() => {
     if (!id) return;
-    setCourse(getCourseById(id));
-    (async () => {
+
+    const loadCourse = async () => {
+      try {
+        const courseRes = await apiFetch(`/api/academic/courses/${id}`);
+        if (courseRes.ok) {
+          const json = await courseRes.json();
+          setCourse({ ...(json.course || {}), resources: [] });
+        }
+      } catch {
+        setCourse(null);
+      }
+    };
+
+    const loadResources = async () => {
       try {
         const res = await apiFetch(`/api/academic/courses/${id}/resources`);
         if (res.ok) {
           const json = await res.json();
-          setCourse((prev) => ({ ...(prev || {}), resources: json.resources || [] } as Course));
+          setCourse((prev) => prev ? { ...prev, resources: json.resources || [] } : null);
         }
       } catch {
         // ignore
       }
-    })();
+    };
+
+    loadCourse();
+    loadResources();
   }, [id]);
 
   const handleAddResource = () => {
@@ -75,7 +109,16 @@ function CourseHub() {
           setCourse(getCourseById(id));
         }
       } catch {
-        setCourse(getCourseById(id));
+        // fallback to local helper if backend info isn't available
+        const localCourse = getCourseById(id);
+        if (localCourse) {
+          setCourse({
+            ...localCourse,
+            title: localCourse.name,
+            overview: localCourse.overview,
+            resources: localCourse.resources || [],
+          });
+        }
       }
       setNewTitle('');
       setNewUrl('');

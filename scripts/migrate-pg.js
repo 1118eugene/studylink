@@ -26,7 +26,8 @@ function getSqlFiles(directory) {
 }
 
 async function run() {
-  const client = new Client({ connectionString: databaseUrl });
+  // Enable SSL for hosted providers (Render, Heroku). For local dev this is harmless.
+  const client = new Client({ connectionString: databaseUrl, ssl: { rejectUnauthorized: false } });
   await client.connect();
 
   // Ensure migration table

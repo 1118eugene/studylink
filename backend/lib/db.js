@@ -9,7 +9,7 @@ const __dirname = path.dirname(__filename);
 const DATA_PATH = path.resolve(__dirname, '..', 'data.json');
 
 const databaseUrl = process.env.DATABASE_URL;
-const useLocalStore = !databaseUrl;
+let useLocalStore = !databaseUrl;
 
 const defaultCourses = [
   {
@@ -239,7 +239,7 @@ function localRows(rows) {
   return Promise.resolve({ rows });
 }
 
-let localState = useLocalStore ? loadLocalData() : null;
+let localState = loadLocalData();
 
 let pool = null;
 if (!useLocalStore) {
@@ -1345,11 +1345,17 @@ export async function updateUserProfile(userId, updates) {
 }
 
 export async function query(text, params = []) {
-  if (!useLocalStore) {
-    return pool.query(text, params);
+  if (useLocalStore || !pool) {
+    return localQuery(text, params);
   }
 
-  return localQuery(text, params);
+  try {
+    return await pool.query(text, params);
+  } catch (error) {
+    console.warn('Postgres query failed, falling back to local store:', error?.message || error);
+    useLocalStore = true;
+    return localQuery(text, params);
+  }
 }
 
 export async function healthcheck() {

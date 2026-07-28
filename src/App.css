@@ -1072,6 +1072,7 @@ nav {
 }
 
 .sidebar-nav {
+  display: flex;
   flex-direction: column;
   gap: 0.5rem;
   justify-content: flex-start;
@@ -1080,9 +1081,18 @@ nav {
 }
 
 .sidebar-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
   background: transparent;
   color: #cbd5e1;
   justify-content: flex-start;
+  border: 1px solid transparent;
+  border-radius: 14px;
+  padding: 0.85rem 1rem;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
 
 .sidebar-logo-link {
   display: inline-flex;
@@ -1101,10 +1111,6 @@ nav {
   width: 1.9rem;
   height: 1.9rem;
   min-width: 1.9rem;
-}
-  border: 1px solid transparent;
-  border-radius: 14px;
-  padding: 0.8rem 1rem;
 }
 
 .sidebar-link:hover,
@@ -1197,6 +1203,123 @@ nav {
 
 .sidebar-collapsed .sidebar-link .nav-label {
   display: none;
+}
+
+@media (hover: none) {
+  .button:hover,
+  .feature-box:hover,
+  .card:hover,
+  .image-card:hover,
+  .sidebar-link:hover,
+  .group-card:hover,
+  .session-card:hover {
+    transform: none !important;
+    box-shadow: none !important;
+  }
+}
+
+@media (max-width: 1080px) {
+  .authenticated-shell {
+    flex-direction: column;
+  }
+
+  .sidebar,
+  .sidebar-shell {
+    width: 100%;
+    min-height: auto;
+    position: static;
+    top: auto;
+    align-self: stretch;
+    border-right: 0;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+    padding: 1rem 1rem 0.75rem;
+    background: linear-gradient(180deg, #111b33 0%, #0f172a 100%);
+  }
+
+  .sidebar-top {
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    row-gap: 0.75rem;
+  }
+
+  .sidebar-nav {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .sidebar-link {
+    width: 100%;
+  }
+
+  .sidebar-footer {
+    width: 100%;
+    padding-top: 0.75rem;
+    margin-top: 0.75rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .sidebar-collapsed {
+    width: 100%;
+  }
+
+  .sidebar-collapsed .sidebar-brand,
+  .sidebar-collapsed .subtle,
+  .sidebar-collapsed .sidebar-user,
+  .sidebar-collapsed .sidebar-footer {
+    display: block;
+  }
+
+  .app-shell {
+    overflow-x: hidden;
+  }
+
+  .app-content,
+  .public-content {
+    padding: 0 1rem 2rem;
+  }
+}
+
+@media (max-width: 720px) {
+  .sidebar {
+    padding: 0.85rem 1rem 0.75rem;
+  }
+
+  .sidebar-top {
+    gap: 0.5rem;
+  }
+
+  .sidebar-toggle {
+    width: 38px;
+    height: 38px;
+  }
+
+  .sidebar-link {
+    padding: 0.8rem 0.95rem;
+  }
+
+  .sidebar-footer {
+    padding-bottom: 1rem;
+  }
+
+  .hero {
+    padding: 2.5rem 0 1.5rem;
+  }
+
+  .hero-actions,
+  .groups-header,
+  .profile-header,
+  .session-card,
+  .management-form,
+  .form-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .container {
+    width: 100%;
+    padding: 0 1rem;
+  }
 }
 
 .notification-bell {
@@ -1542,12 +1665,88 @@ nav {
     flex-direction: column;
   }
 
+  .sidebar,
   .sidebar-shell {
     width: 100%;
     min-height: auto;
     position: static;
+    top: auto;
+    align-self: stretch;
     border-right: 0;
     border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+    padding: 1rem 1rem 0.75rem;
+    background: linear-gradient(180deg, #111b33 0%, #0f172a 100%);
+  }
+
+  .sidebar-top {
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    row-gap: 0.75rem;
+  }
+
+  .sidebar-nav {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .sidebar-link {
+    width: 100%;
+  }
+
+  .sidebar-footer {
+    width: 100%;
+    padding-top: 0.75rem;
+    margin-top: 0.75rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .sidebar-collapsed {
+    width: 100%;
+  }
+
+  .sidebar-collapsed .sidebar-brand,
+  .sidebar-collapsed .subtle,
+  .sidebar-collapsed .sidebar-user,
+  .sidebar-collapsed .sidebar-footer {
+    display: block;
+  }
+
+  .main {
+    min-width: 0;
+  }
+
+  .sidebar-top {
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    row-gap: 0.75rem;
+  }
+
+  .sidebar-nav {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .sidebar-link {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    border-radius: 14px;
+  }
+
+  .sidebar-footer {
+    width: 100%;
+    padding-top: 0.75rem;
+    margin-top: 0.75rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .sidebar-toggle {
+    display: inline-flex;
+  }
+
+  .main {
+    min-width: 0;
   }
 }
 
@@ -1572,6 +1771,39 @@ nav {
   .session-actions,
   .form-actions {
     width: 100%;
+  }
+
+  .header-inner,
+  .hero-actions,
+  .groups-header,
+  .profile-header,
+  .session-card {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .hero {
+    padding: 2.5rem 0 1.5rem;
+  }
+
+  .hero-copy,
+  .hero-visual,
+  .section-grid,
+  .listing-grid,
+  .service-grid,
+  .about-grid,
+  .courses-grid {
+    width: 100%;
+  }
+
+  .button {
+    width: 100%;
+  }
+
+  .container {
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 1rem;
   }
 }
 

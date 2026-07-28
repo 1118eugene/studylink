@@ -988,6 +988,36 @@ app.get('/api/academic/courses', requireAuth, async (req, res) => {
   return res.json({ courses: result.rows });
 });
 
+app.get('/api/academic/courses/:id', requireAuth, async (req, res) => {
+  const id = Number(req.params.id);
+  const result = await query(
+    `SELECT
+      c.id,
+      c.program_id,
+      c.semester_id,
+      c.code,
+      c.title,
+      c.description,
+      p.name AS program_name,
+      p.code AS program_code,
+      y.year_number AS year_number,
+      s.name AS semester_name
+     FROM courses c
+     LEFT JOIN programs p ON p.id = c.program_id
+     LEFT JOIN semesters s ON s.id = c.semester_id
+     LEFT JOIN years y ON y.id = s.year_id
+     WHERE c.id = $1
+     LIMIT 1;`,
+    [id],
+  );
+
+  if (!result.rows[0]) {
+    return res.status(404).json({ message: 'Course not found.' });
+  }
+
+  return res.json({ course: result.rows[0] });
+});
+
 app.post('/api/academic/courses', requireAuth, async (req, res) => {
   if (req.user.role !== 'admin') {
     return res.status(403).json({ message: 'Admin permission required.' });

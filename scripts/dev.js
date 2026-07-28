@@ -8,28 +8,68 @@ const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '..');
 const npmCommand = process.platform === 'win32' ? 'npm.cmd' : 'npm';
 
-function getAvailablePort(startPort) {
+function testPort(port, host) {
   return new Promise((resolve, reject) => {
-    const tryPort = (port) => {
-      const server = net.createServer();
+    const server = net.createServer();
+    let settled = false;
 
-      server.once('error', (error) => {
-        if (error && typeof error === 'object' && 'code' in error && error.code === 'EADDRINUSE') {
-          tryPort(port + 1);
-          return;
-        }
-        reject(error);
-      });
-
-      server.once('listening', () => {
-        server.close(() => resolve(port));
-      });
-
-      server.listen(port);
+    const cleanup = () => {
+      try {
+        server.close();
+      } catch {
+        // ignore cleanup failures
+      }
     };
 
-    tryPort(startPort);
+    server.once('error', (err) => {
+      if (settled) return;
+      settled = true;
+      cleanup();
+      if (err && err.code === 'EADDRINUSE') {
+        resolve(false);
+      } else {
+        reject(err);
+      }
+    });
+
+    server.once('listening', () => {
+      if (settled) return;
+      settled = true;
+      cleanup();
+      resolve(true);
+    });
+
+    server.listen(port, host);
   });
+}
+
+async function getAvailablePort(startPort) {
+  const hosts = ['127.0.0.1', '::'];
+
+  for (let port = startPort; port < startPort + 1000; port += 1) {
+    let available = true;
+    for (const host of hosts) {
+      try {
+        const ok = await testPort(port, host);
+        if (!ok) {
+          available = false;
+          break;
+        }
+      } catch (err) {
+        if (err && err.code === 'EADDRINUSE') {
+          available = false;
+          break;
+        }
+        available = false;
+        break;
+      }
+    }
+    if (available) {
+      return port;
+    }
+  }
+
+  throw new Error(`No available port found starting at ${startPort}`);
 }
 
 function start(command, args, name, extraEnv = {}) {

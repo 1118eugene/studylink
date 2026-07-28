@@ -28,27 +28,28 @@ WHERE p.code = 'CS' AND y.year_number = 1
 LIMIT 1;
 
 -- Courses for CS program
-INSERT INTO courses (program_id, semester_id, code, title, description, created_by_user_id)
+INSERT INTO courses (program_id, semester_id, code, category, title, description, created_by_user_id)
 SELECT p.id,
-  (SELECT id FROM semesters s JOIN years y ON y.id = s.year_id WHERE y.program_id = p.id LIMIT 1),
-  v.code, v.title, v.description, NULL
+  (SELECT s.id FROM semesters s JOIN years y ON y.id = s.year_id WHERE y.program_id = p.id LIMIT 1),
+  v.code, 'Core', v.title, v.description, NULL
 FROM programs p
 JOIN (VALUES
   ('CS101','Introduction to Programming','Learn programming fundamentals'),
   ('CS102','Data Structures','Core data structures'),
   ('CS201','Databases','Intro to relational databases')
 ) AS v(code, title, description) ON p.code = 'CS'
-WHERE p.code = 'CS';
+WHERE p.code = 'CS' ON CONFLICT DO NOTHING;
 
 -- Add a sample resource for CS101 (if course exists)
 INSERT INTO course_resources (course_id, title, url, resource_type, created_by_user_id)
 SELECT c.id, 'Syllabus', '/uploads/sample-syllabus.pdf', 'pdf', NULL
-FROM courses c WHERE c.code = 'CS101' LIMIT 1;
+FROM courses c WHERE c.code = 'CS101' LIMIT 1 ON CONFLICT DO NOTHING;
 
 -- Mark the sample resource as saved in resource_enrollments for user id 1 if exists
 INSERT INTO resources (title, resource_type, url, created_by_user_id)
 SELECT 'Sample Public Syllabus', 'pdf', '/uploads/sample-syllabus.pdf', NULL
-WHERE NOT EXISTS (SELECT 1 FROM resources WHERE url = '/uploads/sample-syllabus.pdf');
+WHERE NOT EXISTS (SELECT 1 FROM resources WHERE url = '/uploads/sample-syllabus.pdf')
+ON CONFLICT DO NOTHING;
 
 -- Optionally, create a saved link for user 1 if a user exists
 DO $$
