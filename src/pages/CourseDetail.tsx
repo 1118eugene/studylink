@@ -213,11 +213,11 @@ function CourseDetail() {
         return (
           <div className="detail-panel">
             <h3>Weekly topics</h3>
-            <div className="detail-list compact-list">
+            <ul className="detail-list compact-list">
               {weeklyTopics.map((topic) => (
                 <li key={topic}>{topic}</li>
               ))}
-            </div>
+            </ul>
           </div>
         );
       case 'notes':

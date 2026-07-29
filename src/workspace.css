@@ -9,24 +9,25 @@
 
 .workspace-hero {
   display: grid;
-  grid-template-columns: minmax(0, 1.5fr) minmax(280px, 0.9fr);
-  gap: 1.2rem;
-  padding: 1.5rem;
-  border-radius: 24px;
+  grid-template-columns: minmax(0, 1.4fr) minmax(240px, 0.85fr);
+  gap: 1rem;
+  padding: 1.2rem;
+  border-radius: 20px;
   color: #fff7ed;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 18px 42px rgba(15, 23, 42, 0.16);
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.14);
+  min-height: auto;
 }
 
 .workspace-hero::before {
   content: '';
   position: absolute;
-  inset: auto -12% -45% auto;
-  width: 220px;
-  height: 220px;
+  inset: auto -6% -50% auto;
+  width: 180px;
+  height: 180px;
   border-radius: 999px;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.22), transparent 68%);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.18), transparent 68%);
 }
 
 .workspace-hero-dashboard {
@@ -63,10 +64,10 @@
 }
 
 .workspace-hero h1 {
-  margin: 0 0 1rem;
-  font-size: clamp(2rem, 4vw, 3.3rem);
-  line-height: 1.05;
-  max-width: 12ch;
+  margin: 0 0 0.85rem;
+  font-size: clamp(1.85rem, 3vw, 2.55rem);
+  line-height: 1.1;
+  max-width: 14ch;
 }
 
 .workspace-lead {

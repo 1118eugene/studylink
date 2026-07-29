@@ -8,7 +8,6 @@ import Home from './pages/Home';
 import Dashboard from './pages/Dashboard';
 import Courses from './pages/Courses';
 import CourseDetail from './pages/CourseDetail';
-import CourseHub from './pages/CourseHub';
 import AdminAcademic from './pages/AdminAcademic';
 import StudyGroups from './pages/StudyGroups';
 import Schools from './pages/Schools';
@@ -94,7 +93,6 @@ function App() {
           <Route path="/schools" element={<ProtectedRoute><Schools /></ProtectedRoute>} />
           <Route path="/courses" element={<ProtectedRoute><Courses /></ProtectedRoute>} />
           <Route path="/courses/:id" element={<ProtectedRoute><CourseDetail /></ProtectedRoute>} />
-          <Route path="/course-hub/:id" element={<ProtectedRoute><CourseHub /></ProtectedRoute>} />
           <Route path="/admin/academic" element={<ProtectedRoute><AdminAcademic /></ProtectedRoute>} />
           <Route path="/groups" element={<ProtectedRoute><StudyGroups /></ProtectedRoute>} />
           <Route path="/groups/new" element={<ProtectedRoute><StudyGroups initialShowForm /></ProtectedRoute>} />
