@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { apiFetch } from '../assets/images/api';
+import { apiFetch } from '../lib/apiClient';
 
 type Classmate = {
   id: number;

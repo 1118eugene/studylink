@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { apiFetch } from '../assets/images/api';
+import { apiFetch } from '../lib/apiClient';
 
 type CourseDetailData = {
   id: number;

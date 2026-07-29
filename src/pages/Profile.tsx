@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { apiFetch } from '../assets/images/api';
+import { apiFetch } from '../lib/apiClient';
 import { getInitials, setStoredAuth } from '../lib/session';
 
 type ProfileResponse = {

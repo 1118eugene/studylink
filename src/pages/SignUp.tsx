@@ -1,6 +1,6 @@
 import { useState, type ChangeEvent, type FormEvent } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { apiFetch } from '../assets/images/api';
+import { apiFetch } from '../lib/apiClient';
 import { setStoredAuth } from '../lib/session';
 
 type SignUpProps = {

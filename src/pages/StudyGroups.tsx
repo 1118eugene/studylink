@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Modal from '../components/Modal';
-import { apiFetch } from '../assets/images/api';
+import { apiFetch } from '../lib/apiClient';
 import { addNotification } from '../lib/notifications';
 
 interface StudyGroup {

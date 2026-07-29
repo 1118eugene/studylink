@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { apiFetch } from '../assets/images/api';
+import { apiFetch } from '../lib/apiClient';
 import { getCourses as getAcademicCourses } from '../lib/academic';
 
 type Course = {

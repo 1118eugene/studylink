@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { apiFetch } from '../assets/images/api';
+import { apiFetch } from '../lib/apiClient';
 
 function Contact() {
   const [name, setName] = useState('');

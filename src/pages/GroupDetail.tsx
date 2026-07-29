@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import Modal from '../components/Modal';
-import { apiFetch } from '../assets/images/api';
+import { apiFetch } from '../lib/apiClient';
 import { addNotification } from '../lib/notifications';
 
 function GroupDetail() {

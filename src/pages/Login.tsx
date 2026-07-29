@@ -1,6 +1,6 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { apiFetch } from '../assets/images/api';
+import { apiFetch } from '../lib/apiClient';
 import { getStoredUser, setStoredAuth } from '../lib/session';
 type LoginProps = {
   onAuthSuccess: () => void;

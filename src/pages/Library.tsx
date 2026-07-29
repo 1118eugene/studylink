@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { apiFetch } from '../assets/images/api';
+import { apiFetch } from '../lib/apiClient';
 
 function Library() {
   const [resources, setResources] = useState<any[]>([]);
