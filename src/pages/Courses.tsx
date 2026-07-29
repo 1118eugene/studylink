@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { apiFetch } from '../lib/apiClient';
-import { getCourses as getAcademicCourses } from '../lib/academic';
 
 type Course = {
   id: number;
@@ -62,7 +61,7 @@ function Courses() {
   return (
     <section className="courses-page workspace-page">
       <div className="container workspace-stack">
-        <section className="workspace-hero workspace-hero-courses">
+        <section className="workspace-hero workspace-hero-compact">
           <div>
             <p className="workspace-eyebrow">Course Directory</p>
             <h1>Enroll once, keep your academic progress saved, and open the right study spaces faster.</h1>
@@ -140,15 +139,9 @@ function Courses() {
                   </div>
 
                   <div className="course-card-actions">
-                    {(() => {
-                      const academic = getAcademicCourses().find((c) => c.code === course.code);
-                      const href = academic ? `/course-hub/${academic.id}` : `/courses/${course.id}`;
-                      return (
-                        <Link to={href} className="button button-secondary">
-                          View details
-                        </Link>
-                      );
-                    })()}
+                    <Link to={`/courses/${course.id}`} className="button button-secondary">
+                      View details
+                    </Link>
                     <button
                       type="button"
                       onClick={() => handleEnroll(course.id)}

@@ -25,7 +25,7 @@ export const apiFetch = async (path: string, options: RequestInit = {}) => {
 
   const token = getStoredToken();
   if (token && !headers.has('Authorization')) {
-    headers.set('Authorization', `Bearer ${token}`);
+    headers.set('Authorization', 'Bearer ' + token);
   }
 
   const init: RequestInit = {

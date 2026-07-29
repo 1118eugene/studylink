@@ -44,9 +44,6 @@ function Sidebar() {
         <NavLink to="/sessions" className={({ isActive }) => (isActive ? 'sidebar-link active' : 'sidebar-link')}>
           <span className="nav-label">Sessions</span>
         </NavLink>
-        <NavLink to="/discover" className={({ isActive }) => (isActive ? 'sidebar-link active' : 'sidebar-link')}>
-          <span className="nav-label">Classmates</span>
-        </NavLink>
         <NavLink to="/resources" className={({ isActive }) => (isActive ? 'sidebar-link active' : 'sidebar-link')}>
           <span className="nav-label">Resources</span>
         </NavLink>

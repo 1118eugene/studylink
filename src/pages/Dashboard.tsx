@@ -1,22 +1,26 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { apiFetch } from '../lib/apiClient';
-import { getCourses as getAcademicCourses } from '../lib/academic';
 
-interface ActivityItem {
+type ActivityItem = {
   id: string;
   title: string;
   meta: string;
   occurredAt: string;
   href: string;
-}
+};
+
+const announcementList = [
+  { id: 'a1', title: 'New course outline templates are available.', detail: 'Course outline PDFs and weekly plans will help you keep every module organized.' },
+  { id: 'a2', title: 'Create or join a study group for your current course.', detail: 'Structured groups improve exam preparation and keep your study time focused.' },
+  { id: 'a3', title: 'Library search now surfaces notes, videos, and past papers.', detail: 'Open your library to filter by category and find what you need faster.' },
+];
 
 function Dashboard() {
   const [courses, setCourses] = useState<any[]>([]);
   const [sessions, setSessions] = useState<any[]>([]);
   const [groups, setGroups] = useState<any[]>([]);
   const [resources, setResources] = useState<any[]>([]);
-  const [classmates, setClassmates] = useState<any[]>([]);
   const [activity, setActivity] = useState<ActivityItem[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -25,84 +29,60 @@ function Dashboard() {
 
     const loadDashboard = async () => {
       try {
-        const [coursesData, sessionsData, groupsData, resourcesData, classmatesData] = await Promise.all([
+        const [coursesData, sessionsData, groupsData, resourcesData] = await Promise.all([
           apiFetch('/api/courses').then((response) => response.json()),
           apiFetch('/api/sessions').then((response) => response.json()),
           apiFetch('/api/groups').then((response) => response.json()),
           apiFetch('/api/resources').then((response) => response.json()),
-          apiFetch('/api/classmates').then((response) => response.json()),
         ]);
 
-        if (!mounted) {
-          return;
-        }
+        if (!mounted) return;
 
         const courseList = coursesData.courses || [];
         const sessionList = sessionsData.sessions || [];
         const groupList = groupsData.groups || [];
         const resourceList = resourcesData.resources || [];
-        const classmatesList = classmatesData.classmates || [];
 
         setCourses(courseList);
         setSessions(sessionList);
         setGroups(groupList);
         setResources(resourceList);
-        setClassmates(classmatesList);
 
         const [courseDetails, groupDetails, sessionDetails, resourceDetails] = await Promise.all([
-          Promise.all(courseList.slice(0, 6).map(async (course: any) => {
+          Promise.all(courseList.slice(0, 4).map(async (course: any) => {
             const response = await apiFetch(`/api/courses/${course.id}`);
-            if (!response.ok) {
-              return null;
-            }
+            if (!response.ok) return null;
             const data = await response.json();
             return data.course;
           })),
-          Promise.all(groupList.slice(0, 6).map(async (group: any) => {
+          Promise.all(groupList.slice(0, 4).map(async (group: any) => {
             const response = await apiFetch(`/api/groups/${group.id}`);
-            if (!response.ok) {
-              return null;
-            }
+            if (!response.ok) return null;
             const data = await response.json();
             return data.group;
           })),
-          Promise.all(sessionList.slice(0, 6).map(async (session: any) => {
+          Promise.all(sessionList.slice(0, 4).map(async (session: any) => {
             const response = await apiFetch(`/api/sessions/${session.id}`);
-            if (!response.ok) {
-              return null;
-            }
+            if (!response.ok) return null;
             const data = await response.json();
             return data.session;
           })),
           Promise.all(resourceList.slice(0, 4).map(async (resource: any) => {
             const response = await apiFetch(`/api/resources/${resource.id}`);
-            if (!response.ok) {
-              return null;
-            }
+            if (!response.ok) return null;
             const data = await response.json();
             return data.resource;
           })),
         ]);
 
-        if (!mounted) {
-          return;
-        }
-
         const courseActivity = courseDetails.flatMap((course: any) =>
           (course?.students || []).map((student: any) => ({
             id: `course-${course.id}-${student.id}-${student.enrolledAt}`,
-            title: `${student.name} enrolled in ${course.code}`,
+            title: `${student.name} is active in ${course.code}`,
             meta: `${course.title} · ${student.email}`,
             occurredAt: student.enrolledAt,
-            href: (() => {
-              try {
-                const found = getAcademicCourses().find((c: any) => c.code === course.code);
-                return found ? `/course-hub/${found.id}` : `/courses/${course.id}`;
-              } catch {
-                return `/courses/${course.id}`;
-              }
-            })(),
-          })),
+            href: `/courses/${course.id}`,
+          })), 
         );
 
         const groupActivity = groupDetails.flatMap((group: any) =>
@@ -118,7 +98,7 @@ function Dashboard() {
         const sessionActivity = sessionDetails.flatMap((session: any) =>
           (session?.attendees || []).map((attendee: any) => ({
             id: `session-${session.id}-${attendee.email}-${attendee.enrolledAt}`,
-            title: `${attendee.name} enrolled in ${session.title}`,
+            title: `${attendee.name} joined ${session.title}`,
             meta: `${session.group || 'Study Session'} · ${attendee.email}`,
             occurredAt: attendee.enrolledAt,
             href: '/sessions',
@@ -141,25 +121,18 @@ function Dashboard() {
             .slice(0, 6),
         );
       } catch {
-        if (!mounted) {
-          return;
-        }
-
+        if (!mounted) return;
         setCourses([]);
         setSessions([]);
         setGroups([]);
         setResources([]);
-        setClassmates([]);
         setActivity([]);
       } finally {
-        if (mounted) {
-          setLoading(false);
-        }
+        if (mounted) setLoading(false);
       }
     };
 
     loadDashboard();
-
     return () => {
       mounted = false;
     };
@@ -169,38 +142,34 @@ function Dashboard() {
     { label: 'Courses enrolled', value: String(courses.filter((course) => course.isEnrolled).length), href: '/courses' },
     { label: 'Study groups', value: String(groups.length), href: '/groups' },
     { label: 'Upcoming sessions', value: String(sessions.length), href: '/sessions' },
-    { label: 'Classmate matches', value: String(classmates.filter((student) => student.sharedCourses?.length > 0).length), href: '/discover' },
+    { label: 'Saved resources', value: String(resources.length), href: '/library' },
   ];
 
-  const spotlightLinks = [
-    { title: 'Study groups', description: 'Open saved group rosters, requirements, and member counts.', href: '/groups' },
-    { title: 'Courses', description: 'Review enrolled students, related groups, and linked sessions.', href: '/courses' },
-    { title: 'Sessions', description: 'Track attendance and run better-prepared study meetings.', href: '/sessions' },
-    { title: 'Resources', description: 'Share reusable study material with visible access history.', href: '/resources' },
-  ];
+  const upcomingSessions = sessions.slice(0, 4);
+  const recentActivity = activity.slice(0, 4);
 
   return (
     <section className="dashboard-page workspace-page">
       <div className="container workspace-stack">
-        <section className="workspace-hero workspace-hero-dashboard">
+        <section className="dashboard-summary-card">
           <div>
-            <p className="workspace-eyebrow">Dashboard</p>
-            <h1>Your academic workspace now keeps courses, groups, sessions, and enrollments in one persistent flow.</h1>
+            <p className="workspace-eyebrow">Welcome back</p>
+            <h1>StudyLink keeps your academic ecosystem compact and productive.</h1>
+            <p className="workspace-lead">A slimmer dashboard with quick stats, upcoming sessions, and direct access to courses, library, and groups.</p>
           </div>
-          <div className="hero-action-stack">
-            <Link to="/courses" className="button button-primary">Open course directory</Link>
-            <Link to="/groups" className="button button-secondary">Manage study groups</Link>
+          <div className="dashboard-summary-actions">
+            <Link to="/courses" className="button button-primary">Continue learning</Link>
+            <Link to="/library" className="button button-secondary">Open library</Link>
           </div>
         </section>
 
-        <div className="stats-grid polished-stats-grid">
+        <div className="dashboard-stats-grid">
           {stats.map((stat) => (
-            <Link key={stat.label} to={stat.href} className="stat-card stat-card-link">
+            <Link key={stat.label} to={stat.href} className="stat-card stat-card-link compact-stat-card">
               <div className="stat-content">
                 <p className="stat-label">{stat.label}</p>
                 <p className="stat-value">{stat.value}</p>
               </div>
-              <span className="stat-link-arrow">View</span>
             </Link>
           ))}
         </div>
@@ -209,19 +178,18 @@ function Dashboard() {
           <section className="dashboard-section dashboard-primary-panel">
             <div className="section-header">
               <h2>Recent activity</h2>
-              <span className="panel-pill">Saved events</span>
+              <span className="panel-pill">Latest updates</span>
             </div>
-
             {loading ? (
-              <p>Loading dashboard activity...</p>
-            ) : activity.length === 0 ? (
+              <div className="workspace-loading-card"><p>Loading dashboard activity…</p></div>
+            ) : recentActivity.length === 0 ? (
               <div className="empty-state">
-                <p className="empty-text">No saved activity yet</p>
-                <p className="empty-help">Enroll in courses, groups, sessions, or resources to start building a visible history.</p>
+                <p className="empty-text">No recent activity available yet.</p>
+                <p className="empty-help">Enroll in a course or join a study group to start tracking your academic actions.</p>
               </div>
             ) : (
               <div className="activity-feed">
-                {activity.map((item) => (
+                {recentActivity.map((item) => (
                   <Link key={item.id} to={item.href} className="activity-card activity-card-link">
                     <div>
                       <p className="activity-title">{item.title}</p>
@@ -236,96 +204,78 @@ function Dashboard() {
 
           <section className="dashboard-section">
             <div className="section-header">
-              <h2>Workspace shortcuts</h2>
+              <h2>Upcoming sessions</h2>
+              <Link to="/sessions" className="view-all-link">View sessions</Link>
+            </div>
+            {upcomingSessions.length === 0 ? (
+              <div className="empty-state">
+                <p className="empty-text">No upcoming sessions found.</p>
+                <p className="empty-help">Create or join a study session to keep your calendar active.</p>
+              </div>
+            ) : (
+              <div className="detail-card-grid">
+                {upcomingSessions.map((session) => (
+                  <article key={session.id} className="detail-summary-card">
+                    <strong>{session.title}</strong>
+                    <p>{session.group || 'Study session'}</p>
+                    <span>{session.startsAt ? new Date(session.startsAt).toLocaleString() : session.time || 'Time pending'}</span>
+                  </article>
+                ))}
+              </div>
+            )}
+          </section>
+        </div>
+
+        <div className="dashboard-layout">
+          <section className="dashboard-section">
+            <div className="section-header">
+              <h2>Announcements</h2>
+              <span className="panel-pill">Campus insights</span>
+            </div>
+            <div className="announcement-list">
+              {announcementList.map((announcement) => (
+                <article key={announcement.id} className="detail-summary-card">
+                  <strong>{announcement.title}</strong>
+                  <p>{announcement.detail}</p>
+                </article>
+              ))}
+            </div>
+          </section>
+
+          <section className="dashboard-section">
+            <div className="section-header">
+              <h2>Quick shortcuts</h2>
+              <span className="panel-pill">Navigate faster</span>
             </div>
             <div className="quick-actions quick-actions-grid">
-              {spotlightLinks.map((item) => (
-                <Link key={item.title} to={item.href} className="quick-action-btn quick-action-card">
-                  <div>
-                    <strong>{item.title}</strong>
-                    <p>{item.description}</p>
-                  </div>
-                  <span className="action-icon">Go</span>
-                </Link>
-              ))}
-            </div>
-          </section>
-        </div>
-
-        <div className="dashboard-layout">
-          <section className="dashboard-section">
-            <div className="section-header">
-              <h2>Course spotlight</h2>
-              <Link to="/courses" className="view-all-link">Open all courses</Link>
-            </div>
-            <div className="detail-card-grid">
-              {courses.slice(0, 3).map((course) => {
-                let href = `/courses/${course.id}`;
-                try {
-                  const found = getAcademicCourses().find((c: any) => c.code === course.code);
-                  if (found) href = `/course-hub/${found.id}`;
-                } catch {
-                  // ignore
-                }
-
-                return (
-                  <Link key={course.id} to={href} className="detail-summary-card">
-                    <strong>{course.code}</strong>
-                    <p>{course.title}</p>
-                    <span>{course.enrolledCount} students · {course.relatedGroupCount} groups</span>
-                  </Link>
-                );
-              })}
-            </div>
-          </section>
-
-          <section className="dashboard-section">
-            <div className="section-header">
-              <h2>Study groups</h2>
-              <Link to="/groups" className="view-all-link">Open groups</Link>
-            </div>
-            <div className="detail-card-grid">
-              {groups.slice(0, 3).map((group) => (
-                <Link key={group.id} to={`/groups/${group.id}`} className="detail-summary-card">
-                  <strong>{group.name}</strong>
-                  <p>{group.courseCode || 'Study Group'}</p>
-                  <span>{group.members} members · {group.sessionCount || 0} sessions</span>
-                </Link>
-              ))}
-            </div>
-          </section>
-        </div>
-
-        <div className="dashboard-layout">
-          <section className="dashboard-section">
-            <div className="section-header">
-              <h2>Upcoming sessions</h2>
-              <Link to="/sessions" className="view-all-link">Open sessions</Link>
-            </div>
-            <div className="detail-card-grid">
-              {sessions.slice(0, 3).map((session) => (
-                <article key={session.id} className="detail-summary-card">
-                  <strong>{session.title}</strong>
-                  <p>{session.group || 'Study Session'}</p>
-                  <span>{session.startsAt ? new Date(session.startsAt).toLocaleString() : session.time || 'Time pending'}</span>
-                </article>
-              ))}
-            </div>
-          </section>
-
-          <section className="dashboard-section">
-            <div className="section-header">
-              <h2>Classmates to reconnect with</h2>
-              <Link to="/discover" className="view-all-link">Open classmates</Link>
-            </div>
-            <div className="detail-card-grid">
-              {classmates.slice(0, 3).map((classmate) => (
-                <article key={classmate.id} className="detail-summary-card">
-                  <strong>{classmate.name}</strong>
-                  <p>{classmate.major || 'Student'} · {classmate.university || 'University'}</p>
-                  <span>{classmate.sharedCourses?.length || 0} shared courses</span>
-                </article>
-              ))}
+              <Link to="/courses" className="quick-action-btn quick-action-card">
+                <div>
+                  <strong>Courses</strong>
+                  <p>Open your enrolled and available course catalog.</p>
+                </div>
+                <span className="action-icon">→</span>
+              </Link>
+              <Link to="/library" className="quick-action-btn quick-action-card">
+                <div>
+                  <strong>Library</strong>
+                  <p>Find notes, PDFs, past papers, and curated resources.</p>
+                </div>
+                <span className="action-icon">→</span>
+              </Link>
+              <Link to="/groups" className="quick-action-btn quick-action-card">
+                <div>
+                  <strong>Study groups</strong>
+                  <p>Review active groups and join collaborative sessions.</p>
+                </div>
+                <span className="action-icon">→</span>
+              </Link>
+              <Link to="/sessions" className="quick-action-btn quick-action-card">
+                <div>
+                  <strong>Sessions</strong>
+                  <p>Check your upcoming sessions and join live review meetings.</p>
+                </div>
+                <span className="action-icon">→</span>
+              </Link>
             </div>
           </section>
         </div>

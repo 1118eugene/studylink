@@ -11,7 +11,7 @@ function Schools() {
   return (
     <section className="schools-page workspace-page">
       <div className="container workspace-stack">
-        <section className="workspace-hero workspace-hero-courses">
+        <section className="workspace-hero workspace-hero-compact">
           <div>
             <p className="workspace-eyebrow">Schools</p>
             <h1>Select your school to begin</h1>

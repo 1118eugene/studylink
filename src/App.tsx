@@ -6,7 +6,6 @@ import Login from './pages/Login';
 import SignUp from './pages/SignUp';
 import Home from './pages/Home';
 import Dashboard from './pages/Dashboard';
-import DiscoverClassmates from './pages/DiscoverClassmates';
 import Courses from './pages/Courses';
 import CourseDetail from './pages/CourseDetail';
 import CourseHub from './pages/CourseHub';
@@ -93,7 +92,6 @@ function App() {
           {/* Authenticated pages */}
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/schools" element={<ProtectedRoute><Schools /></ProtectedRoute>} />
-          <Route path="/discover" element={<ProtectedRoute><DiscoverClassmates /></ProtectedRoute>} />
           <Route path="/courses" element={<ProtectedRoute><Courses /></ProtectedRoute>} />
           <Route path="/courses/:id" element={<ProtectedRoute><CourseDetail /></ProtectedRoute>} />
           <Route path="/course-hub/:id" element={<ProtectedRoute><CourseHub /></ProtectedRoute>} />

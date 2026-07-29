@@ -8,7 +8,6 @@ function AuthHeader() {
 
   const navLinks = [
     { label: 'Home', path: '/dashboard' },
-    { label: 'Discover', path: '/discover' },
     { label: 'Courses', path: '/courses' },
     { label: 'Groups', path: '/groups' },
     { label: 'Sessions', path: '/sessions' },

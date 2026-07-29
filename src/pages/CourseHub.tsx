@@ -140,7 +140,7 @@ function CourseHub() {
   return (
     <section className="workspace-page">
       <div className="container workspace-stack">
-        <section className="workspace-hero workspace-hero-courses">
+        <section className="workspace-hero workspace-hero-compact">
           <div>
             <p className="workspace-eyebrow">{course.code}</p>
                         <h1>{course.title}</h1>
