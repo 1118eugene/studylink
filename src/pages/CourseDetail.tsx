@@ -56,7 +56,7 @@ const hubTabs = [
   { key: 'groups', label: 'Study groups' },
   { key: 'sessions', label: 'Live sessions' },
   { key: 'students', label: 'Students enrolled' },
-  { key: 'ask', label: 'Ask StudyLink' },
+  { key: 'ask', label: 'Ask StudyLink AI' },
 ];
 
 function CourseDetail() {
@@ -147,6 +147,11 @@ function CourseDetail() {
                   <li key={item}>{item}</li>
                 ))}
               </ul>
+              <div className="detail-action-row" style={{ marginTop: '1rem' }}>
+                <button type="button" className="button button-secondary" onClick={() => setSelectedTab('ask')}>
+                  Ask StudyLink AI about this course
+                </button>
+              </div>
             </div>
             <div className="detail-panel">
               <h3>Course details</h3>
@@ -393,8 +398,11 @@ function CourseDetail() {
             </div>
           </div>
           <div className="detail-action-row">
-            <button type="button" className="button button-primary" onClick={() => setSelectedTab('students')}>
-              View students
+            <button type="button" className="button button-primary" onClick={() => setSelectedTab('ask')}>
+              Ask StudyLink AI
+            </button>
+            <button type="button" className="button button-secondary" onClick={() => setSelectedTab('students')}>
+              Students enrolled
             </button>
             <Link to="/courses" className="button button-secondary">Back to courses</Link>
           </div>
