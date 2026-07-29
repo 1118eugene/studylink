@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { apiFetch } from '../lib/apiClient';
 import { buildMergedCourses, getAllCatalogResources, getCatalogCourseByCode, getResourcesForCourse } from '../lib/studylinkContent';
 
@@ -73,6 +73,7 @@ function buildCatalogResources() {
 }
 
 function LearningHub() {
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const initialView = searchParams.get('view') || 'library';
   const [selectedView, setSelectedView] = useState(initialView);
@@ -223,31 +224,11 @@ function LearningHub() {
   }, [baseResources, searchTerm, selectedSchool, selectedType, selectedView]);
 
   const handleAccess = async (resource: ResourceItem) => {
-    if (resource.isCatalog) {
-      if (selectedView !== 'library') {
-        setAllResources((current) => current.map((item) => (
-          String(item.id) === String(resource.id) ? { ...item, downloads: item.downloads + 1 } : item
-        )));
-      }
-      window.open(resource.url, '_blank', 'noopener,noreferrer');
-      return;
-    }
+    const id = String(resource.id);
+    const queryParams = new URLSearchParams();
+    if (resource.courseCode) queryParams.set('courseCode', resource.courseCode);
 
-    try {
-      const response = await apiFetch(`/api/resources/${resource.id}/enroll`, { method: 'POST' });
-      if (!response.ok) {
-        throw new Error('Resource access failed');
-      }
-
-      setAllResources((current) => current.map((item) => (
-        String(item.id) === String(resource.id) ? { ...item, downloads: item.downloads + 1 } : item
-      )));
-      window.open(resource.url, '_blank', 'noopener,noreferrer');
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error(error);
-      alert('Could not open this resource right now.');
-    }
+    navigate(`/resources/${encodeURIComponent(id)}?${queryParams.toString()}`);
   };
 
   const handleHide = async (resource: ResourceItem) => {

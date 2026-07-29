@@ -65,28 +65,348 @@ function escapeHtml(value: string) {
     .replace(/'/g, '&#39;');
 }
 
-function buildDataUrl(title: string, sections: string[]) {
+function buildDataUrl(title: string, bodyHtml: string) {
   const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <title>${escapeHtml(title)}</title>
 <style>
-  body { font-family: system-ui, sans-serif; color: #111; background: #f9fafb; margin: 0; padding: 2rem; line-height: 1.6; }
-  h1, h2 { color: #111; margin: 0 0 1rem; }
-  h2 { margin-top: 1.5rem; }
-  p { margin: 0 0 1rem; }
-  ul { margin: 0 0 1rem 1.5rem; }
-  pre { background: #fff; padding: 1rem; border-radius: 0.5rem; overflow-x: auto; }
+  body { font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: #0f172a; background: #f8fafc; margin: 0; padding: 2rem; }
+  .page { max-width: 900px; margin: 0 auto; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 1rem; box-shadow: 0 20px 60px rgba(15, 23, 42, 0.08); padding: 2.5rem; }
+  h1 { margin: 0 0 1.25rem; font-size: 2.2rem; letter-spacing: -0.03em; }
+  h2 { margin: 2rem 0 1rem; font-size: 1.25rem; color: #1e293b; }
+  p { margin: 0 0 1rem; color: #334155; line-height: 1.7; }
+  ul, ol { margin: 0 0 1rem 1.5rem; color: #334155; }
+  li { margin: 0.5rem 0; }
+  .section { margin-bottom: 1.75rem; }
+  .section-title { display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 700; color: #0f172a; }
+  .note-box, .pdf-box, .media-box, .question-box, .answer-box { background: #f1f5f9; border-radius: 0.85rem; padding: 1rem 1.25rem; margin: 1rem 0; }
+  .question-box strong, .answer-box strong { display: block; margin-bottom: 0.75rem; }
+  .resource-footer { border-top: 1px solid #e2e8f0; padding-top: 1rem; color: #475569; font-size: 0.95rem; }
+  .definition-list dt { font-weight: 700; margin-top: 1rem; }
+  .definition-list dd { margin: 0 0 0.75rem 1.5rem; }
 </style>
 </head>
 <body>
-  <h1>${escapeHtml(title)}</h1>
-  ${sections.map((section) => `<p>${escapeHtml(section).replace(/\n/g, '<br/>')}</p>`).join('')}
+  <div class="page">
+    <h1>${escapeHtml(title)}</h1>
+    ${bodyHtml}
+  </div>
 </body>
 </html>`;
   return `data:text/html;charset=utf-8,${encodeURIComponent(html)}`;
 }
+
+function buildYoutubeSearchUrl(query: string) {
+  return `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`;
+}
+
+function buildPodcastSearchUrl(query: string) {
+  return `https://www.google.com/search?q=${encodeURIComponent(`${query} podcast`)}`;
+}
+
+function buildSection(title: string, contentHtml: string) {
+  return `<section class="section"><h2 class="section-title">${escapeHtml(title)}</h2>${contentHtml}</section>`;
+}
+
+function buildParagraph(text: string) {
+  return `<p>${escapeHtml(text)}</p>`;
+}
+
+function buildList(items: string[]) {
+  return `<ul>${items.map((item) => `<li>${escapeHtml(item)}</li>`).join('')}</ul>`;
+}
+
+function buildDefinitionList(items: Array<[string, string]>) {
+  return `<dl class="definition-list">${items.map(([term, definition]) => `<dt>${escapeHtml(term)}</dt><dd>${escapeHtml(definition)}</dd>`).join('')}</dl>`;
+}
+
+function buildQuestionBlock(question: string, choices: string[]) {
+  return `<div class="question-box"><strong>${escapeHtml(question)}</strong><ol type="A">${choices.map((choice) => `<li>${escapeHtml(choice)}</li>`).join('')}</ol></div>`;
+}
+
+function buildMcqQuestionBlock(question: string, choices: string[], correctIndex: number, explanation: string) {
+  const correctLabel = String.fromCharCode(65 + correctIndex);
+  return `<div class="question-box"><strong>${escapeHtml(question)}</strong><ol type="A">${choices.map((choice) => `<li>${escapeHtml(choice)}</li>`).join('')}</ol><div class="answer-box"><strong>Correct answer: ${escapeHtml(correctLabel)}</strong><p>${escapeHtml(choices[correctIndex])}</p><strong>Why this is best</strong><p>${escapeHtml(explanation)}</p></div></div>`;
+}
+
+function buildAnswerBlock(answerText: string) {
+  return `<div class="answer-box"><strong>Answer</strong><p>${escapeHtml(answerText)}</p></div>`;
+}
+
+function buildFooter(text: string) {
+  return `<div class="resource-footer">${escapeHtml(text)}</div>`;
+}
+
+function buildNoteContent(seed: CourseSeed, topic: string) {
+  return buildDataUrl(`${seed.code} Study Note: ${topic}`,
+    buildSection('Overview', buildParagraph(`This note is organised into a clear topic roadmap with related subtopics and detailed explanations. It explains ${topic.toLowerCase()} as a concept, shows how it appears in ${seed.title}, and gives students the structure they need for confident answers.`)) +
+    buildSection('Why this topic matters', buildParagraph(`In ${seed.title}, ${topic.toLowerCase()} appears in lectures, assignments, and exam questions. This section explains why it is central to understanding the course and how it supports decision-making in practical tasks.`)) +
+    buildSection('Topic roadmap', buildList([
+      `Subtopic 1: Core definition and purpose of ${topic.toLowerCase()}.`,
+      `Subtopic 2: Practical applications and examples in ${seed.title}.`,
+      `Subtopic 3: Common pitfalls, comparisons, and evaluation advice.`,
+    ])) +
+    buildSection(`Subtopic 1: Definition and concept`, buildParagraph(`${topic.toLowerCase()} is best understood as a specific idea or method that solves part of the course problem. In this subtopic, we clarify its meaning, how it differs from related concepts, and the precise terms examiners want to see.`)) +
+    buildSection(`Subtopic 2: Practical application`, buildParagraph(`This subtopic shows how to apply ${topic.toLowerCase()} in ${seed.title}. It explains a typical scenario, the steps required, and the reasoning behind each step so students can write a well-supported answer.`)) +
+    buildSection('Application steps', `<div class="note-box">${escapeHtml(`Use these stages when applying the topic:`)}<br/><br/>${escapeHtml(`1. Identify the problem requirement.
+2. Select the relevant part of the topic.
+3. Explain how it solves the task.
+4. Provide a short example or illustration.
+5. Evaluate why the choice is appropriate.`).replace(/\n/g, '<br/>')}</div>`) +
+    buildSection(`Subtopic 3: Common pitfalls and comparison`, buildParagraph(`Students often confuse ${topic.toLowerCase()} with similar ideas or stop at a definition. This section explains the common mistakes, how to compare it with related topics, and what to include to make the answer stronger.`)) +
+    buildSection('Comparison checklist', buildList([
+      `Describe what ${topic.toLowerCase()} is not, as well as what it is.`,
+      'Link it to a related course concept and explain the difference.',
+      'Show why the chosen approach is better in this situation.',
+    ])) +
+    buildSection('Worked example', buildParagraph(`Example: A student is asked to use ${topic.toLowerCase()} in a practical task. The response below shows the structure of a strong answer and the exact reasoning needed.`)) +
+    buildSection('Example walkthrough', `<div class="note-box">${escapeHtml(`Example walkthrough:`)}<br/><br/>${escapeHtml(`1. Start with a sentence defining the topic.
+2. Describe the context of the task.
+3. Explain the selected method and why it applies.
+4. Show one example or outcome.
+5. Add a short evaluation or conclusion.`).replace(/\n/g, '<br/>')}</div>`) +
+    buildSection('Detailed explanation', buildParagraph(`A complete answer should explain each subtopic clearly. This means defining the concept, applying it in a scenario, comparing it with alternatives, and evaluating the result so the examiner understands the reasoning.`)) +
+    buildSection('Study checklist', buildList([
+      'Write the definition in your own words.',
+      'Add at least one practical example.',
+      'Compare it to a related idea to avoid mix-ups.',
+      'Include one short statement of why this approach works.',
+    ])) +
+    buildSection('Revision prompts', buildList([
+      `What are the three key points you should remember about ${topic.toLowerCase()}?`,
+      'Which example best shows the topic in action?',
+      'Where does this topic fit in the course structure and why?',
+    ])) +
+    buildFooter(`This note is structured to teach ${topic.toLowerCase()} through topic, subtopic, application, and explanation so students learn the concept thoroughly.`),
+  );
+}
+
+function buildPdfContent(seed: CourseSeed, title: string) {
+  return buildDataUrl(`${seed.code} PDF Guide: ${title}`,
+    buildSection('Executive summary', buildParagraph(`This PDF guide is a fully researched study resource for ${seed.title}. It brings together the key theory, literature review, practical examples, and revision strategy so that learners can use it as a complete answer reference.`)) +
+    buildSection('Why this matters', buildParagraph(`${title} is important because it appears in the course’s core assessment objectives and helps students demonstrate both understanding and application. This guide explains why the topic is valuable and how it should be used in assignments.`)) +
+    buildSection('Literature review', buildParagraph(`Course and academic literature often frame this topic in terms of problem solving, evaluation, and justification. This section summarises the most relevant perspectives and the reason they are emphasised in ${seed.title}.`)) +
+    buildSection('Core definitions', buildDefinitionList([
+      [`${seed.code} concept`, `A clear description of the topic and how it functions within the course.`],
+      ['Practical application', 'How and where this topic is used in assignments, projects, or exam questions.'],
+      ['Evaluation criteria', 'The elements lecturers look for in a strong answer.'],
+    ])) +
+    buildSection('Application example', `<div class="pdf-box">${escapeHtml(`Application example: This section walks through a real course-style problem step by step, showing how to use the topic effectively.`)}<br/><br/>${escapeHtml(`Scenario: A student must solve or evaluate a task related to ${title.toLowerCase()}. The answer should define the concept, show how it applies, and explain why it is correct.`).replace(/\n/g, '<br/>')}</div>`) +
+    buildSection('Research implications', buildParagraph(`The key implication for students is that a strong answer combines concept, example, and justification. This guide emphasises the reasoning and evidence that make the response convincing.`)) +
+    buildSection('Comparison with related topics', buildList([
+      `Why ${title.toLowerCase()} is different from similar course topics.`,
+      'When to use this topic instead of another one.',
+      'How to avoid mixing up concepts in exam answers.',
+    ])) +
+    buildSection('Revision strategy', buildList([
+      'Read the summary and write the main terms in your own words.',
+      'Rewrite the application example from memory.',
+      'Use the comparison section to test your concept distinctions.',
+      'Practice one sample question using the guide.',
+    ])) +
+    buildFooter(`This PDF resource is created to be a deep, teacher-quality study document for ${seed.code}.`),
+  );
+}
+
+function buildPodcastContent(seed: CourseSeed, topic: string) {
+  return buildDataUrl(`${seed.code} Podcast Notes: ${topic}`,
+    buildSection('Episode summary', buildParagraph(`This podcast-style resource is written like a researched lecture notes page. It provides the topic, the underlying research idea, and the practical conclusion so listeners can capture the essential learning in one place.`)) +
+    buildSection('Research context', buildParagraph(`Studies and course materials show that listening with purpose improves retention. This section summarises the key research idea behind ${topic.toLowerCase()} and the lessons students need for ${seed.title}.`)) +
+    buildSection('Main points', buildList([
+      `What ${topic.toLowerCase()} means and why it is important in ${seed.title}.`,
+      'The strongest example that helps make the concept memorable.',
+      'A clear study tip to apply it during revision.',
+    ])) +
+    buildSection('Detailed explanation', `<div class="media-box">${escapeHtml(`Detailed explanation: Write this as if the student is listening to a tutor explain the topic step by step.`)}<br/><br/>${escapeHtml(`1. Introduce the topic simply.
+2. Explain how it connects to the course.
+3. Show one strong example.
+4. Highlight the most important takeaway.`).replace(/\n/g, '<br/>')}</div>`) +
+    buildSection('Reflection prompts', buildList([
+      'What is the one sentence summary you would use for this topic?',
+      'How does it apply to the next assignment or exam?',
+      'What action should you take after listening to this resource?',
+    ])) +
+    buildFooter(`This podcast notes page is designed to be a deep, research-style learning resource for ${seed.code}.`),
+  );
+}
+
+function buildVideoContent(seed: CourseSeed, topic: string) {
+  return buildDataUrl(`${seed.code} Video Companion: ${topic}`,
+    buildSection('Visual summary', buildParagraph(`This companion content is written like a video study guide. It explains the topic, highlights the key visual steps, and identifies the exact research-backed evidence students should focus on while watching.`)) +
+    buildSection('Research highlights', buildList([
+      'The topic is explained in a stepwise process.',
+      'A common mistake is compared with the recommended approach.',
+      'The visual cues are tied to the course learning objectives.',
+    ])) +
+    buildSection('Video walkthrough', `<div class="media-box">${escapeHtml(`Video walkthrough: This section describes the flow of a typical explanatory video, including what students should pause on and what to summarise.`)}<br/><br/>${escapeHtml(`1. Start with the topic definition.
+2. Show a concrete example.
+3. Highlight the key decision points.
+4. Summarise the evidence and conclusion.`).replace(/\n/g, '<br/>')}</div>`) +
+    buildSection('Study actions', buildList([
+      'Pause after each major point and write a one-sentence summary.',
+      'Draw the concept or process diagram discussed in the video.',
+      'Note one application example and one caution or limitation.',
+    ])) +
+    buildFooter(`This video companion is created to feel like a full lecture-support resource for ${seed.code}.`),
+  );
+}
+
+function buildMcqContent(seed: CourseSeed, topic: string) {
+  return buildDataUrl(`${seed.code} MCQ Drill: ${topic}`,
+    buildSection('Practice questions', buildParagraph(`This MCQ drill provides a structured study exercise with clear rationale and answer review. It is written to feel like exam preparation material from a course tutor.`)) +
+    buildMcqQuestionBlock(`In ${seed.title}, which description best captures ${topic.toLowerCase()}?`, [
+      'A practical method used for solving the course problem.',
+      'A vague statement with no application.',
+      'A historical definition unrelated to the topic.',
+      'A list of terms without meaning.',
+    ], 0, `This answer is best because it directly matches the course emphasis on applying the concept to solve actual problems, while the other choices are vague or off-topic.`) +
+    buildMcqQuestionBlock(`When applying ${topic.toLowerCase()} in a real task, what should you do first?`, [
+      'Choose the first idea that comes to mind.',
+      'Identify the problem requirement and select the appropriate approach.',
+      'Write a long answer without a plan.',
+      'Ignore the context and use a memorised formula.',
+    ], 1, `This answer is best because the first step in a strong solution is understanding the problem before selecting the correct approach; the other choices ignore the context or lead to unfocused work.`) +
+    buildMcqQuestionBlock(`Which student answer shows the strongest reasoning for ${topic.toLowerCase()}?`, [
+      'A short definition only.',
+      'A definition with an example and justification.',
+      'A list of unrelated facts.',
+      'A vague statement about the topic.',
+    ], 1, `The strongest answer includes a definition, a relevant example, and a justification, which matches what examiners expect from a course-based response.`) +
+    buildMcqQuestionBlock(`What is the most important benefit of using ${topic.toLowerCase()} correctly?`, [
+      'It helps solve the specific task accurately.',
+      'It makes the answer longer.',
+      'It sounds more impressive.',
+      'It avoids all errors automatically.',
+    ], 0, `The correct benefit is that the concept helps solve the task accurately; the other choices confuse length, style, and certainty with actual effectiveness.`) +
+    buildMcqQuestionBlock(`How should you present ${topic.toLowerCase()} in an exam answer?`, [
+      'With a clear explanation of why it is used.',
+      'With only a definition and no example.',
+      'By copying a textbook sentence.',
+      'By writing a very short phrase.',
+    ], 0, `A strong exam answer explains the concept and why it is used, while the others lack explanation, originality, or sufficient context.`) +
+    buildMcqQuestionBlock(`Which phrase best avoids a common mistake when applying ${topic.toLowerCase()}?`, [
+      'Use the concept with an example and reasoned justification.',
+      'State the concept quickly and stop.',
+      'Repeat the question as the answer.',
+      'Assume the reader already understands it.',
+    ], 0, `This choice avoids the common mistake of giving a shallow response by insisting on example and justification.`) +
+    buildMcqQuestionBlock(`When comparing ${topic.toLowerCase()} to a related idea, you should:`, [
+      'Explain both clearly and note the key difference.',
+      'Choose one and ignore the other.',
+      'Use both interchangeably without distinction.',
+      'Avoid the comparison altogether.',
+    ], 0, `The correct strategy is to explain both ideas clearly and identify their difference, which demonstrates understanding and prevents confusion.`) +
+    buildMcqQuestionBlock(`A strong revision strategy for ${topic.toLowerCase()} is to:`, [
+      'Rewrite the idea in your own words and practise examples.',
+      'Memorise the textbook sentence exactly.',
+      'Skip it if it feels difficult.',
+      'Only read the headings and not the details.',
+    ], 0, `The best revision strategy is active recall and application, not passive memorisation or avoidance.`) +
+    buildMcqQuestionBlock(`In a group discussion, the most useful way to review ${topic.toLowerCase()} is to:`, [
+      'Share one example, compare reasoning, and clarify differences.',
+      'Agree quickly without discussing details.',
+      'Focus only on the hardest parts.',
+      'Tell others the answer is obvious.',
+    ], 0, `Sharing examples and comparing reasoning helps the whole group understand the concept deeply and catch misunderstandings.`) +
+    buildMcqQuestionBlock(`Which statement shows the best use of ${topic.toLowerCase()} in a practical problem?`, [
+      'Identify the requirement, apply the concept, and explain why it solves the task.',
+      'Describe the concept without linking it to the problem.',
+      'State an unrelated fact and move on.',
+      'Write the question again as the answer.',
+    ], 0, `The best use links the concept directly to the requirement and explains the reason, which is what exam-quality answers need.`) +
+    buildMcqQuestionBlock(`Why should you include a short evaluation when explaining ${topic.toLowerCase()}?`, [
+      'It shows awareness of strengths, limits, and real application.',
+      'It makes the answer look more complex.',
+      'It fills space in the answer.',
+      'It proves the topic is always perfect.',
+    ], 0, `A short evaluation shows higher-order thinking by acknowledging strengths and limits, rather than adding complexity or filler.`) +
+    buildMcqQuestionBlock(`Which revision note is most useful for remembering ${topic.toLowerCase()}?`, [
+      'A concise summary plus one practical example.',
+      'A long, unfocused paragraph.',
+      'A list of unrelated terms.',
+      'A sentence with no application.',
+    ], 0, `A concise summary with an example is the most useful because it combines concept understanding with application.`) +
+    buildMcqQuestionBlock(`When an exam question asks for ${topic.toLowerCase()} and an example, your best response is:`, [
+      'Define the concept and give a specific, relevant example.',
+      'Give a generic statement and no example.',
+      'Write only the example without the definition.',
+      'Answer with an unrelated concept.',
+    ], 0, `The best response includes both a definition and a relevant example, matching the question requirements fully.`) +
+    buildMcqQuestionBlock(`What makes an answer about ${topic.toLowerCase()} stand out to markers?`, [
+      'Clear structure, correct reasoning, and practical application.',
+      'Long sentences and complex language.',
+      'Different terminology from the course.',
+      'A short answer with no detail.',
+    ], 0, `Markers value clarity, reasoning, and application over length or complexity, so this is the strongest choice.`) +
+    buildSection('Study tips', buildList([
+      'Review your reasoning after each question.',
+      'Compare your answer to the course definition.',
+      'Use the explanations to correct any misunderstandings.',
+    ])) +
+    buildFooter(`This MCQ resource is designed to feel like a high-quality study pack for ${seed.code}.`),
+  );
+}
+
+function buildPaperContent(seed: CourseSeed, topic: string) {
+  return buildDataUrl(`${seed.code} Past Paper: ${topic}`,
+    buildSection('Topic overview', buildParagraph(`This past paper resource is arranged by topic and subtopic so students can see how ${topic.toLowerCase()} should be explained in a structured written response. It includes concept guidance, practical examples, and exam-ready question prompts.`)) +
+    buildSection('Subtopic roadmap', buildList([
+      `Subtopic A: What ${topic.toLowerCase()} means in ${seed.title}.`,
+      `Subtopic B: How to apply it in a practical task.`,
+      `Subtopic C: How to compare it with alternatives and evaluate the result.`,
+    ])) +
+    buildSection('Subtopic A: Concept definition', buildParagraph(`Begin by defining ${topic.toLowerCase()} clearly and connecting it to the course objective. Explain the key terms, why this concept matters, and what it enables the student to do in the task.`)) +
+    buildSection('Subtopic B: Practical application', buildParagraph(`Next, show how the topic is used in a real scenario. Describe the steps involved, the expected outcome, and how this approach addresses the problem effectively.`)) +
+    buildSection('Subtopic C: Comparison and evaluation', buildParagraph(`Finish with a short comparison or evaluation. Explain how this topic is stronger than or different from a related idea, and mention any limitations or conditions for success.`)) +
+    buildSection('Question one', buildParagraph(`Explain the role of ${topic.toLowerCase()} in a practical ${seed.title} scenario and provide a concrete example. Your answer should cover the concept, the application, and a short evaluation.`)) +
+    buildSection('Question two', buildParagraph(`Compare two practical approaches to solving a problem that involves ${topic.toLowerCase()}. Describe when each approach is appropriate and how they differ in terms of outcome or ease of use.`)) +
+    buildSection('Answer structure', buildList([
+      'Introduction: define the topic and set the context.',
+      'Body part 1: explain the main concept clearly.',
+      'Body part 2: give a practical example or step-by-step application.',
+      'Body part 3: compare alternatives and evaluate the chosen method.',
+      'Conclusion: summarise the answer and link back to the question.',
+    ])) +
+    buildSection('Example guidance', buildParagraph(`Use this structure for both questions. For Question one, focus on the concept, example, and why it solves the task. For Question two, compare two methods and explain which is more suitable under which conditions.`)) +
+    buildSection('Exam tips', buildList([
+      'Use clear subheadings in your mind as you plan the answer.',
+      'Keep each paragraph focused on one idea or subtopic.',
+      'Include one real or course-related example for each main point.',
+      'Write a short conclusion that restates the best choice and why it works.',
+    ])) +
+    buildFooter(`This past paper guide is designed to make ${topic.toLowerCase()} easy to structure, explain, and evaluate in ${seed.code} exam-style answers.`),
+  );
+}
+
+function buildGuideContent(seed: CourseSeed) {
+  return buildDataUrl(`${seed.code} Group Support Guide`,
+    buildSection('Study workflow', buildParagraph(`This guide describes a complete study workflow for ${seed.title}. It shows how to combine notes, PDF guides, podcasts, videos, and practice resources into one cohesive learning path.`)) +
+    buildSection('Resource sequence', buildList([
+      'Start with notes to understand the core theory.',
+      'Use PDFs for structured summaries and examples.',
+      'Listen to podcasts for a conversational review.',
+      'Watch videos to visualise the concepts.',
+      'Practice with MCQs and past paper questions.',
+    ])) +
+    buildSection('Group tactic', buildParagraph(`In group study, share your summaries, compare answers, and discuss the reasoning behind each approach. This helps turn individual understanding into a shared, problem-solving outcome.`)) +
+    buildSection('Key outcome', buildList([
+      'A deep understanding of the topic.',
+      'A shared example everyone can explain.',
+      'A list of follow-up questions for StudyLink AI.',
+    ])) +
+    buildFooter(`This guide is designed to make the platform feel like a full solution system for ${seed.code}.`),
+  );
+}
+
+const podcastLinkOverrides: Record<string, string> = {
+};
+
+const videoLinkOverrides: Record<string, string> = {
+  'ACC210|Ledger posting walkthrough': 'https://www.youtube.com/shorts/gopqOQnHzAY',
+  'ACC210|Statement preparation visual guide': 'https://www.youtube.com/shorts/tIzBVa8zqto',
+};
 
 function createResources(seed: CourseSeed): CatalogResource[] {
   const noteResources = seed.noteTopics.map((topic, index) => ({
@@ -97,26 +417,7 @@ function createResources(seed: CourseSeed): CatalogResource[] {
     description: `Structured study notes for ${topic} in ${seed.title}.`,
     audience: `${seed.program} learners`,
     usageNotes: 'Read this before your discussion group and highlight weak areas.',
-    url: buildDataUrl(`${seed.code} Study Note ${index + 1}`, [
-      `Course: ${seed.title}`,
-      `Topic: ${topic}`,
-      '',
-      'Summary:',
-      `This note explains ${topic.toLowerCase()} with classroom examples, revision cues, and short self-check questions.`,
-      '',
-      'Key points:',
-      `- What ${topic.toLowerCase()} means`,
-      `- Why it matters in ${seed.code}`,
-      `- Common exam traps and how to avoid them`,
-      '',
-      'Action steps:',
-      '1. Read the summary and write the main idea in your own words.',
-      '2. Share one question from this note with your study group.',
-      '3. Use the self-check prompt below to verify your understanding.',
-      '',
-      'Self-check prompt:',
-      `Explain ${topic.toLowerCase()} as if you were teaching it to someone who has not studied ${seed.code}.`,
-    ]),
+    url: buildNoteContent(seed, topic),
   }));
 
   const pdfResources = seed.pdfTitles.map((title, index) => ({
@@ -127,71 +428,46 @@ function createResources(seed: CourseSeed): CatalogResource[] {
     description: `${title} prepared for ${seed.title}.`,
     audience: 'All enrolled students',
     usageNotes: 'Keep this in your library for revision week and assignment planning.',
-    url: buildDataUrl(`${seed.code} PDF Guide ${index + 1}`, [
-      `Course: ${seed.title}`,
-      `Guide: ${title}`,
-      '',
-      'What this PDF includes:',
-      '- Core definitions and formula summaries',
-      '- Worked examples with exam-style reasoning',
-      '- Key points to review before the next tutorial',
-      '',
-      'How to use this PDF:',
-      '1. Read the key definitions first.',
-      '2. Follow the worked examples step by step.',
-      '3. Highlight two concepts to ask your group about.',
-    ]),
+    url: buildPdfContent(seed, title),
   }));
 
-  const podcastResources = seed.podcastTopics.map((topic, index) => ({
-    id: `${seed.code}-podcast-${index + 1}`,
-    courseCode: seed.code,
-    title: `${seed.code} Podcast ${index + 1}: ${topic}`,
-    type: 'Podcast' as const,
-    description: `Audio-style revision guide covering ${topic.toLowerCase()}.`,
-    audience: 'Students revising beyond class hours',
-    usageNotes: 'Play this to reinforce concepts before or after study sessions.',
-    duration: '12-18 min',
-    url: buildDataUrl(`${seed.code} Podcast Episode ${index + 1}`, [
-      `Episode focus: ${topic}`,
-      '',
-      'Listen for:',
-      '- Why this topic matters in class and exams',
-      '- A student-friendly explanation with examples',
-      '- Common mistakes to avoid',
-      '- A useful application for group discussion',
-      '',
-      'Takeaway prompts:',
-      '1. Explain the main idea in one sentence.',
-      '2. Identify one example that helps you remember it.',
-      '3. Ask your study group one follow-up question.',
-    ]),
-  }));
+  const podcastResources = seed.podcastTopics.map((topic, index) => {
+    const overrideKey = `${seed.code}|${topic}`;
+    const externalUrl = podcastLinkOverrides[overrideKey] ?? buildPodcastSearchUrl(`${seed.title} ${topic}`);
 
-  const videoResources = seed.videoTopics.map((topic, index) => ({
-    id: `${seed.code}-video-${index + 1}`,
-    courseCode: seed.code,
-    title: `${seed.code} Video Guide ${index + 1}: ${topic}`,
-    type: 'Video' as const,
-    description: `Visual explanation pack for ${topic.toLowerCase()}.`,
-    audience: 'Visual learners',
-    usageNotes: 'Use this after reading notes so the diagrams make more sense.',
-    duration: '8-14 min',
-    url: buildDataUrl(`${seed.code} Video Companion ${index + 1}`, [
-      `Topic: ${topic}`,
-      '',
-      'What you will see:',
-      '- A concept map of the topic',
-      '- One worked example with step-by-step reasoning',
-      '- Common mistakes and how to avoid them',
-      '- A revision checklist for quick review',
-      '',
-      'How to use this video companion:',
-      '1. Watch the example once.',
-      '2. Pause and explain each step aloud.',
-      '3. Combine it with your notes for deeper understanding.',
-    ]),
-  }));
+    return {
+      id: `${seed.code}-podcast-${index + 1}`,
+      courseCode: seed.code,
+      title: `${seed.code} Podcast ${index + 1}: ${topic}`,
+      type: 'Podcast' as const,
+      description: `Audio-style revision guide covering ${topic.toLowerCase()}.`,
+      audience: 'Students revising beyond class hours',
+      usageNotes: externalUrl
+        ? 'Open this external podcast search for a listening-style review of the topic.'
+        : 'Play this to reinforce concepts before or after study sessions.',
+      duration: '12-18 min',
+      url: externalUrl,
+    };
+  });
+
+  const videoResources = seed.videoTopics.map((topic, index) => {
+    const overrideKey = `${seed.code}|${topic}`;
+    const externalUrl = videoLinkOverrides[overrideKey] ?? buildYoutubeSearchUrl(`${seed.title} ${topic}`);
+
+    return {
+      id: `${seed.code}-video-${index + 1}`,
+      courseCode: seed.code,
+      title: `${seed.code} Video Guide ${index + 1}: ${topic}`,
+      type: 'Video' as const,
+      description: `Visual explanation pack for ${topic.toLowerCase()}.`,
+      audience: 'Visual learners',
+      usageNotes: externalUrl
+        ? 'Open this external video search for a direct visual explanation of the topic.'
+        : 'Use this after reading notes so the diagrams make more sense.',
+      duration: '8-14 min',
+      url: externalUrl,
+    };
+  });
 
   const mcqResources = seed.mcqTopics.map((topic, index) => ({
     id: `${seed.code}-mcq-${index + 1}`,
@@ -201,17 +477,7 @@ function createResources(seed: CourseSeed): CatalogResource[] {
     description: `Practice questions for ${topic.toLowerCase()} in ${seed.title}.`,
     audience: 'Students preparing for exams',
     usageNotes: 'Attempt these alone first, then review the reasoning with peers.',
-    url: buildDataUrl(`${seed.code} MCQ Drill ${index + 1}`, [
-      `Topic: ${topic}`,
-      '',
-      'Instructions:',
-      '- Answer each question as if it were in an exam.',
-      '- Mark whether you felt confident, unsure, or guessed.',
-      '- Review the questions you missed or found difficult.',
-      '',
-      'Study tip:',
-      'After completing this drill, return to the related notes and videos for the concepts that were weakest.',
-    ]),
+    url: buildMcqContent(seed, topic),
   }));
 
   const paperResources = seed.paperTopics.map((topic, index) => ({
@@ -222,15 +488,7 @@ function createResources(seed: CourseSeed): CatalogResource[] {
     description: `Exam-style practice paper focused on ${topic.toLowerCase()}.`,
     audience: 'Revision groups and independent learners',
     usageNotes: 'Use this after notes and MCQs to simulate real exam pressure.',
-    url: buildDataUrl(`${seed.code} Past Paper ${index + 1}`, [
-      `Focus area: ${topic}`,
-      '',
-      'Practice routine:',
-      '- Set a timer.',
-      '- Answer each question fully.',
-      '- Compare your answers against the key points below.',
-      '- Identify which concepts took the longest and revisit those resources.',
-    ]),
+    url: buildPaperContent(seed, topic),
   }));
 
   const guideResource: CatalogResource = {
@@ -241,16 +499,7 @@ function createResources(seed: CourseSeed): CatalogResource[] {
     description: `Peer-support roadmap showing how to use StudyLink for ${seed.title}.`,
     audience: 'Students who feel stuck in the course',
     usageNotes: 'Start here if you do not know which resource to open first.',
-    url: buildDataUrl(`${seed.code} Support Guide`, [
-      `Support focus: ${seed.supportFocus}`,
-      '',
-      'Recommended order:',
-      '1. Read one note that explains the key topic.',
-      '2. Open a PDF summary for the same concept.',
-      '3. Listen to a podcast episode to reinforce the idea.',
-      '4. Attempt a MCQ drill to test understanding.',
-      '5. Join a study group and ask StudyLink AI for the specific concept that still feels confusing.',
-    ]),
+    url: buildGuideContent(seed),
   };
 
   return [

@@ -17,6 +17,7 @@ import GroupDetail from './pages/GroupDetail';
 import Resources from './pages/Resources';
 import Library from './pages/Library';
 import LearningHub from './pages/LearningHub';
+import ResourceDetail from './pages/ResourceDetail';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import StudyLinkAI from './pages/StudyLinkAI';
@@ -134,6 +135,7 @@ function App() {
           <Route path="/learning" element={<ProtectedRoute><LearningHub /></ProtectedRoute>} />
           <Route path="/resources" element={<ProtectedRoute><Resources /></ProtectedRoute>} />
           <Route path="/library" element={<ProtectedRoute><Library /></ProtectedRoute>} />
+          <Route path="/resources/:id" element={<ProtectedRoute><ResourceDetail /></ProtectedRoute>} />
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           <Route path="*" element={<Navigate to={isAuthenticated ? '/schools' : '/'} replace />} />
         </Routes>

@@ -1,17 +1,18 @@
 import { useMemo, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { buildStudyLinkAiResponse, getAllCatalogCourses } from '../lib/studylinkContent';
 
 function StudyLinkAI() {
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [selectedCourseCode, setSelectedCourseCode] = useState(searchParams.get('course') || 'APT3060');
   const [question, setQuestion] = useState('Give me notes and revision guidance for this course.');
-  const [submittedQuestion, setSubmittedQuestion] = useState(question);
+  const [selectedResourceId, setSelectedResourceId] = useState('');
   const courses = getAllCatalogCourses();
 
   const response = useMemo(
-    () => buildStudyLinkAiResponse(submittedQuestion, selectedCourseCode),
-    [selectedCourseCode, submittedQuestion],
+    () => buildStudyLinkAiResponse(question, selectedCourseCode),
+    [selectedCourseCode, question],
   );
 
   const activeCourse = courses.find((course) => course.code === selectedCourseCode) || courses[0];
@@ -76,9 +77,9 @@ function StudyLinkAI() {
           </label>
 
           <div className="detail-action-row">
-            <button type="button" className="button button-primary" onClick={() => setSubmittedQuestion(question)}>
-              Generate guidance
-            </button>
+            <span className="panel-pill" style={{ fontSize: '0.9rem' }}>
+              Guidance updates live as you type.
+            </span>
           </div>
         </section>
 
@@ -110,13 +111,70 @@ function StudyLinkAI() {
                 <strong>{resource.title}</strong>
                 <p>{resource.description}</p>
                 <span>{resource.type} · {resource.audience}</span>
-                <button type="button" className="button button-secondary button-sm" onClick={() => window.open(resource.url, '_blank', 'noopener,noreferrer')}>
-                  Open resource
-                </button>
+                <div className="detail-action-row">
+                  <button
+                    type="button"
+                    className="button button-secondary button-sm"
+                    onClick={() => setSelectedResourceId(String(resource.id))}
+                  >
+                    Preview
+                  </button>
+                  <button
+                    type="button"
+                    className="button button-primary button-sm"
+                    onClick={() => navigate(`/resources/${encodeURIComponent(resource.id)}?courseCode=${encodeURIComponent(resource.courseCode || '')}`)}
+                  >
+                    Open resource
+                  </button>
+                </div>
               </article>
             ))}
           </div>
         </section>
+
+        {selectedResourceId ? (
+          <section className="detail-panel">
+            <div className="section-header">
+              <h2>Resource preview</h2>
+              <span className="panel-pill">Live preview</span>
+            </div>
+            {(() => {
+              const selectedResource = response.recommendedResources.find((item) => String(item.id) === selectedResourceId);
+              if (!selectedResource) {
+                return <p>Selected resource could not be found.</p>;
+              }
+
+              const isDataPreview = selectedResource.url.startsWith('data:');
+
+              return (
+                <>
+                  <p>{selectedResource.description}</p>
+                  {isDataPreview ? (
+                    <iframe
+                      title={selectedResource.title}
+                      src={selectedResource.url}
+                      className="resource-preview-frame"
+                      sandbox="allow-same-origin allow-scripts allow-popups"
+                    />
+                  ) : (
+                    <div className="detail-summary-card">
+                      <p>This resource cannot be previewed in-app, but it is available to open directly.</p>
+                      <div className="detail-action-row">
+                        <button
+                          type="button"
+                          className="button button-primary button-sm"
+                          onClick={() => navigate(`/resources/${encodeURIComponent(selectedResource.id)}?courseCode=${encodeURIComponent(selectedResource.courseCode || '')}`)}
+                        >
+                          Open resource
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </>
+              );
+            })()}
+          </section>
+        ) : null}
       </div>
     </section>
   );
