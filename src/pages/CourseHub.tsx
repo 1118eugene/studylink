@@ -52,7 +52,7 @@ function CourseHub() {
         const courseRes = await apiFetch(`/api/academic/courses/${id}`);
         if (courseRes.ok) {
           const json = await courseRes.json();
-          setCourse({ ...(json.course || {}), resources: [] });
+                  setCourse(normalizeCourse(json.course || {}));
         }
       } catch {
         setCourse(null);
@@ -103,10 +103,11 @@ function CourseHub() {
         const res = await apiFetch(`/api/academic/courses/${id}/resources`);
         if (res.ok) {
           const json = await res.json();
-          setCourse((prev) => ({ ...(prev || {}), resources: json.resources || [] } as Course));
+          setCourse((prev) => prev ? { ...prev, resources: json.resources || [] } : null);
         } else {
           // fallback to local helper for immediate UI
-          setCourse(getCourseById(id));
+          const local = getCourseById(id);
+          setCourse(local ? normalizeCourse(local) : null);
         }
       } catch {
         // fallback to local helper if backend info isn't available
@@ -142,7 +143,7 @@ function CourseHub() {
         <section className="workspace-hero workspace-hero-courses">
           <div>
             <p className="workspace-eyebrow">{course.code}</p>
-            <h1>{course.name}</h1>
+                        <h1>{course.title}</h1>
             <p className="workspace-lead">{course.overview}</p>
           </div>
         </section>
