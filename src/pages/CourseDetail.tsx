@@ -69,6 +69,13 @@ function CourseDetail() {
   const [isAsking, setIsAsking] = useState(false);
 
   useEffect(() => {
+    const hash = window.location.hash.replace('#', '');
+    if (hash && ['overview', 'outline', 'objectives', 'topics', 'notes', 'quizzes', 'papers', 'groups', 'sessions', 'students', 'ask'].includes(hash)) {
+      setSelectedTab(hash);
+    }
+  }, [id]);
+
+  useEffect(() => {
     if (!id) return;
 
     apiFetch(`/api/courses/${id}`)
@@ -112,6 +119,56 @@ function CourseDetail() {
       `Apply key concepts from ${course.category} to real academic tasks`,
       `Connect theory to practical study and exam preparation`,
       `Use the course resources to solve past questions`,
+    ];
+  }, [course]);
+
+  const courseNotes = useMemo(() => {
+    if (!course) return [];
+    return [
+      {
+        title: 'Lecture summary',
+        description: `Core ideas from today’s ${course.title} lecture with definitions and examples.`,
+      },
+      {
+        title: 'Revision sheet',
+        description: 'A one-page study guide for exam preparation and quick topic review.',
+      },
+      {
+        title: 'Problem-solving notes',
+        description: 'Step-by-step examples for the most tested course concepts.',
+      },
+    ];
+  }, [course]);
+
+  const coursePdfs = useMemo(() => {
+    if (!course) return [];
+    return [
+      {
+        title: `${course.code} course outline`,
+        description: 'Download the official course structure and weekly topic plan.',
+        url: `https://example.com/${course.code}-outline.pdf`,
+      },
+      {
+        title: `${course.code} revision checklist`,
+        description: 'Key revision steps for every week of the semester.',
+        url: `https://example.com/${course.code}-revision.pdf`,
+      },
+    ];
+  }, [course]);
+
+  const coursePapers = useMemo(() => {
+    if (!course) return [];
+    return [
+      {
+        title: 'Past paper: Midterm',
+        description: 'Practice question set from previous midterm exams.',
+        url: `https://example.com/${course.code}-midterm.pdf`,
+      },
+      {
+        title: 'Past paper: Final exam',
+        description: 'Final exam sample with worked answers and marking guide.',
+        url: `https://example.com/${course.code}-final.pdf`,
+      },
     ];
   }, [course]);
 
@@ -187,9 +244,19 @@ function CourseDetail() {
                   <li key={topic}>{topic}</li>
                 ))}
               </ul>
+              <div className="detail-card-grid" style={{ marginTop: '1rem' }}>
+                {coursePdfs.map((pdf) => (
+                  <article key={pdf.title} className="detail-summary-card">
+                    <strong>{pdf.title}</strong>
+                    <p>{pdf.description}</p>
+                    <a href={pdf.url} target="_blank" rel="noreferrer" className="button button-secondary button-sm">
+                      Open PDF
+                    </a>
+                  </article>
+                ))}
+              </div>
               <div className="detail-action-row" style={{ marginTop: '1rem' }}>
-                <button type="button" className="button button-primary">Download course outline PDF</button>
-                <button type="button" className="button button-secondary">Save to library</button>
+                <button type="button" className="button button-primary">Save outline to library</button>
               </div>
             </div>
             <div className="detail-panel">
@@ -228,17 +295,19 @@ function CourseDetail() {
       case 'notes':
         return (
           <div className="detail-panel">
-            <h3>Course notes</h3>
-            <p>Keep notes here for quick revision.</p>
+            <div className="section-header">
+              <h3>Course notes</h3>
+              <span className="panel-pill">Revision-ready</span>
+            </div>
+            <p>Organized notes for lecture summaries, exam revision, and fast concept review.</p>
             <div className="detail-card-grid">
-              <article className="detail-summary-card">
-                <strong>Lecture summary</strong>
-                <p>Short notes for the current topic and key terms.</p>
-              </article>
-              <article className="detail-summary-card">
-                <strong>Revision sheet</strong>
-                <p>One-page review for the next exam.</p>
-              </article>
+              {courseNotes.map((note) => (
+                <article key={note.title} className="detail-summary-card">
+                  <strong>{note.title}</strong>
+                  <p>{note.description}</p>
+                  <button type="button" className="button button-secondary button-sm">Open note</button>
+                </article>
+              ))}
             </div>
           </div>
         );
@@ -265,14 +334,15 @@ function CourseDetail() {
             <h3>Past papers</h3>
             <p>Link your past exams and solutions for exam-style practice.</p>
             <div className="detail-card-grid">
-              <article className="detail-summary-card">
-                <strong>Final exam sample</strong>
-                <p>Practice the most likely question format.</p>
-              </article>
-              <article className="detail-summary-card">
-                <strong>Midterm review</strong>
-                <p>Focus on the core concepts tested in earlier assessments.</p>
-              </article>
+              {coursePapers.map((paper) => (
+                <article key={paper.title} className="detail-summary-card">
+                  <strong>{paper.title}</strong>
+                  <p>{paper.description}</p>
+                  <a href={paper.url} target="_blank" rel="noreferrer" className="button button-secondary button-sm">
+                    Open paper
+                  </a>
+                </article>
+              ))}
             </div>
           </div>
         );

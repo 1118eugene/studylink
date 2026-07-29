@@ -113,6 +113,8 @@ function GroupDetail() {
     );
   }
 
+  const contactLink = group.whatsappLink || (group.communicationChannel?.toLowerCase().includes('whatsapp') ? group.communicationChannel : undefined);
+
   return (
     <section className="workspace-page">
       <div className="container workspace-stack">
@@ -131,6 +133,11 @@ function GroupDetail() {
 
             <div className="detail-action-row">
               <button className="button button-primary" onClick={handleJoin}>Join this group</button>
+              {contactLink ? (
+                <a href={contactLink} target="_blank" rel="noreferrer" className="button button-secondary">
+                  Open WhatsApp chat
+                </a>
+              ) : null}
               {group.courseCode ? <Link to="/courses" className="button button-secondary">Open courses</Link> : null}
             </div>
           </div>
@@ -141,7 +148,13 @@ function GroupDetail() {
             <h2>How this group runs</h2>
             <div className="detail-copy-stack">
               <p><strong>Who can join:</strong> {group.whoCanJoin || 'Students enrolled in the related course or approved by a moderator.'}</p>
-              <p><strong>Communication:</strong> {group.communicationChannel || 'Dashboard announcements and a shared study chat.'}</p>
+              {contactLink ? (
+                <p>
+                  <strong>Communication:</strong> <a href={contactLink} target="_blank" rel="noreferrer">WhatsApp group</a>
+                </p>
+              ) : (
+                <p><strong>Communication:</strong> {group.communicationChannel || 'Dashboard announcements and a shared study chat.'}</p>
+              )}
               <p><strong>Schedule notes:</strong> {group.scheduleNotes || 'Specific meeting times and participation expectations are posted by the group owner.'}</p>
             </div>
           </section>

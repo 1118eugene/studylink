@@ -19,6 +19,7 @@ interface StudyGroup {
   newMemberSteps?: string[];
   whoCanJoin?: string;
   communicationChannel?: string;
+  whatsappLink?: string;
   scheduleNotes?: string;
   sessionCount?: number;
 }
@@ -49,6 +50,7 @@ function StudyGroups({ initialShowForm = false }: StudyGroupsProps) {
     memberBenefits: '',
     newMemberSteps: '',
     communicationChannel: '',
+    whatsappLink: '',
     scheduleNotes: '',
   });
 
@@ -97,6 +99,7 @@ function StudyGroups({ initialShowForm = false }: StudyGroupsProps) {
       memberBenefits: '',
       newMemberSteps: '',
       communicationChannel: '',
+      whatsappLink: '',
       scheduleNotes: '',
     });
   };
@@ -117,6 +120,7 @@ function StudyGroups({ initialShowForm = false }: StudyGroupsProps) {
       memberBenefits: (group.memberBenefits || []).join('\n'),
       newMemberSteps: (group.newMemberSteps || []).join('\n'),
       communicationChannel: group.communicationChannel || '',
+      whatsappLink: (group as any).whatsappLink || '',
       scheduleNotes: group.scheduleNotes || '',
     });
   };
@@ -137,6 +141,7 @@ function StudyGroups({ initialShowForm = false }: StudyGroupsProps) {
       memberBenefits: groupForm.memberBenefits.split('\n').map((value) => value.trim()).filter(Boolean),
       newMemberSteps: groupForm.newMemberSteps.split('\n').map((value) => value.trim()).filter(Boolean),
       communicationChannel: groupForm.communicationChannel,
+      whatsappLink: groupForm.whatsappLink,
       scheduleNotes: groupForm.scheduleNotes,
     };
 
@@ -353,8 +358,14 @@ function StudyGroups({ initialShowForm = false }: StudyGroupsProps) {
             <div className="form-grid form-grid-two">
               <label>
                 <span>Communication channel</span>
-                <input value={groupForm.communicationChannel} onChange={(event) => setGroupForm((current) => ({ ...current, communicationChannel: event.target.value }))} />
+                <input value={groupForm.communicationChannel} onChange={(event) => setGroupForm((current) => ({ ...current, communicationChannel: event.target.value }))} placeholder="e.g. WhatsApp, Zoom chat, Discord" />
               </label>
+              <label>
+                <span>WhatsApp / chat link</span>
+                <input value={groupForm.whatsappLink} onChange={(event) => setGroupForm((current) => ({ ...current, whatsappLink: event.target.value }))} placeholder="https://chat.whatsapp.com/..." />
+              </label>
+            </div>
+            <div className="form-grid form-grid-two">
               <label>
                 <span>Schedule notes</span>
                 <input value={groupForm.scheduleNotes} onChange={(event) => setGroupForm((current) => ({ ...current, scheduleNotes: event.target.value }))} />
@@ -408,6 +419,9 @@ function StudyGroups({ initialShowForm = false }: StudyGroupsProps) {
                   <p><strong>Join:</strong> {group.whoCanJoin || 'Students connected to the course or approved by the moderator.'}</p>
                   <p><strong>Sessions:</strong> {group.sessionCount || 0} planned</p>
                   <p><strong>Members:</strong> {group.members}</p>
+                  {group.whatsappLink ? (
+                    <p><strong>Chat:</strong> <a href={group.whatsappLink} target="_blank" rel="noreferrer">WhatsApp</a></p>
+                  ) : null}
                 </div>
                 <div className="group-footer">
                   <div className="group-actions">
