@@ -12,6 +12,8 @@ function GroupDetail() {
   const [pendingJoinGroup, setPendingJoinGroup] = useState<any | null>(null);
   const [acceptedRequirements, setAcceptedRequirements] = useState(false);
   const [joinError, setJoinError] = useState('');
+  const [joiningGroup, setJoiningGroup] = useState(false);
+  const [joinedGroup, setJoinedGroup] = useState(false);
 
   useEffect(() => {
     if (!id) {
@@ -31,18 +33,22 @@ function GroupDetail() {
   }, [id]);
 
   const joinGroup = async (targetGroup: any) => {
+    setJoiningGroup(true);
+
     try {
       const response = await apiFetch(`/api/groups/${targetGroup.id}/enroll`, { method: 'POST' });
+      const data = await response.json();
       if (!response.ok) {
         const message = response.status === 403
           ? 'You do not meet the access requirements for this group.'
-          : 'Unable to join the group right now.';
+          : data?.message || 'Unable to join the group right now.';
         throw new Error(message);
       }
 
       const refreshed = await apiFetch(`/api/groups/${targetGroup.id}`);
-      const data = await refreshed.json();
-      setGroup(data.group);
+      const refreshedData = await refreshed.json();
+      setGroup(refreshedData.group);
+      setJoinedGroup(true);
       addNotification({
         id: `join-detail-${targetGroup.id}-${Date.now()}`,
         title: 'Group joined',
@@ -56,6 +62,8 @@ function GroupDetail() {
       // eslint-disable-next-line no-console
       console.error(error);
       setJoinError(error instanceof Error ? error.message : 'Failed to join this group.');
+    } finally {
+      setJoiningGroup(false);
     }
   };
 
@@ -132,7 +140,14 @@ function GroupDetail() {
             </div>
 
             <div className="detail-action-row">
-              <button className="button button-primary" onClick={handleJoin}>Join this group</button>
+              <button
+              className="button button-primary"
+              type="button"
+              disabled={joiningGroup || joinedGroup}
+              onClick={handleJoin}
+            >
+              {joinedGroup ? 'Joined' : joiningGroup ? 'Joining…' : group.joinRequirements?.length > 0 ? 'Review requirements' : 'Join this group'}
+            </button>
               {contactLink ? (
                 <a href={contactLink} target="_blank" rel="noreferrer" className="button button-secondary">
                   Open WhatsApp chat

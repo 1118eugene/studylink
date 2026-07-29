@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { apiFetch } from '../lib/apiClient';
+import { addNotification } from '../lib/notifications';
 
 interface Session {
   id: number;
@@ -26,6 +27,8 @@ function Sessions() {
   const [loading, setLoading] = useState(true);
   const [editingSessionId, setEditingSessionId] = useState<number | null>(null);
   const [showSessionForm, setShowSessionForm] = useState(false);
+  const [enrollingSessionIds, setEnrollingSessionIds] = useState<number[]>([]);
+  const [enrolledSessionIds, setEnrolledSessionIds] = useState<number[]>([]);
   const [sessionForm, setSessionForm] = useState({
     groupId: '',
     title: '',
@@ -147,17 +150,29 @@ function Sessions() {
   };
 
   const handleEnroll = async (id: number) => {
+    setEnrollingSessionIds((current) => Array.from(new Set([...current, id])));
+
     try {
       const response = await apiFetch(`/api/sessions/${id}/enroll`, { method: 'POST' });
+      const data = await response.json();
       if (!response.ok) {
-        throw new Error('Enroll failed');
+        throw new Error(data?.message || 'Enroll failed');
       }
 
+      setEnrolledSessionIds((current) => Array.from(new Set([...current, id])));
+      addNotification({
+        id: `session-enroll-${id}-${Date.now()}`,
+        title: 'Session enrolled',
+        message: `You are now enrolled in the session "${data.session?.title || 'session'}".`,
+        createdAt: new Date().toISOString(),
+      });
       await loadSessions();
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error);
-      alert('Failed to enroll. Please try again.');
+      alert(error instanceof Error ? error.message : 'Failed to enroll. Please try again.');
+    } finally {
+      setEnrollingSessionIds((current) => current.filter((sessionId) => sessionId !== id));
     }
   };
 
@@ -319,7 +334,18 @@ function Sessions() {
                 </div>
 
                 <div className="session-actions session-actions-column">
-                  <button className="button button-primary" onClick={() => handleEnroll(session.id)}>Enroll</button>
+                  <button
+                    className="button button-primary"
+                    type="button"
+                    disabled={enrollingSessionIds.includes(session.id) || enrolledSessionIds.includes(session.id)}
+                    onClick={() => handleEnroll(session.id)}
+                  >
+                    {enrolledSessionIds.includes(session.id)
+                      ? 'Enrolled'
+                      : enrollingSessionIds.includes(session.id)
+                        ? 'Enrolling…'
+                        : 'Enroll'}
+                  </button>
                   <button type="button" className="button button-secondary" onClick={() => loadSessionIntoForm(session)}>Edit</button>
                   <button type="button" className="button button-secondary action-danger" onClick={() => deleteSession(session.id)}>Delete</button>
                 </div>

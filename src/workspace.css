@@ -1,22 +1,22 @@
 .workspace-page {
-  padding: 1.5rem 0 2rem;
+  padding: 1rem 0 1.2rem;
 }
 
 .workspace-stack {
   display: grid;
-  gap: 1.2rem;
+  gap: 0.8rem;
 }
 
 .workspace-hero {
   display: grid;
-  grid-template-columns: minmax(0, 1.4fr) minmax(240px, 0.85fr);
-  gap: 1rem;
-  padding: 1.2rem;
-  border-radius: 20px;
+  grid-template-columns: minmax(0, 1.4fr) minmax(220px, 0.8fr);
+  gap: 0.75rem;
+  padding: 0.95rem;
+  border-radius: 18px;
   color: #fff7ed;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.14);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.12);
   min-height: auto;
 }
 
@@ -64,17 +64,18 @@
 }
 
 .workspace-hero h1 {
-  margin: 0 0 0.85rem;
-  font-size: clamp(1.85rem, 3vw, 2.55rem);
-  line-height: 1.1;
+  margin: 0 0 0.7rem;
+  font-size: clamp(1.65rem, 2.3vw, 2rem);
+  line-height: 1.06;
   max-width: 14ch;
 }
 
 .workspace-lead {
   margin: 0;
-  max-width: 58ch;
+  max-width: 40ch;
   color: rgba(255, 247, 237, 0.86);
-  line-height: 1.7;
+  line-height: 1.45;
+  font-size: 0.94rem;
 }
 
 .hero-stat-grid,
@@ -85,29 +86,29 @@
 
 .hero-stat-grid {
   display: grid;
-  gap: 0.8rem;
+  gap: 0.5rem;
   align-content: start;
 }
 
 .hero-stat-card {
   display: grid;
-  gap: 0.25rem;
-  padding: 0.95rem 1rem;
+  gap: 0.15rem;
+  padding: 0.7rem 0.8rem;
   background: rgba(255, 255, 255, 0.12);
   border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: 18px;
+  border-radius: 14px;
   backdrop-filter: blur(12px);
 }
 
 .hero-stat-value {
-  font-size: 1.75rem;
+  font-size: 1.5rem;
   font-weight: 800;
   color: #ffffff;
 }
 
 .hero-stat-label {
   color: rgba(255, 247, 237, 0.8);
-  font-size: 0.9rem;
+  font-size: 0.82rem;
 }
 
 .hero-action-stack {
@@ -230,17 +231,17 @@
 .resource-library-card {
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
-  padding: 0.75rem;
+  gap: 0.55rem;
+  padding: 0.7rem;
   border-radius: 14px;
   background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
   border: 1px solid #dbe4f0;
-  box-shadow: 0 10px 26px rgba(15, 23, 42, 0.05);
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05);
 }
 
 .course-card-body {
   display: grid;
-  gap: 0.85rem;
+  gap: 0.7rem;
 }
 
 .course-card-topline,
@@ -250,7 +251,7 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 1rem;
+  gap: 0.75rem;
 }
 
 .course-level-badge {
@@ -301,32 +302,32 @@
 .detail-hero-card {
   display: grid;
   grid-template-columns: minmax(220px, 0.9fr) minmax(0, 1.1fr);
-  gap: 1rem;
-  padding: 1rem;
-  border-radius: 18px;
+  gap: 0.9rem;
+  padding: 0.9rem;
+  border-radius: 16px;
   background: linear-gradient(135deg, #fff7ed 0%, #ffffff 55%, #eff6ff 100%);
   border: 1px solid #e5e7eb;
-  box-shadow: 0 14px 36px rgba(15, 23, 42, 0.06);
+  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.06);
 }
 
 .detail-hero-image {
   width: 100%;
   height: 100%;
-  min-height: 240px;
+  min-height: 220px;
   object-fit: cover;
-  border-radius: 22px;
+  border-radius: 20px;
 }
 
 .detail-hero-copy {
   display: grid;
   align-content: start;
-  gap: 1rem;
+  gap: 0.85rem;
 }
 
 .detail-hero-copy h1 {
   margin: 0;
   color: #0f172a;
-  font-size: clamp(2rem, 4vw, 3rem);
+  font-size: clamp(1.85rem, 3vw, 2.6rem);
 }
 
 .detail-hero-copy .workspace-lead {
@@ -336,18 +337,18 @@
 .detail-chip-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.65rem;
+  gap: 0.55rem;
 }
 
 .detail-chip,
 .panel-pill {
   display: inline-flex;
   align-items: center;
-  padding: 0.45rem 0.85rem;
+  padding: 0.35rem 0.75rem;
   border-radius: 999px;
   background: #eff6ff;
   color: #1d4ed8;
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   font-weight: 700;
 }
 
@@ -363,11 +364,11 @@
 }
 
 .detail-panel {
-  padding: 1rem;
-  border-radius: 16px;
+  padding: 0.85rem;
+  border-radius: 14px;
   background: #ffffff;
   border: 1px solid #dbe4f0;
-  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.05);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
 }
 
 .detail-panel h2 {
@@ -377,13 +378,13 @@
 .detail-card-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1rem;
+  gap: 0.85rem;
 }
 
 .detail-summary-card {
   display: grid;
-  gap: 0.45rem;
-  padding: 0.75rem;
+  gap: 0.35rem;
+  padding: 0.65rem;
   border-radius: 12px;
   background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
   border: 1px solid #e2e8f0;
@@ -395,6 +396,7 @@
 .detail-summary-card span {
   margin: 0;
   color: #64748b;
+  font-size: 0.95rem;
 }
 
 .detail-copy-stack {
@@ -429,8 +431,8 @@
 .member-list-card {
   display: flex;
   justify-content: space-between;
-  gap: 0.85rem;
-  padding: 0.9rem;
+  gap: 0.75rem;
+  padding: 0.75rem;
   border-radius: 14px;
   background: #f8fafc;
   border: 1px solid #e2e8f0;
@@ -445,6 +447,7 @@
 .member-list-card p,
 .member-list-meta span {
   color: #64748b;
+  font-size: 0.95rem;
 }
 
 .member-list-meta {
@@ -460,18 +463,21 @@
 
 .network-card {
   display: grid;
-  gap: 0.85rem;
-  border-radius: 20px;
-  box-shadow: 0 14px 32px rgba(15, 23, 42, 0.06);
+  gap: 0.75rem;
+  border-radius: 18px;
+  padding: 0.85rem;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.06);
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
 }
 
 .network-meta,
 .network-footer {
   display: flex;
   justify-content: space-between;
-  gap: 0.85rem;
+  gap: 0.75rem;
   color: #475569;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
 }
 
 .network-bio {
@@ -488,17 +494,22 @@
 }
 
 .polished-group-card {
-  gap: 0.6rem;
+  gap: 0.55rem;
+  padding: 0.85rem;
   border-radius: 14px;
-  box-shadow: 0 10px 26px rgba(15, 23, 42, 0.05);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
 }
 
 .polished-session-card {
   grid-template-columns: 84px minmax(0, 1fr) auto;
-  gap: 0.85rem;
+  gap: 0.75rem;
   align-items: stretch;
   border-radius: 14px;
-  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
 }
 
 .session-course-tag {
@@ -642,17 +653,17 @@
   grid-template-columns: 1fr auto;
   align-items: flex-start;
   gap: 1rem;
-  padding: 1.3rem;
-  border-radius: 22px;
+  padding: 1rem;
+  border-radius: 20px;
   background: #ffffff;
   border: 1px solid #e5e7eb;
-  box-shadow: 0 14px 32px rgba(15, 23, 42, 0.06);
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.06);
 }
 
 .dashboard-summary-card h1,
 .hub-hero-card h1 {
   margin: 0;
-  font-size: clamp(1.75rem, 2.5vw, 2.4rem);
+  font-size: clamp(1.65rem, 2.5vw, 2.3rem);
 }
 
 .dashboard-summary-actions,

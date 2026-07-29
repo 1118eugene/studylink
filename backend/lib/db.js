@@ -144,7 +144,18 @@ function normalizeLocalState(raw) {
     ...(raw || {}),
   };
 
-  state.users = (state.users || []).map((user, index) => ({
+  const existingUserEmails = new Set(
+    (state.users || [])
+      .map((user) => String(user.email || '').toLowerCase())
+      .filter(Boolean),
+  );
+
+  state.users = [
+    ...(state.users || []),
+    ...defaultLocalState.users.filter(
+      (user) => !existingUserEmails.has(String(user.email || '').toLowerCase()),
+    ),
+  ].map((user, index) => ({
     id: user.id || index + 1,
     email: user.email,
     full_name: user.full_name || user.name || user.email,

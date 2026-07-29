@@ -75,6 +75,12 @@
           "email": "simeonodhiambo57@gmail.com",
           "name": "simeon",
           "joinedAt": 1784137730084
+        },
+        {
+          "user_id": 2,
+          "email": "eugeneonyango@gmail.com",
+          "name": "violet eugene",
+          "joinedAt": 1785350269925
         }
       ],
       "id": 1,
@@ -88,6 +94,12 @@
           "email": "eugenonyango@gmail.com",
           "name": "eugen juma",
           "joinedAt": 1785170026333
+        },
+        {
+          "user_id": 2,
+          "email": "eugeneonyango@gmail.com",
+          "name": "violet eugene",
+          "joinedAt": 1785350280516
         }
       ],
       "id": 2,
@@ -224,7 +236,14 @@
       "owner_user_id": 3
     },
     {
-      "enrollments": [],
+      "enrollments": [
+        {
+          "user_id": 3,
+          "email": "eugenonyango@gmail.com",
+          "name": "eugen juma",
+          "joinedAt": 1785343797596
+        }
+      ],
       "id": 7,
       "name": "math class",
       "description": "math classs",

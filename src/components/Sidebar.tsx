@@ -18,25 +18,28 @@ function Sidebar() {
     <aside className={collapsed ? 'sidebar sidebar-collapsed' : 'sidebar'}>
       <div className="sidebar-top">
         <div className="sidebar-brand">
-          <Link to="/dashboard" className="logo-brand sidebar-logo-link">
+          <Link to="/schools" className="logo-brand sidebar-logo-link">
             <img src={logo} alt="StudyLink logo" className="brand-image sidebar-brand-image" />
             <span className="brand-text">StudyLink</span>
           </Link>
         </div>
         <button type="button" className="sidebar-toggle" onClick={() => setCollapsed((value) => !value)} aria-label="Toggle navigation">
-          ☰
+          Menu
         </button>
       </div>
 
       <nav className="sidebar-nav">
-        <NavLink to="/dashboard" className={({ isActive }) => (isActive ? 'sidebar-link active' : 'sidebar-link')}>
-          <span className="nav-label">Dashboard</span>
-        </NavLink>
         <NavLink to="/schools" className={({ isActive }) => (isActive ? 'sidebar-link active' : 'sidebar-link')}>
           <span className="nav-label">Schools</span>
         </NavLink>
         <NavLink to="/courses" className={({ isActive }) => (isActive ? 'sidebar-link active' : 'sidebar-link')}>
           <span className="nav-label">Courses</span>
+        </NavLink>
+        <NavLink to="/learning?view=library" className={({ isActive }) => (isActive ? 'sidebar-link active' : 'sidebar-link')}>
+          <span className="nav-label">Learning Hub</span>
+        </NavLink>
+        <NavLink to="/ask-ai" className={({ isActive }) => (isActive ? 'sidebar-link active' : 'sidebar-link')}>
+          <span className="nav-label">StudyLink AI</span>
         </NavLink>
         <NavLink to="/groups" className={({ isActive }) => (isActive ? 'sidebar-link active' : 'sidebar-link')}>
           <span className="nav-label">Study Groups</span>
@@ -44,14 +47,11 @@ function Sidebar() {
         <NavLink to="/sessions" className={({ isActive }) => (isActive ? 'sidebar-link active' : 'sidebar-link')}>
           <span className="nav-label">Sessions</span>
         </NavLink>
-        <NavLink to="/resources" className={({ isActive }) => (isActive ? 'sidebar-link active' : 'sidebar-link')}>
-          <span className="nav-label">Resources</span>
+        <NavLink to="/dashboard" className={({ isActive }) => (isActive ? 'sidebar-link active' : 'sidebar-link')}>
+          <span className="nav-label">Dashboard</span>
         </NavLink>
         <NavLink to="/profile" className={({ isActive }) => (isActive ? 'sidebar-link active' : 'sidebar-link')}>
           <span className="nav-label">Profile</span>
-        </NavLink>
-        <NavLink to="/library" className={({ isActive }) => (isActive ? 'sidebar-link active' : 'sidebar-link')}>
-          <span className="nav-label">Library</span>
         </NavLink>
         {currentUser?.role === 'admin' ? (
           <NavLink to="/admin/academic" className={({ isActive }) => (isActive ? 'sidebar-link active' : 'sidebar-link')}>

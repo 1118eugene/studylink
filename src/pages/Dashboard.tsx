@@ -13,8 +13,42 @@ type ActivityItem = {
 const announcementList = [
   { id: 'a1', title: 'New course outline templates are available.', detail: 'Course outline PDFs and weekly plans will help you keep every module organized.' },
   { id: 'a2', title: 'Create or join a study group for your current course.', detail: 'Structured groups improve exam preparation and keep your study time focused.' },
-  { id: 'a3', title: 'Library search now surfaces notes, videos, and past papers.', detail: 'Open your library to filter by category and find what you need faster.' },
+  { id: 'a3', title: 'Learning Hub now groups notes, videos, podcasts, and past papers together.', detail: 'Open one merged study area and switch content views from the same workspace.' },
 ];
+
+const fallbackCourses = [
+  { id: 1, code: 'APT3060', category: 'Applied Computer Technology', title: 'Mobile Programming', description: 'Create polished mobile apps and learn practical software engineering workflows.', level: 'Year 4', deliveryMode: 'Blended', enrolledCount: 128, isEnrolled: true, relatedGroupCount: 2, upcomingSessionCount: 3 },
+  { id: 2, code: 'APT3025', category: 'Applied Computer Technology', title: 'Machine Learning', description: 'Understand supervised learning, evaluation, and applied AI thinking.', level: 'Year 4', deliveryMode: 'Online', enrolledCount: 94, isEnrolled: true, relatedGroupCount: 1, upcomingSessionCount: 2 },
+];
+
+const fallbackSessions = [
+  { id: 11, title: 'Retrofit & Room Review', group: 'Mobile Programming Study Circle', startsAt: new Date().toISOString(), time: 'Today, 14:00' },
+  { id: 12, title: 'ML Concept Sprint', group: 'Machine Learning Group', startsAt: null, time: 'Tomorrow, 16:30' },
+];
+
+const fallbackGroups = [
+  { id: 21, name: 'Mobile Programming Study Circle', courseCode: 'APT3060', description: 'A structured weekly group for questions, notes, and revision planning.' },
+  { id: 22, name: 'ML Exam Prep', courseCode: 'APT3025', description: 'Share solved examples, notes, and exam-style questions.' },
+];
+
+const fallbackResources = [
+  { id: 31, title: 'Course outline PDF', type: 'PDF', downloads: 5 },
+  { id: 32, title: 'Revision notes', type: 'Notes', downloads: 8 },
+];
+
+const fallbackActivity: ActivityItem[] = [
+  { id: 'fallback-course', title: 'Mobile Programming course hub is ready', meta: 'APT3060 - notes, PDFs, and quiz support', occurredAt: new Date().toISOString(), href: '/courses/1' },
+  { id: 'fallback-group', title: 'Join a structured study group', meta: 'Academic collaboration and WhatsApp-style support', occurredAt: new Date().toISOString(), href: '/groups' },
+];
+
+async function readJsonOrNull(path: string) {
+  const response = await apiFetch(path);
+  if (!response.ok) {
+    return null;
+  }
+
+  return response.json();
+}
 
 function Dashboard() {
   const [courses, setCourses] = useState<any[]>([]);
@@ -29,19 +63,24 @@ function Dashboard() {
 
     const loadDashboard = async () => {
       try {
-        const [coursesData, sessionsData, groupsData, resourcesData] = await Promise.all([
-          apiFetch('/api/courses').then((response) => response.json()),
-          apiFetch('/api/sessions').then((response) => response.json()),
-          apiFetch('/api/groups').then((response) => response.json()),
-          apiFetch('/api/resources').then((response) => response.json()),
+        const [coursesResult, sessionsResult, groupsResult, resourcesResult] = await Promise.allSettled([
+          readJsonOrNull('/api/courses'),
+          readJsonOrNull('/api/sessions'),
+          readJsonOrNull('/api/groups'),
+          readJsonOrNull('/api/resources'),
         ]);
 
         if (!mounted) return;
 
-        const courseList = coursesData.courses || [];
-        const sessionList = sessionsData.sessions || [];
-        const groupList = groupsData.groups || [];
-        const resourceList = resourcesData.resources || [];
+        const coursesData = coursesResult.status === 'fulfilled' ? coursesResult.value : null;
+        const sessionsData = sessionsResult.status === 'fulfilled' ? sessionsResult.value : null;
+        const groupsData = groupsResult.status === 'fulfilled' ? groupsResult.value : null;
+        const resourcesData = resourcesResult.status === 'fulfilled' ? resourcesResult.value : null;
+
+        const courseList = Array.isArray(coursesData?.courses) && coursesData.courses.length > 0 ? coursesData.courses : fallbackCourses;
+        const sessionList = Array.isArray(sessionsData?.sessions) && sessionsData.sessions.length > 0 ? sessionsData.sessions : fallbackSessions;
+        const groupList = Array.isArray(groupsData?.groups) && groupsData.groups.length > 0 ? groupsData.groups : fallbackGroups;
+        const resourceList = Array.isArray(resourcesData?.resources) && resourcesData.resources.length > 0 ? resourcesData.resources : fallbackResources;
 
         setCourses(courseList);
         setSessions(sessionList);
@@ -50,28 +89,20 @@ function Dashboard() {
 
         const [courseDetails, groupDetails, sessionDetails, resourceDetails] = await Promise.all([
           Promise.all(courseList.slice(0, 4).map(async (course: any) => {
-            const response = await apiFetch(`/api/courses/${course.id}`);
-            if (!response.ok) return null;
-            const data = await response.json();
-            return data.course;
+            const data = await readJsonOrNull(`/api/courses/${course.id}`);
+            return data?.course || null;
           })),
           Promise.all(groupList.slice(0, 4).map(async (group: any) => {
-            const response = await apiFetch(`/api/groups/${group.id}`);
-            if (!response.ok) return null;
-            const data = await response.json();
-            return data.group;
+            const data = await readJsonOrNull(`/api/groups/${group.id}`);
+            return data?.group || null;
           })),
           Promise.all(sessionList.slice(0, 4).map(async (session: any) => {
-            const response = await apiFetch(`/api/sessions/${session.id}`);
-            if (!response.ok) return null;
-            const data = await response.json();
-            return data.session;
+            const data = await readJsonOrNull(`/api/sessions/${session.id}`);
+            return data?.session || null;
           })),
           Promise.all(resourceList.slice(0, 4).map(async (resource: any) => {
-            const response = await apiFetch(`/api/resources/${resource.id}`);
-            if (!response.ok) return null;
-            const data = await response.json();
-            return data.resource;
+            const data = await readJsonOrNull(`/api/resources/${resource.id}`);
+            return data?.resource || null;
           })),
         ]);
 
@@ -79,17 +110,17 @@ function Dashboard() {
           (course?.students || []).map((student: any) => ({
             id: `course-${course.id}-${student.id}-${student.enrolledAt}`,
             title: `${student.name} is active in ${course.code}`,
-            meta: `${course.title} · ${student.email}`,
+            meta: `${course.title} - ${student.email}`,
             occurredAt: student.enrolledAt,
             href: `/courses/${course.id}`,
-          })), 
+          })),
         );
 
         const groupActivity = groupDetails.flatMap((group: any) =>
           (group?.membersList || []).map((member: any) => ({
             id: `group-${group.id}-${member.email}-${member.enrolledAt}`,
             title: `${member.name} joined ${group.name}`,
-            meta: `${group.courseCode || 'Study Group'} · ${member.email}`,
+            meta: `${group.courseCode || 'Study Group'} - ${member.email}`,
             occurredAt: member.enrolledAt,
             href: `/groups/${group.id}`,
           })),
@@ -99,7 +130,7 @@ function Dashboard() {
           (session?.attendees || []).map((attendee: any) => ({
             id: `session-${session.id}-${attendee.email}-${attendee.enrolledAt}`,
             title: `${attendee.name} joined ${session.title}`,
-            meta: `${session.group || 'Study Session'} · ${attendee.email}`,
+            meta: `${session.group || 'Study Session'} - ${attendee.email}`,
             occurredAt: attendee.enrolledAt,
             href: '/sessions',
           })),
@@ -109,24 +140,24 @@ function Dashboard() {
           (resource?.accesses || []).map((access: any) => ({
             id: `resource-${resource.id}-${access.email}-${access.enrolledAt}`,
             title: `${access.name} opened ${resource.title}`,
-            meta: `${resource.type || 'Resource'} · ${access.email}`,
+            meta: `${resource.type || 'Resource'} - ${access.email}`,
             occurredAt: access.enrolledAt,
-            href: '/resources',
+            href: '/learning?view=resources',
           })),
         );
 
-        setActivity(
-          [...courseActivity, ...groupActivity, ...sessionActivity, ...resourceActivity]
-            .sort((left, right) => new Date(right.occurredAt).getTime() - new Date(left.occurredAt).getTime())
-            .slice(0, 6),
-        );
+        const mergedActivity = [...courseActivity, ...groupActivity, ...sessionActivity, ...resourceActivity]
+          .sort((left, right) => new Date(right.occurredAt).getTime() - new Date(left.occurredAt).getTime())
+          .slice(0, 6);
+
+        setActivity(mergedActivity.length > 0 ? mergedActivity : fallbackActivity);
       } catch {
         if (!mounted) return;
-        setCourses([]);
-        setSessions([]);
-        setGroups([]);
-        setResources([]);
-        setActivity([]);
+        setCourses(fallbackCourses);
+        setSessions(fallbackSessions);
+        setGroups(fallbackGroups);
+        setResources(fallbackResources);
+        setActivity(fallbackActivity);
       } finally {
         if (mounted) setLoading(false);
       }
@@ -142,7 +173,7 @@ function Dashboard() {
     { label: 'Courses enrolled', value: String(courses.filter((course) => course.isEnrolled).length), href: '/courses' },
     { label: 'Study groups', value: String(groups.length), href: '/groups' },
     { label: 'Upcoming sessions', value: String(sessions.length), href: '/sessions' },
-    { label: 'Saved resources', value: String(resources.length), href: '/library' },
+    { label: 'Learning resources', value: String(resources.length), href: '/learning?view=library' },
   ];
 
   const upcomingSessions = sessions.slice(0, 4);
@@ -159,7 +190,8 @@ function Dashboard() {
           </div>
           <div className="dashboard-summary-actions">
             <Link to="/courses" className="button button-primary">Continue learning</Link>
-            <Link to="/library" className="button button-secondary">Open library</Link>
+            <Link to="/courses/1#ask" className="button button-secondary">Ask StudyLink AI</Link>
+            <Link to="/learning?view=library" className="button button-secondary">Open learning hub</Link>
           </div>
         </section>
 
@@ -181,7 +213,7 @@ function Dashboard() {
               <span className="panel-pill">Latest updates</span>
             </div>
             {loading ? (
-              <div className="workspace-loading-card"><p>Loading dashboard activity…</p></div>
+              <div className="workspace-loading-card"><p>Loading dashboard activity...</p></div>
             ) : recentActivity.length === 0 ? (
               <div className="empty-state">
                 <p className="empty-text">No recent activity available yet.</p>
@@ -253,35 +285,35 @@ function Dashboard() {
                   <strong>Courses</strong>
                   <p>Open your enrolled and available course catalog.</p>
                 </div>
-                <span className="action-icon">→</span>
+                <span className="action-icon">-&gt;</span>
               </Link>
-              <Link to="/library" className="quick-action-btn quick-action-card">
+              <Link to="/learning?view=library" className="quick-action-btn quick-action-card">
                 <div>
-                  <strong>Library</strong>
-                  <p>Find notes, PDFs, past papers, and curated resources.</p>
+                  <strong>Learning Hub</strong>
+                  <p>Find notes, PDFs, podcasts, quizzes, and curated resources in one place.</p>
                 </div>
-                <span className="action-icon">→</span>
+                <span className="action-icon">-&gt;</span>
               </Link>
-              <Link to="/courses" className="quick-action-btn quick-action-card">
+              <Link to="/courses/1#ask" className="quick-action-btn quick-action-card">
                 <div>
                   <strong>Ask StudyLink AI</strong>
                   <p>Open a course and ask the AI tutor for explanations, quizzes, and summaries.</p>
                 </div>
-                <span className="action-icon">→</span>
+                <span className="action-icon">-&gt;</span>
               </Link>
               <Link to="/groups" className="quick-action-btn quick-action-card">
                 <div>
                   <strong>Study groups</strong>
                   <p>Review active groups and join collaborative sessions.</p>
                 </div>
-                <span className="action-icon">→</span>
+                <span className="action-icon">-&gt;</span>
               </Link>
               <Link to="/sessions" className="quick-action-btn quick-action-card">
                 <div>
                   <strong>Sessions</strong>
                   <p>Check your upcoming sessions and join live review meetings.</p>
                 </div>
-                <span className="action-icon">→</span>
+                <span className="action-icon">-&gt;</span>
               </Link>
             </div>
           </section>

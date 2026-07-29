@@ -37,6 +37,8 @@ function StudyGroups({ initialShowForm = false }: StudyGroupsProps) {
   const [pendingJoinGroup, setPendingJoinGroup] = useState<StudyGroup | null>(null);
   const [acceptedRequirements, setAcceptedRequirements] = useState(false);
   const [joinError, setJoinError] = useState('');
+  const [joiningGroupIds, setJoiningGroupIds] = useState<number[]>([]);
+  const [joinedGroupIds, setJoinedGroupIds] = useState<number[]>([]);
   const [groupForm, setGroupForm] = useState({
     name: '',
     description: '',
@@ -187,15 +189,19 @@ function StudyGroups({ initialShowForm = false }: StudyGroupsProps) {
   };
 
   const joinGroup = async (group: StudyGroup) => {
+    setJoiningGroupIds((current) => Array.from(new Set([...current, group.id])));
+
     try {
       const response = await apiFetch(`/api/groups/${group.id}/enroll`, { method: 'POST' });
+      const data = await response.json();
       if (!response.ok) {
         const message = response.status === 403
           ? 'You do not meet this group’s access requirements.'
-          : 'Join failed. Please try again later.';
+          : data?.message || 'Join failed. Please try again later.';
         throw new Error(message);
       }
 
+      setJoinedGroupIds((current) => Array.from(new Set([...current, group.id])));
       await loadGroups();
       addNotification({
         id: `join-${group.id}-${Date.now()}`,
@@ -210,6 +216,8 @@ function StudyGroups({ initialShowForm = false }: StudyGroupsProps) {
       // eslint-disable-next-line no-console
       console.error(error);
       setJoinError(error instanceof Error ? error.message : 'Failed to join this group.');
+    } finally {
+      setJoiningGroupIds((current) => current.filter((groupId) => groupId !== group.id));
     }
   };
 
@@ -429,8 +437,19 @@ function StudyGroups({ initialShowForm = false }: StudyGroupsProps) {
                     <button type="button" className="action-link" onClick={() => loadGroupIntoForm(group)}>Edit</button>
                     <button type="button" className="action-link action-danger" onClick={() => deleteGroup(group.id)}>Delete</button>
                   </div>
-                  <button onClick={() => handleJoinGroup(group)} className="button button-primary button-sm">
-                    Join group
+                  <button
+                    type="button"
+                    onClick={() => handleJoinGroup(group)}
+                    className="button button-primary button-sm"
+                    disabled={joiningGroupIds.includes(group.id) || joinedGroupIds.includes(group.id)}
+                  >
+                    {joinedGroupIds.includes(group.id)
+                      ? 'Joined'
+                      : joiningGroupIds.includes(group.id)
+                        ? 'Joining…'
+                        : group.joinRequirements && group.joinRequirements.length > 0
+                          ? 'Review requirements'
+                          : 'Join group'}
                   </button>
                 </div>
               </article>

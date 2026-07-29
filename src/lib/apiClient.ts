@@ -28,6 +28,8 @@ export const apiFetch = async (path: string, options: RequestInit = {}) => {
     headers.set('Authorization', 'Bearer ' + token);
   }
 
+  
+
   const init: RequestInit = {
     ...options,
     headers,

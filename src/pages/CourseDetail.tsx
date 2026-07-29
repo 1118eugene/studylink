@@ -1,56 +1,14 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { apiFetch } from '../lib/apiClient';
-
-type CourseDetailData = {
-  id: number;
-  code: string;
-  category: string;
-  title: string;
-  description: string;
-  image: string;
-  level: string;
-  deliveryMode: string;
-  enrolledCount: number;
-  isEnrolled: boolean;
-  students: Array<{
-    id: number;
-    name: string;
-    email: string;
-    university: string;
-    major: string;
-    yearOfStudy: string;
-    enrolledAt: string;
-  }>;
-  groups: Array<{
-    id: number;
-    name: string;
-    course: string;
-    courseCode: string;
-    meetingType: string;
-    members: number;
-    image: string;
-    description: string;
-    sessionCount: number;
-  }>;
-  sessions: Array<{
-    id: number;
-    title: string;
-    startsAt: string | null;
-    location: string;
-    group: string;
-    courseCode: string;
-    status: string;
-    enrolledCount: number;
-  }>;
-};
+import { buildCourseContent, buildStudyLinkAiResponse, saveSupplementalEnrollmentCode } from '../lib/studylinkContent';
 
 const hubTabs = [
   { key: 'overview', label: 'Overview' },
-  { key: 'outline', label: 'Course outline' },
-  { key: 'objectives', label: 'Learning goals' },
-  { key: 'topics', label: 'Weekly topics' },
   { key: 'notes', label: 'Notes' },
+  { key: 'pdfs', label: 'PDFs' },
+  { key: 'podcasts', label: 'Podcasts' },
+  { key: 'videos', label: 'Videos' },
   { key: 'quizzes', label: 'MCQs' },
   { key: 'papers', label: 'Past papers' },
   { key: 'groups', label: 'Study groups' },
@@ -61,16 +19,15 @@ const hubTabs = [
 
 function CourseDetail() {
   const { id } = useParams();
-  const [course, setCourse] = useState<CourseDetailData | null>(null);
+  const [course, setCourse] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedTab, setSelectedTab] = useState('overview');
-  const [question, setQuestion] = useState('');
-  const [answer, setAnswer] = useState('');
-  const [isAsking, setIsAsking] = useState(false);
+  const [question, setQuestion] = useState('Give me notes and revision guidance for the hardest topic in this course.');
+  const [submittedQuestion, setSubmittedQuestion] = useState(question);
 
   useEffect(() => {
     const hash = window.location.hash.replace('#', '');
-    if (hash && ['overview', 'outline', 'objectives', 'topics', 'notes', 'quizzes', 'papers', 'groups', 'sessions', 'students', 'ask'].includes(hash)) {
+    if (hash && hubTabs.some((tab) => tab.key === hash)) {
       setSelectedTab(hash);
     }
   }, [id]);
@@ -79,113 +36,58 @@ function CourseDetail() {
     if (!id) return;
 
     apiFetch(`/api/courses/${id}`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Course not found');
-        }
-        return response.json();
-      })
-      .then((data) => setCourse(data.course))
-      .catch(() => setCourse(null))
+      .then((response) => response.ok ? response.json() : { course: null })
+      .then((data) => setCourse(buildCourseContent(data.course || { id })))
+      .catch(() => setCourse(buildCourseContent({ id })))
       .finally(() => setLoading(false));
   }, [id]);
 
-  const courseOverview = useMemo(() => {
-    if (!course) return [];
-    return [
-      `${course.level} course at ${course.deliveryMode}`,
-      `${course.enrolledCount} students currently enrolled`,
-      `${course.students.length} course peers available`,
-      `${course.groups.length} active study groups`,
-      `${course.sessions.length} live sessions scheduled`,
-    ];
+  const resourcesByType = useMemo(() => {
+    const resources = course?.resources || [];
+    return {
+      notes: resources.filter((resource: any) => resource.type === 'Note'),
+      pdfs: resources.filter((resource: any) => resource.type === 'PDF' || resource.type === 'Guide'),
+      podcasts: resources.filter((resource: any) => resource.type === 'Podcast'),
+      videos: resources.filter((resource: any) => resource.type === 'Video'),
+      quizzes: resources.filter((resource: any) => resource.type === 'MCQ'),
+      papers: resources.filter((resource: any) => resource.type === 'Past Paper'),
+    };
   }, [course]);
 
-  const weeklyTopics = useMemo(() => {
-    if (!course) return [];
-    return [
-      `${course.title} introduction and foundations`,
-      `Core concepts and terminology`,
-      `Practical examples and course applications`,
-      `Exam-focused review and practice`,
-      `Revision checklist and study summary`,
-    ];
-  }, [course]);
+  const aiResponse = useMemo(
+    () => buildStudyLinkAiResponse(submittedQuestion, course?.code),
+    [course?.code, submittedQuestion],
+  );
 
-  const learningObjectives = useMemo(() => {
-    if (!course) return [];
-    return [
-      `Understand the fundamentals of ${course.title}`,
-      `Apply key concepts from ${course.category} to real academic tasks`,
-      `Connect theory to practical study and exam preparation`,
-      `Use the course resources to solve past questions`,
-    ];
-  }, [course]);
-
-  const courseNotes = useMemo(() => {
-    if (!course) return [];
-    return [
-      {
-        title: 'Lecture summary',
-        description: `Core ideas from today’s ${course.title} lecture with definitions and examples.`,
-      },
-      {
-        title: 'Revision sheet',
-        description: 'A one-page study guide for exam preparation and quick topic review.',
-      },
-      {
-        title: 'Problem-solving notes',
-        description: 'Step-by-step examples for the most tested course concepts.',
-      },
-    ];
-  }, [course]);
-
-  const coursePdfs = useMemo(() => {
-    if (!course) return [];
-    return [
-      {
-        title: `${course.code} course outline`,
-        description: 'Download the official course structure and weekly topic plan.',
-        url: `https://example.com/${course.code}-outline.pdf`,
-      },
-      {
-        title: `${course.code} revision checklist`,
-        description: 'Key revision steps for every week of the semester.',
-        url: `https://example.com/${course.code}-revision.pdf`,
-      },
-    ];
-  }, [course]);
-
-  const coursePapers = useMemo(() => {
-    if (!course) return [];
-    return [
-      {
-        title: 'Past paper: Midterm',
-        description: 'Practice question set from previous midterm exams.',
-        url: `https://example.com/${course.code}-midterm.pdf`,
-      },
-      {
-        title: 'Past paper: Final exam',
-        description: 'Final exam sample with worked answers and marking guide.',
-        url: `https://example.com/${course.code}-final.pdf`,
-      },
-    ];
-  }, [course]);
-
-  const handleAskStudyLink = () => {
-    if (!question.trim()) return;
-    setIsAsking(true);
-    setTimeout(() => {
-      setAnswer(
-        `Ask StudyLink: ${question.trim()}
-
-` +
-        `Review ${course?.title} notes, syllabus outline, and recent study groups to answer this question. ` +
-        `Start with the course outline and weekly topics, then practice with MCQs and past papers for best results.`,
-      );
-      setIsAsking(false);
-    }, 650);
+  const handleEnroll = async () => {
+    if (!course) return;
+    try {
+      const response = await apiFetch(`/api/courses/${course.id}/enroll`, { method: 'POST' });
+      if (!response.ok) {
+        throw new Error('Local enrollment fallback');
+      }
+      const data = await response.json();
+      setCourse(buildCourseContent(data.course));
+    } catch {
+      saveSupplementalEnrollmentCode(course.code);
+      setCourse((current: any) => current ? { ...current, isEnrolled: true, enrolledCount: Number(current.enrolledCount || 0) + 1 } : current);
+    }
   };
+
+  const renderResourceGrid = (items: any[], buttonLabel: string) => (
+    <div className="detail-card-grid">
+      {items.map((item) => (
+        <article key={item.id} className="detail-summary-card">
+          <strong>{item.title}</strong>
+          <p>{item.description}</p>
+          <span>{item.audience}</span>
+          <button type="button" className="button button-secondary button-sm" onClick={() => window.open(item.url, '_blank', 'noopener,noreferrer')}>
+            {buttonLabel}
+          </button>
+        </article>
+      ))}
+    </div>
+  );
 
   const renderTabContent = () => {
     if (!course) {
@@ -197,99 +99,24 @@ function CourseDetail() {
         return (
           <div className="hub-section-grid">
             <div className="detail-panel">
-              <h3>Course summary</h3>
+              <h3>Course support summary</h3>
               <p>{course.description}</p>
               <ul className="detail-list compact-list">
-                {courseOverview.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
+                <li>{course.school}</li>
+                <li>{course.program}</li>
+                <li>{course.level} · {course.deliveryMode}</li>
+                <li>{course.resources.length} learning resources inside this hub</li>
+                <li>{course.supportFocus}</li>
               </ul>
-              <div className="detail-action-row" style={{ marginTop: '1rem' }}>
-                <button type="button" className="button button-secondary" onClick={() => setSelectedTab('ask')}>
-                  Ask StudyLink AI about this course
-                </button>
-              </div>
             </div>
             <div className="detail-panel">
-              <h3>Course details</h3>
-              <div className="course-meta-grid">
-                <div>
-                  <span className="mini-label">Course code</span>
-                  <strong>{course.code}</strong>
-                </div>
-                <div>
-                  <span className="mini-label">Category</span>
-                  <strong>{course.category}</strong>
-                </div>
-                <div>
-                  <span className="mini-label">Level</span>
-                  <strong>{course.level}</strong>
-                </div>
-                <div>
-                  <span className="mini-label">Delivery</span>
-                  <strong>{course.deliveryMode}</strong>
-                </div>
-              </div>
-            </div>
-          </div>
-        );
-      case 'outline':
-        return (
-          <div className="hub-section-grid">
-            <div className="detail-panel">
-              <h3>Course outline</h3>
-              <p>This section is your central syllabus and weekly guide.</p>
+              <h3>Why this hub matters</h3>
               <ul className="detail-list compact-list">
-                {weeklyTopics.map((topic) => (
-                  <li key={topic}>{topic}</li>
+                {course.objectives.map((objective: string) => (
+                  <li key={objective}>{objective}</li>
                 ))}
               </ul>
-              <div className="detail-card-grid" style={{ marginTop: '1rem' }}>
-                {coursePdfs.map((pdf) => (
-                  <article key={pdf.title} className="detail-summary-card">
-                    <strong>{pdf.title}</strong>
-                    <p>{pdf.description}</p>
-                    <a href={pdf.url} target="_blank" rel="noreferrer" className="button button-secondary button-sm">
-                      Open PDF
-                    </a>
-                  </article>
-                ))}
-              </div>
-              <div className="detail-action-row" style={{ marginTop: '1rem' }}>
-                <button type="button" className="button button-primary">Save outline to library</button>
-              </div>
             </div>
-            <div className="detail-panel">
-              <h3>Study checklist</h3>
-              <ul className="detail-list compact-list">
-                <li>Review the week-by-week topics.</li>
-                <li>Save notes and practice resources.</li>
-                <li>Join groups for peer review.</li>
-                <li>Use Ask StudyLink for quick explanations.</li>
-              </ul>
-            </div>
-          </div>
-        );
-      case 'objectives':
-        return (
-          <div className="detail-panel">
-            <h3>Learning objectives</h3>
-            <ul className="detail-list compact-list">
-              {learningObjectives.map((objective) => (
-                <li key={objective}>{objective}</li>
-              ))}
-            </ul>
-          </div>
-        );
-      case 'topics':
-        return (
-          <div className="detail-panel">
-            <h3>Weekly topics</h3>
-            <ul className="detail-list compact-list">
-              {weeklyTopics.map((topic) => (
-                <li key={topic}>{topic}</li>
-              ))}
-            </ul>
           </div>
         );
       case 'notes':
@@ -297,53 +124,59 @@ function CourseDetail() {
           <div className="detail-panel">
             <div className="section-header">
               <h3>Course notes</h3>
-              <span className="panel-pill">Revision-ready</span>
+              <span className="panel-pill">{resourcesByType.notes.length}</span>
             </div>
-            <p>Organized notes for lecture summaries, exam revision, and fast concept review.</p>
-            <div className="detail-card-grid">
-              {courseNotes.map((note) => (
-                <article key={note.title} className="detail-summary-card">
-                  <strong>{note.title}</strong>
-                  <p>{note.description}</p>
-                  <button type="button" className="button button-secondary button-sm">Open note</button>
-                </article>
-              ))}
+            {renderResourceGrid(resourcesByType.notes, 'Open note')}
+          </div>
+        );
+      case 'pdfs':
+        return (
+          <div className="detail-panel">
+            <div className="section-header">
+              <h3>PDFs and guides</h3>
+              <span className="panel-pill">{resourcesByType.pdfs.length}</span>
             </div>
+            {renderResourceGrid(resourcesByType.pdfs, 'Open PDF')}
+          </div>
+        );
+      case 'podcasts':
+        return (
+          <div className="detail-panel">
+            <div className="section-header">
+              <h3>Learning podcasts</h3>
+              <span className="panel-pill">{resourcesByType.podcasts.length}</span>
+            </div>
+            {renderResourceGrid(resourcesByType.podcasts, 'Open podcast guide')}
+          </div>
+        );
+      case 'videos':
+        return (
+          <div className="detail-panel">
+            <div className="section-header">
+              <h3>Video companions</h3>
+              <span className="panel-pill">{resourcesByType.videos.length}</span>
+            </div>
+            {renderResourceGrid(resourcesByType.videos, 'Open video guide')}
           </div>
         );
       case 'quizzes':
         return (
           <div className="detail-panel">
-            <h3>MCQs & quizzes</h3>
-            <p>Practice course concepts with quick quiz sessions and review prompts.</p>
-            <div className="detail-card-grid">
-              <article className="detail-summary-card">
-                <strong>Quiz practice</strong>
-                <p>20 MCQs for immediate revision.</p>
-              </article>
-              <article className="detail-summary-card">
-                <strong>Timed review</strong>
-                <p>Fast-paced question rounds to test your memory.</p>
-              </article>
+            <div className="section-header">
+              <h3>MCQs and quiz drills</h3>
+              <span className="panel-pill">{resourcesByType.quizzes.length}</span>
             </div>
+            {renderResourceGrid(resourcesByType.quizzes, 'Open MCQ drill')}
           </div>
         );
       case 'papers':
         return (
           <div className="detail-panel">
-            <h3>Past papers</h3>
-            <p>Link your past exams and solutions for exam-style practice.</p>
-            <div className="detail-card-grid">
-              {coursePapers.map((paper) => (
-                <article key={paper.title} className="detail-summary-card">
-                  <strong>{paper.title}</strong>
-                  <p>{paper.description}</p>
-                  <a href={paper.url} target="_blank" rel="noreferrer" className="button button-secondary button-sm">
-                    Open paper
-                  </a>
-                </article>
-              ))}
+            <div className="section-header">
+              <h3>Past papers</h3>
+              <span className="panel-pill">{resourcesByType.papers.length}</span>
             </div>
+            {renderResourceGrid(resourcesByType.papers, 'Open paper')}
           </div>
         );
       case 'groups':
@@ -351,10 +184,10 @@ function CourseDetail() {
           <div className="detail-panel">
             <h3>Study groups</h3>
             {course.groups.length === 0 ? (
-              <p>No study groups have been created for this course yet.</p>
+              <p>Use the course resources first, then create or join a study group to discuss difficult topics together.</p>
             ) : (
               <div className="detail-card-grid">
-                {course.groups.map((group) => (
+                {course.groups.map((group: any) => (
                   <Link key={group.id} to={`/groups/${group.id}`} className="detail-summary-card">
                     <strong>{group.name}</strong>
                     <p>{group.description}</p>
@@ -370,10 +203,10 @@ function CourseDetail() {
           <div className="detail-panel">
             <h3>Live sessions</h3>
             {course.sessions.length === 0 ? (
-              <p>No live sessions are scheduled for this course yet.</p>
+              <p>No live sessions are scheduled yet. Use StudyLink AI and the course resources while your study group plans the next review.</p>
             ) : (
               <div className="detail-card-grid">
-                {course.sessions.map((session) => (
+                {course.sessions.map((session: any) => (
                   <article key={session.id} className="detail-summary-card">
                     <strong>{session.title}</strong>
                     <p>{session.group || 'Study session'}</p>
@@ -388,44 +221,67 @@ function CourseDetail() {
         return (
           <div className="detail-panel">
             <h3>Students enrolled</h3>
-            <div className="member-list">
-              {course.students.map((student) => (
-                <article key={student.id} className="member-list-card">
-                  <div>
-                    <strong>{student.name}</strong>
-                    <p>{student.major || 'Student'} · {student.yearOfStudy || 'Active learner'}</p>
-                  </div>
-                  <div className="member-list-meta">
-                    <span>{student.email}</span>
-                    <span>{new Date(student.enrolledAt).toLocaleDateString()}</span>
-                  </div>
-                </article>
-              ))}
-            </div>
+            {course.students.length === 0 ? (
+              <p>This course hub is ready for learners. Enroll and start the peer-support cycle.</p>
+            ) : (
+              <div className="member-list">
+                {course.students.map((student: any) => (
+                  <article key={student.id} className="member-list-card">
+                    <div>
+                      <strong>{student.name}</strong>
+                      <p>{student.major || 'Student'} · {student.yearOfStudy || 'Active learner'}</p>
+                    </div>
+                    <div className="member-list-meta">
+                      <span>{student.email}</span>
+                      <span>{student.enrolledAt ? new Date(student.enrolledAt).toLocaleDateString() : 'Recently enrolled'}</span>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            )}
           </div>
         );
       case 'ask':
         return (
           <div className="detail-panel">
-            <h3>Ask StudyLink</h3>
-            <p>Ask a question about the course, revision, or exam preparation.</p>
+            <div className="section-header">
+              <h3>Ask StudyLink AI</h3>
+              <Link to={`/ask-ai?course=${encodeURIComponent(course.code)}`} className="button button-secondary button-sm">
+                Open full AI workspace
+              </Link>
+            </div>
+            <p>Ask for notes, explanations, revision plans, MCQs, or what to study next in this course.</p>
             <textarea
               value={question}
               onChange={(event) => setQuestion(event.target.value)}
-              placeholder="Ask StudyLink about this course..."
+              placeholder="Ask StudyLink AI about this course..."
               className="studylink-input"
             />
             <div className="detail-action-row" style={{ marginTop: '1rem' }}>
-              <button type="button" className="button button-primary" onClick={handleAskStudyLink} disabled={isAsking}>
-                {isAsking ? 'Thinking…' : 'Get academic guidance'}
+              <button type="button" className="button button-primary" onClick={() => setSubmittedQuestion(question)}>
+                Get academic guidance
               </button>
             </div>
-            {answer ? (
-              <div className="detail-panel" style={{ marginTop: '1rem' }}>
-                <strong>Answer</strong>
-                <p style={{ marginTop: '0.75rem', whiteSpace: 'pre-wrap' }}>{answer}</p>
-              </div>
-            ) : null}
+            <div className="detail-panel" style={{ marginTop: '1rem' }}>
+              <strong>{aiResponse.headline}</strong>
+              <p style={{ marginTop: '0.75rem' }}>{aiResponse.explanation}</p>
+              <ul className="detail-list compact-list">
+                {aiResponse.nextSteps.map((step) => (
+                  <li key={step}>{step}</li>
+                ))}
+              </ul>
+            </div>
+            <div className="detail-card-grid" style={{ marginTop: '1rem' }}>
+              {aiResponse.recommendedResources.map((resource) => (
+                <article key={resource.id} className="detail-summary-card">
+                  <strong>{resource.title}</strong>
+                  <p>{resource.description}</p>
+                  <button type="button" className="button button-secondary button-sm" onClick={() => window.open(resource.url, '_blank', 'noopener,noreferrer')}>
+                    Open resource
+                  </button>
+                </article>
+              ))}
+            </div>
           </div>
         );
       default:
@@ -458,22 +314,22 @@ function CourseDetail() {
       <div className="container workspace-stack">
         <section className="hub-hero-card">
           <div>
-            <p className="workspace-eyebrow">{course.category}</p>
+            <p className="workspace-eyebrow">{course.school}</p>
             <h1>{course.code}: {course.title}</h1>
             <p className="workspace-lead">{course.description}</p>
             <div className="detail-chip-row">
               <span className="detail-chip">{course.level}</span>
               <span className="detail-chip">{course.deliveryMode}</span>
-              <span className="detail-chip">{course.enrolledCount} students</span>
+              <span className="detail-chip">{course.resources.length} resources</span>
             </div>
           </div>
           <div className="detail-action-row">
-            <button type="button" className="button button-primary" onClick={() => setSelectedTab('ask')}>
+            <button type="button" className="button button-primary" onClick={handleEnroll}>
+              {course.isEnrolled ? 'Enrolled' : 'Enroll in course'}
+            </button>
+            <Link to={`/ask-ai?course=${encodeURIComponent(course.code)}`} className="button button-secondary">
               Ask StudyLink AI
-            </button>
-            <button type="button" className="button button-secondary" onClick={() => setSelectedTab('students')}>
-              Students enrolled
-            </button>
+            </Link>
             <Link to="/courses" className="button button-secondary">Back to courses</Link>
           </div>
         </section>

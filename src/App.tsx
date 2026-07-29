@@ -16,8 +16,10 @@ import Profile from './pages/Profile';
 import GroupDetail from './pages/GroupDetail';
 import Resources from './pages/Resources';
 import Library from './pages/Library';
+import LearningHub from './pages/LearningHub';
 import About from './pages/About';
 import Contact from './pages/Contact';
+import StudyLinkAI from './pages/StudyLinkAI';
 import './App.css';
 import './workspace.css';
 import { getStoredUser } from './lib/session';
@@ -28,6 +30,21 @@ type ProtectedRouteProps = {
 
 function ProtectedRoute({ children }: ProtectedRouteProps) {
   return getStoredUser() ? <>{children}</> : <Navigate to="/login" replace />;
+}
+
+function getMobilePageTitle(pathname: string) {
+  if (pathname.startsWith('/courses/')) return 'Course Hub';
+  if (pathname.startsWith('/groups/')) return 'Study Groups';
+  if (pathname.startsWith('/dashboard')) return 'Dashboard';
+  if (pathname.startsWith('/schools')) return 'Schools';
+  if (pathname.startsWith('/courses')) return 'Courses';
+  if (pathname.startsWith('/sessions')) return 'Sessions';
+  if (pathname.startsWith('/learning')) return 'Learning Hub';
+  if (pathname.startsWith('/resources')) return 'Learning Hub';
+  if (pathname.startsWith('/library')) return 'Learning Hub';
+  if (pathname.startsWith('/profile')) return 'Profile';
+  if (pathname.startsWith('/ask-ai')) return 'StudyLink AI';
+  return 'StudyLink';
 }
 
 function App() {
@@ -50,58 +67,75 @@ function App() {
   }, []);
 
   const mobileNavLinks = [
-    { label: 'Dashboard', path: '/dashboard' },
-    { label: 'Groups', path: '/groups' },
-    { label: 'Sessions', path: '/sessions' },
-    { label: 'Courses', path: '/courses' },
-    { label: 'Resources', path: '/resources' },
-    { label: 'Library', path: '/library' },
+    { label: 'Schools', path: '/schools', icon: '🏫' },
+    { label: 'Courses', path: '/courses', icon: '📘' },
+    { label: 'Learning', path: '/learning?view=library', icon: '📚' },
+    { label: 'AI', path: '/ask-ai', icon: '🤖' },
+    { label: 'Profile', path: '/profile', icon: '👤' },
   ];
+  const showDesktopSidebar = isAuthenticated && !isMobile;
+  const currentUser = getStoredUser();
 
   return (
     <div className={`app-shell ${isAuthenticated ? 'authenticated-shell' : 'public-shell'}`}>
-      {isAuthenticated ? <Sidebar /> : <Header />}
+      {!isAuthenticated ? <Header /> : null}
+      {showDesktopSidebar ? <Sidebar /> : null}
       {isAuthenticated && isMobile ? (
-        <div className="mobile-auth-nav">
-          <div className="mobile-auth-nav-links">
-            {mobileNavLinks.map((link) => (
-              <Link
-                key={link.path}
-                to={link.path}
-                className={location.pathname === link.path ? 'mobile-auth-nav-link active' : 'mobile-auth-nav-link'}
-              >
-                {link.label}
-              </Link>
-            ))}
+        <>
+          <div className="mobile-auth-header">
+            <div>
+              <p className="mobile-auth-kicker">StudyLink Workspace</p>
+              <strong>{getMobilePageTitle(location.pathname)}</strong>
+            </div>
+            <Link to="/profile" className="mobile-auth-profile-link">
+              {currentUser?.name ? currentUser.name.split(' ')[0] : 'Profile'}
+            </Link>
           </div>
-        </div>
+          <div className="mobile-auth-nav">
+            <div className="mobile-auth-nav-links">
+              {mobileNavLinks.map((link) => (
+                <Link
+                  key={link.path}
+                  to={link.path}
+                  className={location.pathname === '/learning' && link.path.startsWith('/learning')
+                    ? 'mobile-auth-nav-link active'
+                    : location.pathname === link.path || `${location.pathname}${location.search}` === link.path
+                      ? 'mobile-auth-nav-link active'
+                      : 'mobile-auth-nav-link'}
+                >
+                  <span className="mobile-auth-nav-icon">{link.icon}</span>
+                  <span className="mobile-auth-nav-label">{link.label}</span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </>
       ) : null}
       <main className={isAuthenticated ? 'app-content' : 'app-content public-content'}>
         <Routes>
-          <Route path="/" element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <Home />} />
+          <Route path="/" element={isAuthenticated ? <Navigate to="/schools" replace /> : <Home />} />
 
-          {/* Auth pages */}
-          <Route path="/login" element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <Login onAuthSuccess={() => setIsAuthenticated(true)} />} />
-          <Route path="/signup" element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <SignUp onAuthSuccess={() => setIsAuthenticated(true)} />} />
+          <Route path="/login" element={isAuthenticated ? <Navigate to="/schools" replace /> : <Login onAuthSuccess={() => setIsAuthenticated(true)} />} />
+          <Route path="/signup" element={isAuthenticated ? <Navigate to="/schools" replace /> : <SignUp onAuthSuccess={() => setIsAuthenticated(true)} />} />
 
-          {/* Public pages */}
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
 
-          {/* Authenticated pages */}
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/schools" element={<ProtectedRoute><Schools /></ProtectedRoute>} />
           <Route path="/courses" element={<ProtectedRoute><Courses /></ProtectedRoute>} />
           <Route path="/courses/:id" element={<ProtectedRoute><CourseDetail /></ProtectedRoute>} />
+          <Route path="/ask-ai" element={<ProtectedRoute><StudyLinkAI /></ProtectedRoute>} />
           <Route path="/admin/academic" element={<ProtectedRoute><AdminAcademic /></ProtectedRoute>} />
           <Route path="/groups" element={<ProtectedRoute><StudyGroups /></ProtectedRoute>} />
           <Route path="/groups/new" element={<ProtectedRoute><StudyGroups initialShowForm /></ProtectedRoute>} />
           <Route path="/groups/:id" element={<ProtectedRoute><GroupDetail /></ProtectedRoute>} />
           <Route path="/sessions" element={<ProtectedRoute><Sessions /></ProtectedRoute>} />
+          <Route path="/learning" element={<ProtectedRoute><LearningHub /></ProtectedRoute>} />
           <Route path="/resources" element={<ProtectedRoute><Resources /></ProtectedRoute>} />
           <Route path="/library" element={<ProtectedRoute><Library /></ProtectedRoute>} />
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-          <Route path="*" element={<Navigate to={isAuthenticated ? '/dashboard' : '/'} replace />} />
+          <Route path="*" element={<Navigate to={isAuthenticated ? '/schools' : '/'} replace />} />
         </Routes>
       </main>
     </div>
