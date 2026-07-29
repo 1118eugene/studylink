@@ -142,6 +142,9 @@ function Courses() {
                     <Link to={`/courses/${course.id}`} className="button button-secondary">
                       View details
                     </Link>
+                    <Link to={`/courses/${course.id}#ask`} className="button button-secondary">
+                      Ask StudyLink AI
+                    </Link>
                     <button
                       type="button"
                       onClick={() => handleEnroll(course.id)}

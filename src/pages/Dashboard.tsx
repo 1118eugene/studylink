@@ -262,6 +262,13 @@ function Dashboard() {
                 </div>
                 <span className="action-icon">→</span>
               </Link>
+              <Link to="/courses" className="quick-action-btn quick-action-card">
+                <div>
+                  <strong>Ask StudyLink AI</strong>
+                  <p>Open a course and ask the AI tutor for explanations, quizzes, and summaries.</p>
+                </div>
+                <span className="action-icon">→</span>
+              </Link>
               <Link to="/groups" className="quick-action-btn quick-action-card">
                 <div>
                   <strong>Study groups</strong>
