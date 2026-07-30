@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import fs from 'fs';
 import path from 'path';
+import { Client } from 'pg';
 import { createAuthToken, getBearerToken, hashPassword, verifyAuthToken, verifyPassword } from './lib/auth.js';
 import {
   enrollInCourse,
@@ -47,6 +48,47 @@ app.use(
   }),
 );
 app.use(express.json({ limit: '50mb' }));
+
+// Simple in-memory cache for AI fetches (prototype) - key: `${courseCode}:${topic}` -> { ts, results }
+const aiFetchCache = new Map();
+
+// Helper to run an operation with a short-lived Postgres client if DATABASE_URL is provided.
+async function withPgClient(fn) {
+  const databaseUrl = process.env.DATABASE_URL;
+  if (!databaseUrl) return null;
+  const client = new Client({ connectionString: databaseUrl, ssl: { rejectUnauthorized: false } });
+  await client.connect();
+  try {
+    return await fn(client);
+  } finally {
+    try { await client.end(); } catch (e) { /* ignore */ }
+  }
+}
+
+async function getCuratedLinksFromDb(client, courseCode) {
+  const res = await client.query('SELECT label, url, type, source, added_at, added_by, metadata FROM curated_links WHERE course_code = $1 ORDER BY added_at DESC;', [courseCode]);
+  return res.rows.map((r) => ({ label: r.label, url: r.url, type: r.type, source: r.source, addedAt: r.added_at, addedBy: r.added_by, metadata: r.metadata }));
+}
+
+async function saveCuratedLinkToDb(client, courseCode, resource, addedBy) {
+  const sql = `INSERT INTO curated_links (course_code, label, url, type, source, added_at, added_by, metadata) VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *;`;
+  const metadata = { ...resource };
+  delete metadata.label; delete metadata.url; delete metadata.type; delete metadata.source;
+  const addedAt = new Date();
+  const vals = [courseCode, resource.label || null, resource.url || null, resource.type || null, resource.source || null, addedAt, addedBy || null, metadata];
+  const res = await client.query(sql, vals);
+  return res.rows[0];
+}
+
+async function saveCurationFlagToDb(client, courseCode, resource, reason, flaggedBy) {
+  const sql = `INSERT INTO curation_flags (course_code, url, reason, flagged_by, flagged_at, metadata) VALUES ($1,$2,$3,$4,$5,$6) RETURNING *;`;
+  const metadata = { ...resource };
+  delete metadata.label; delete metadata.url; delete metadata.type; delete metadata.source;
+  const flaggedAt = new Date();
+  const vals = [courseCode, resource.url || null, reason || null, flaggedBy || null, flaggedAt, metadata];
+  const res = await client.query(sql, vals);
+  return res.rows[0];
+}
 
 function toArray(value) {
   return Array.isArray(value) ? value : [];
@@ -572,6 +614,192 @@ app.post('/api/groups/:id/enroll', requireAuth, async (req, res) => {
 
   const updated = await loadGroupById(id);
   return res.json({ group: toGroupSummary(updated) });
+});
+
+// Prototype AI fetcher endpoint - returns curated/stubbed links for a course/topic
+app.post('/api/ai/fetch', requireAuth, async (req, res) => {
+  const { courseCode, topic } = req.body || {};
+  const cacheKey = `${String(courseCode || '').toUpperCase()}:${String(topic || '').trim()}`;
+  const TTL = 1000 * 60 * 10; // 10 minutes
+  const cached = aiFetchCache.get(cacheKey);
+  if (cached && (Date.now() - cached.ts) < TTL) {
+    return res.json({ results: cached.results, cached: true });
+  }
+
+  // In prototype mode we return safe, curated links (replace with real search integration later)
+  const results = [];
+
+  if (String(courseCode || '').toUpperCase() === 'APT3060') {
+    results.push(
+      { label: 'Android Activity lifecycle - official docs', url: 'https://developer.android.com/guide/components/activities/activity-lifecycle', type: 'Note', source: 'developer.android.com' },
+      { label: 'Activity lifecycle MCQ examples', url: 'https://www.javatpoint.com/android-activity-lifecycle', type: 'MCQ', source: 'javatpoint.com' },
+      { label: 'Mobile UI design checklist (Material Design)', url: 'https://material.io/design', type: 'PDF', source: 'material.io' },
+    );
+  } else {
+    // Generic safe fallback links
+    results.push(
+      { label: `${topic || 'Topic'} - general PDFs`, url: `https://www.google.com/search?q=${encodeURIComponent((topic || courseCode) + ' filetype:pdf')}`, type: 'PDF', source: 'google.com' },
+      { label: `${topic || 'Topic'} - YouTube`, url: `https://www.youtube.com/results?search_query=${encodeURIComponent((topic || courseCode))}`, type: 'Video', source: 'youtube.com' },
+    );
+  }
+
+  aiFetchCache.set(cacheKey, { ts: Date.now(), results });
+  return res.json({ results });
+});
+
+// Accept curated link and persist to backend/curated_links.json - simple prototype persistence
+app.post('/api/ai/accept', requireAuth, async (req, res) => {
+  const { courseCode, resource } = req.body || {};
+  if (!courseCode || !resource || !resource.url) {
+    return res.status(400).json({ message: 'courseCode and resource.url are required' });
+  }
+  // Try to persist to Postgres if configured, otherwise fall back to file-based persistence
+  const course = String(courseCode || '').toUpperCase();
+  try {
+    const dbResult = await withPgClient(async (client) => {
+      if (!client) return null;
+      return await saveCuratedLinkToDb(client, course, resource, req.user.email || req.user.id);
+    });
+
+    if (dbResult) {
+      // still append analytics
+      try {
+        const analyticsPath = path.join(process.cwd(), 'backend', 'ai_analytics.log');
+        const entry = { event: 'accept', courseCode: course, resource: { ...resource }, by: req.user.email || req.user.id, at: new Date().toISOString(), persisted: 'db' };
+        fs.appendFileSync(analyticsPath, JSON.stringify(entry) + '\n', 'utf8');
+      } catch (err) {
+        console.error('Failed writing analytics log', err);
+      }
+
+      return res.json({ saved: true, resource: { ...resource, persisted: 'db' } });
+    }
+  } catch (err) {
+    console.error('DB save failed, falling back to file:', err && err.message ? err.message : err);
+  }
+
+  // fallback: file-based persistence
+  const filePath = path.join(process.cwd(), 'backend', 'curated_links.json');
+  let current = {};
+  try {
+    if (fs.existsSync(filePath)) {
+      const raw = fs.readFileSync(filePath, 'utf8');
+      current = raw ? JSON.parse(raw) : {};
+    }
+  } catch (err) {
+    console.error('Failed reading curated links file', err);
+    current = {};
+  }
+
+  const list = Array.isArray(current[course]) ? current[course] : [];
+  list.push({ ...resource, addedAt: new Date().toISOString(), addedBy: req.user.email || req.user.id });
+  current[course] = list;
+
+  try {
+    fs.writeFileSync(filePath, JSON.stringify(current, null, 2), 'utf8');
+  } catch (err) {
+    console.error('Failed writing curated links file', err);
+    return res.status(500).json({ message: 'Failed to persist curated link' });
+  }
+
+  try {
+    const analyticsPath = path.join(process.cwd(), 'backend', 'ai_analytics.log');
+    const entry = { event: 'accept', courseCode: course, resource: { ...resource }, by: req.user.email || req.user.id, at: new Date().toISOString(), persisted: 'file' };
+    fs.appendFileSync(analyticsPath, JSON.stringify(entry) + '\n', 'utf8');
+  } catch (err) {
+    console.error('Failed writing analytics log', err);
+  }
+
+  return res.json({ saved: true, resource });
+});
+
+// Return persisted curated links for a course (prototype)
+app.get('/api/ai/links', requireAuth, async (req, res) => {
+  const courseCode = String(req.query.courseCode || '').toUpperCase();
+  // Try DB first
+  try {
+    const dbResult = await withPgClient(async (client) => {
+      if (!client) return null;
+      return await getCuratedLinksFromDb(client, courseCode);
+    });
+
+    if (dbResult) {
+      return res.json({ links: dbResult });
+    }
+  } catch (err) {
+    console.error('DB fetch failed, falling back to file:', err && err.message ? err.message : err);
+  }
+
+  const filePath = path.join(process.cwd(), 'backend', 'curated_links.json');
+  try {
+    if (!fs.existsSync(filePath)) return res.json({ links: [] });
+    const raw = fs.readFileSync(filePath, 'utf8');
+    const current = raw ? JSON.parse(raw) : {};
+    const links = current[courseCode] || [];
+    return res.json({ links });
+  } catch (err) {
+    console.error('Failed reading curated links file', err);
+    return res.status(500).json({ message: 'Failed to read curated links' });
+  }
+});
+
+// Flag a curated link for review (prototype) - stores a small flag record
+app.post('/api/ai/flag', requireAuth, async (req, res) => {
+  const { courseCode, resource, reason } = req.body || {};
+  if (!courseCode || !resource || !resource.url) {
+    return res.status(400).json({ message: 'courseCode and resource.url are required' });
+  }
+  const course = String(courseCode || '').toUpperCase();
+  try {
+    const dbResult = await withPgClient(async (client) => {
+      if (!client) return null;
+      return await saveCurationFlagToDb(client, course, resource, reason || '', req.user.email || req.user.id);
+    });
+
+    if (dbResult) {
+      try {
+        const analyticsPath = path.join(process.cwd(), 'backend', 'ai_analytics.log');
+        const logEntry = { event: 'flag', courseCode: course, resource: { ...resource }, reason: reason || '', by: req.user.email || req.user.id, at: new Date().toISOString(), persisted: 'db' };
+        fs.appendFileSync(analyticsPath, JSON.stringify(logEntry) + '\n', 'utf8');
+      } catch (err) {
+        console.error('Failed writing analytics log', err);
+      }
+      return res.json({ ok: true, persisted: 'db' });
+    }
+  } catch (err) {
+    console.error('DB flag save failed, falling back to file:', err && err.message ? err.message : err);
+  }
+
+  const filePath = path.join(process.cwd(), 'backend', 'curation_flags.json');
+  let current = [];
+  try {
+    if (fs.existsSync(filePath)) {
+      const raw = fs.readFileSync(filePath, 'utf8');
+      current = raw ? JSON.parse(raw) : [];
+    }
+  } catch (err) {
+    console.error('Failed reading curation flags file', err);
+    current = [];
+  }
+
+  const entry = { courseCode: course, resource: { ...resource }, reason: reason || '', flaggedAt: new Date().toISOString(), flaggedBy: req.user.email || req.user.id };
+  current.push(entry);
+
+  try {
+    fs.writeFileSync(filePath, JSON.stringify(current, null, 2), 'utf8');
+  } catch (err) {
+    console.error('Failed writing curation flags file', err);
+    return res.status(500).json({ message: 'Failed to persist flag' });
+  }
+
+  try {
+    const analyticsPath = path.join(process.cwd(), 'backend', 'ai_analytics.log');
+    const logEntry = { event: 'flag', courseCode: course, resource: { ...resource }, reason: reason || '', by: req.user.email || req.user.id, at: new Date().toISOString(), persisted: 'file' };
+    fs.appendFileSync(analyticsPath, JSON.stringify(logEntry) + '\n', 'utf8');
+  } catch (err) {
+    console.error('Failed writing analytics log', err);
+  }
+
+  return res.json({ ok: true });
 });
 
 app.get('/api/sessions', requireAuth, async (_req, res) => {

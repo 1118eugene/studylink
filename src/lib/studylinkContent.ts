@@ -17,6 +17,7 @@ export type CatalogResource = {
   usageNotes: string;
   duration?: string;
   url: string;
+  fallbackUrl?: string;
 };
 
 export type CatalogCourse = {
@@ -41,8 +42,11 @@ export type StudyLinkAiResponse = {
   headline: string;
   explanation: string;
   nextSteps: string[];
+  focusAreas: string[];
+  studyTips: string[];
   recommendedResources: CatalogResource[];
   peerAdvice: string;
+  externalLinks?: Array<{ label: string; url: string }>;
 };
 
 type CourseSeed = Omit<CatalogCourse, 'resources'> & {
@@ -104,6 +108,30 @@ function buildYoutubeSearchUrl(query: string) {
 
 function buildPodcastSearchUrl(query: string) {
   return `https://www.google.com/search?q=${encodeURIComponent(`${query} podcast`)}`;
+}
+
+function buildGoogleSearchUrl(query: string) {
+  return `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+}
+
+function buildPdfSearchUrl(query: string) {
+  return `https://www.google.com/search?q=${encodeURIComponent(query + ' filetype:pdf')}`;
+}
+
+function buildNotesSearchUrl(query: string) {
+  return `https://www.google.com/search?q=${encodeURIComponent(query + ' notes')}`;
+}
+
+function buildScholarSearchUrl(query: string) {
+  return `https://scholar.google.com/scholar?q=${encodeURIComponent(query)}`;
+}
+
+function buildMcqSearchUrl(query: string) {
+  return `https://www.google.com/search?q=${encodeURIComponent(query + ' MCQ questions')}`;
+}
+
+function buildPaperSearchUrl(query: string) {
+  return `https://www.google.com/search?q=${encodeURIComponent(query + ' past paper')}`;
 }
 
 function buildSection(title: string, contentHtml: string) {
@@ -408,32 +436,66 @@ const videoLinkOverrides: Record<string, string> = {
   'ACC210|Statement preparation visual guide': 'https://www.youtube.com/shorts/tIzBVa8zqto',
 };
 
-function createResources(seed: CourseSeed): CatalogResource[] {
-  const noteResources = seed.noteTopics.map((topic, index) => ({
-    id: `${seed.code}-note-${index + 1}`,
-    courseCode: seed.code,
-    title: `${seed.code} Note ${index + 1}: ${topic}`,
-    type: 'Note' as const,
-    description: `Structured study notes for ${topic} in ${seed.title}.`,
-    audience: `${seed.program} learners`,
-    usageNotes: 'Read this before your discussion group and highlight weak areas.',
-    url: buildNoteContent(seed, topic),
-  }));
+const noteLinkOverrides: Record<string, string> = {
+  // Add exact note URLs here if you want to pin them for a course.
+};
 
-  const pdfResources = seed.pdfTitles.map((title, index) => ({
-    id: `${seed.code}-pdf-${index + 1}`,
-    courseCode: seed.code,
-    title: `${seed.code} PDF ${index + 1}: ${title}`,
-    type: 'PDF' as const,
-    description: `${title} prepared for ${seed.title}.`,
-    audience: 'All enrolled students',
-    usageNotes: 'Keep this in your library for revision week and assignment planning.',
-    url: buildPdfContent(seed, title),
-  }));
+const pdfLinkOverrides: Record<string, string> = {
+  // If you have exact PDF resources, add them here.
+};
+
+const paperLinkOverrides: Record<string, string> = {
+  // Add exact past paper URLs here if needed.
+};
+
+const mcqLinkOverrides: Record<string, string> = {
+  // Add exact MCQ links here if needed.
+};
+
+// Podcast overrides (search-friendly fallbacks)
+// Add curated podcast links here if available.
+
+function createResources(seed: CourseSeed): CatalogResource[] {
+  const noteResources = seed.noteTopics.map((topic, index) => {
+    const overrideKey = `${seed.code}|${topic}`;
+    const externalUrl = noteLinkOverrides[overrideKey] ?? buildNotesSearchUrl(`${seed.title} ${topic}`);
+    const inApp = buildNoteContent(seed, topic);
+
+    return {
+      id: `${seed.code}-note-${index + 1}`,
+      courseCode: seed.code,
+      title: `${seed.code} Note ${index + 1}: ${topic}`,
+      type: 'Note' as const,
+      description: `Structured study notes for ${topic} in ${seed.title}.`,
+      audience: `${seed.program} learners`,
+      usageNotes: 'Open the curated external note; use the in-app note as a quick summary.',
+      url: externalUrl,
+      fallbackUrl: inApp,
+    };
+  });
+
+  const pdfResources = seed.pdfTitles.map((title, index) => {
+    const overrideKey = `${seed.code}|${title}`;
+    const externalUrl = pdfLinkOverrides[overrideKey] ?? buildPdfSearchUrl(`${seed.title} ${title}`);
+    const inApp = buildPdfContent(seed, title);
+
+    return {
+      id: `${seed.code}-pdf-${index + 1}`,
+      courseCode: seed.code,
+      title: `${seed.code} PDF ${index + 1}: ${title}`,
+      type: 'PDF' as const,
+      description: `${title} prepared for ${seed.title}.`,
+      audience: 'All enrolled students',
+      usageNotes: 'Open the curated external PDF/resource; the in-app PDF gives a concise guide.',
+      url: externalUrl,
+      fallbackUrl: inApp,
+    };
+  });
 
   const podcastResources = seed.podcastTopics.map((topic, index) => {
     const overrideKey = `${seed.code}|${topic}`;
     const externalUrl = podcastLinkOverrides[overrideKey] ?? buildPodcastSearchUrl(`${seed.title} ${topic}`);
+    const inApp = buildPodcastContent(seed, topic);
 
     return {
       id: `${seed.code}-podcast-${index + 1}`,
@@ -442,17 +504,17 @@ function createResources(seed: CourseSeed): CatalogResource[] {
       type: 'Podcast' as const,
       description: `Audio-style revision guide covering ${topic.toLowerCase()}.`,
       audience: 'Students revising beyond class hours',
-      usageNotes: externalUrl
-        ? 'Open this external podcast search for a listening-style review of the topic.'
-        : 'Play this to reinforce concepts before or after study sessions.',
+      usageNotes: 'Open the curated external podcast; use the in-app notes for a concise summary.',
       duration: '12-18 min',
       url: externalUrl,
+      fallbackUrl: inApp,
     };
   });
 
   const videoResources = seed.videoTopics.map((topic, index) => {
     const overrideKey = `${seed.code}|${topic}`;
     const externalUrl = videoLinkOverrides[overrideKey] ?? buildYoutubeSearchUrl(`${seed.title} ${topic}`);
+    const inApp = buildVideoContent(seed, topic);
 
     return {
       id: `${seed.code}-video-${index + 1}`,
@@ -461,35 +523,48 @@ function createResources(seed: CourseSeed): CatalogResource[] {
       type: 'Video' as const,
       description: `Visual explanation pack for ${topic.toLowerCase()}.`,
       audience: 'Visual learners',
-      usageNotes: externalUrl
-        ? 'Open this external video search for a direct visual explanation of the topic.'
-        : 'Use this after reading notes so the diagrams make more sense.',
+      usageNotes: 'Open the curated external video/search; use the in-app guide for a concise walkthrough.',
       duration: '8-14 min',
       url: externalUrl,
+      fallbackUrl: inApp,
     };
   });
 
-  const mcqResources = seed.mcqTopics.map((topic, index) => ({
-    id: `${seed.code}-mcq-${index + 1}`,
-    courseCode: seed.code,
-    title: `${seed.code} MCQ Drill ${index + 1}: ${topic}`,
-    type: 'MCQ' as const,
-    description: `Practice questions for ${topic.toLowerCase()} in ${seed.title}.`,
-    audience: 'Students preparing for exams',
-    usageNotes: 'Attempt these alone first, then review the reasoning with peers.',
-    url: buildMcqContent(seed, topic),
-  }));
+  const mcqResources = seed.mcqTopics.map((topic, index) => {
+    const overrideKey = `${seed.code}|${topic}`;
+    const externalUrl = mcqLinkOverrides[overrideKey] ?? buildMcqSearchUrl(`${seed.title} ${topic}`);
+    const inApp = buildMcqContent(seed, topic);
 
-  const paperResources = seed.paperTopics.map((topic, index) => ({
-    id: `${seed.code}-paper-${index + 1}`,
-    courseCode: seed.code,
-    title: `${seed.code} Past Paper ${index + 1}: ${topic}`,
-    type: 'Past Paper' as const,
-    description: `Exam-style practice paper focused on ${topic.toLowerCase()}.`,
-    audience: 'Revision groups and independent learners',
-    usageNotes: 'Use this after notes and MCQs to simulate real exam pressure.',
-    url: buildPaperContent(seed, topic),
-  }));
+    return {
+      id: `${seed.code}-mcq-${index + 1}`,
+      courseCode: seed.code,
+      title: `${seed.code} MCQ Drill ${index + 1}: ${topic}`,
+      type: 'MCQ' as const,
+      description: `Practice questions for ${topic.toLowerCase()} in ${seed.title}.`,
+      audience: 'Students preparing for exams',
+      usageNotes: 'Open the curated external MCQ; use the in-app drill for immediate practice and explanations.',
+      url: externalUrl,
+      fallbackUrl: inApp,
+    };
+  });
+
+  const paperResources = seed.paperTopics.map((topic, index) => {
+    const overrideKey = `${seed.code}|${topic}`;
+    const externalUrl = paperLinkOverrides[overrideKey] ?? buildPaperSearchUrl(`${seed.title} ${topic}`);
+    const inApp = buildPaperContent(seed, topic);
+
+    return {
+      id: `${seed.code}-paper-${index + 1}`,
+      courseCode: seed.code,
+      title: `${seed.code} Past Paper ${index + 1}: ${topic}`,
+      type: 'Past Paper' as const,
+      description: `Exam-style practice paper focused on ${topic.toLowerCase()}.`,
+      audience: 'Revision groups and independent learners',
+      usageNotes: 'Open the curated external past paper; use the in-app past paper for quick practice.',
+      url: externalUrl,
+      fallbackUrl: inApp,
+    };
+  });
 
   const guideResource: CatalogResource = {
     id: `${seed.code}-guide-1`,
@@ -920,16 +995,38 @@ export function buildStudyLinkAiResponse(question: string, selectedCourseCode?: 
   const noteFallback = fallbackCourse.resources.filter((resource) => resource.type === 'Note').slice(0, 2);
   const finalResources = recommendedResources.length > 0 ? recommendedResources : noteFallback;
 
+  const externalLinks = [
+    { label: 'Search PDFs', url: buildPdfSearchUrl(`${fallbackCourse.title} ${focusTopic}`) },
+    { label: 'Search YouTube', url: buildYoutubeSearchUrl(`${fallbackCourse.title} ${focusTopic}`) },
+    { label: 'Search Scholar', url: buildScholarSearchUrl(`${fallbackCourse.title} ${focusTopic}`) },
+    { label: 'Search MCQs', url: buildMcqSearchUrl(`${fallbackCourse.title} ${focusTopic}`) },
+  ];
+
   return {
     headline: `${fallbackCourse.code}: ${focusTopic}`,
-    explanation: `StudyLink AI recommends starting with ${focusTopic.toLowerCase()} in ${fallbackCourse.title}. Focus on the core definition, one worked example, and one common mistake before moving to MCQs or past papers.`,
+    explanation: `StudyLink AI recommends starting with ${focusTopic.toLowerCase()} in ${fallbackCourse.title}. Begin by understanding the concept clearly, then link it to the course outcomes, practical examples, and likely exam questions. Use the steps below to build depth, retain the idea, and apply it to real study tasks.`,
     nextSteps: [
-      `Read 1-2 notes for ${fallbackCourse.code} and write the main idea in your own words.`,
-      `Open one PDF or guide for ${fallbackCourse.title} and extract the weekly or exam checklist.`,
-      `Listen to a podcast or open a video companion so you can reinforce the same concept beyond class time.`,
-      'Join a study group or ask a follow-up question with the exact concept that still feels confusing.',
+      `Define ${focusTopic.toLowerCase()} in your own words and note how it appears in ${fallbackCourse.title}.`,
+      `Compare the concept with one related topic from the course so you can see the difference clearly.`,
+      `Open one note or PDF and outline the main stages, formulas, or definitions it uses.`,
+      `Watch a video or listen to a podcast to reinforce the idea through another learning mode.`,
+      `Try one practice question or MCQ on the topic, then explain the answer aloud.`,
+      'After each pass, write a short summary to lock the learning and identify any weak points to revisit.',
+    ],
+    focusAreas: [
+      `Core definition and why ${focusTopic.toLowerCase()} matters in ${fallbackCourse.title}.`, 
+      `Common mistakes or misconceptions students make with this topic.`, 
+      `How the topic is used in assignments, exams, or practical tasks.`, 
+      `A short example or scenario that makes the idea concrete.`, 
+    ],
+    studyTips: [
+      'Break the topic into small parts and study one part at a time.',
+      'Write a simple explanation as if you were teaching a friend.',
+      'Use notes, video, and practice together to build deeper understanding.',
+      'Review the same idea again after a short break to strengthen recall.',
     ],
     recommendedResources: finalResources,
     peerAdvice: `If this course feels difficult, do not study it alone. Use the notes first, then take the same topic into your StudyLink group discussion for faster understanding.`,
+    externalLinks,
   };
 }

@@ -8,6 +8,7 @@ function StudyLinkAI() {
   const [selectedCourseCode, setSelectedCourseCode] = useState(searchParams.get('course') || 'APT3060');
   const [question, setQuestion] = useState('Give me notes and revision guidance for this course.');
   const [selectedResourceId, setSelectedResourceId] = useState('');
+  const [selectedTab, setSelectedTab] = useState<'guidance' | 'resources'>('guidance');
   const courses = getAllCatalogCourses();
 
   const response = useMemo(
@@ -84,55 +85,102 @@ function StudyLinkAI() {
         </section>
 
         <section className="detail-panel">
-          <div className="section-header">
-            <h2>{response.headline}</h2>
-            <span className="panel-pill">AI study response</span>
-          </div>
-          <p>{response.explanation}</p>
-          <ul className="detail-list compact-list">
-            {response.nextSteps.map((step) => (
-              <li key={step}>{step}</li>
-            ))}
-          </ul>
-          <div className="modal-note">
-            <strong>Peer advice</strong>
-            <p style={{ margin: '0.5rem 0 0' }}>{response.peerAdvice}</p>
-          </div>
-        </section>
-
-        <section className="detail-panel">
-          <div className="section-header">
-            <h2>Recommended resources</h2>
-            <span className="panel-pill">{response.recommendedResources.length}</span>
-          </div>
-          <div className="detail-card-grid">
-            {response.recommendedResources.map((resource) => (
-              <article key={resource.id} className="detail-summary-card">
-                <strong>{resource.title}</strong>
-                <p>{resource.description}</p>
-                <span>{resource.type} · {resource.audience}</span>
-                <div className="detail-action-row">
-                  <button
-                    type="button"
-                    className="button button-secondary button-sm"
-                    onClick={() => setSelectedResourceId(String(resource.id))}
-                  >
-                    Preview
-                  </button>
-                  <button
-                    type="button"
-                    className="button button-primary button-sm"
-                    onClick={() => navigate(`/resources/${encodeURIComponent(resource.id)}?courseCode=${encodeURIComponent(resource.courseCode || '')}`)}
-                  >
-                    Open resource
-                  </button>
-                </div>
-              </article>
+          <div className="hub-tab-bar">
+            {['guidance', 'resources'].map((tab) => (
+              <button
+                key={tab}
+                type="button"
+                className={`hub-tab-button ${selectedTab === tab ? 'hub-tab-active' : ''}`}
+                onClick={() => setSelectedTab(tab as 'guidance' | 'resources')}
+              >
+                {tab === 'guidance' ? 'AI guidance' : 'AI resources'}
+              </button>
             ))}
           </div>
         </section>
 
-        {selectedResourceId ? (
+        {selectedTab === 'guidance' ? (
+          <section className="detail-panel">
+            <div className="section-header">
+              <h2>{response.headline}</h2>
+              <span className="panel-pill">AI study response</span>
+            </div>
+            <p>{response.explanation}</p>
+            <div className="detail-panel" style={{ marginTop: '1rem' }}>
+              <h3>Focus areas</h3>
+              <ul className="detail-list compact-list">
+                {response.focusAreas?.map((area) => (
+                  <li key={area}>{area}</li>
+                ))}
+              </ul>
+            </div>
+            <div className="detail-panel" style={{ marginTop: '1rem' }}>
+              <h3>Study tips</h3>
+              <ul className="detail-list compact-list">
+                {response.studyTips?.map((tip) => (
+                  <li key={tip}>{tip}</li>
+                ))}
+              </ul>
+            </div>
+            <div className="detail-panel" style={{ marginTop: '1rem' }}>
+              <h3>Action steps</h3>
+              <ul className="detail-list compact-list">
+                {response.nextSteps.map((step) => (
+                  <li key={step}>{step}</li>
+                ))}
+              </ul>
+            </div>
+            <div className="modal-note">
+              <strong>Peer advice</strong>
+              <p style={{ margin: '0.5rem 0 0' }}>{response.peerAdvice}</p>
+            </div>
+          </section>
+        ) : (
+          <section className="detail-panel">
+            <div className="section-header">
+              <h2>Recommended resources</h2>
+              <span className="panel-pill">{response.recommendedResources.length}</span>
+            </div>
+            <div className="detail-card-grid">
+              {response.recommendedResources.map((resource) => {
+                const resourceUrl = resource.url || resource.fallbackUrl;
+                return (
+                  <article key={resource.id} className="detail-summary-card">
+                    <strong>{resource.title}</strong>
+                    <p>{resource.description}</p>
+                    <span>{resource.type} · {resource.audience}</span>
+                    <div className="detail-action-row">
+                      <button
+                        type="button"
+                        className="button button-secondary button-sm"
+                        onClick={() => setSelectedResourceId(String(resource.id))}
+                      >
+                        Preview
+                      </button>
+                      {resourceUrl ? (
+                        <a
+                          href={resourceUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="button button-primary button-sm"
+                        >
+                          Open resource
+                        </a>
+                      ) : (
+                        <button type="button" className="button button-primary button-sm" disabled>
+                          No URL
+                        </button>
+                      )}
+                      {/* in-app fallback button removed */}
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+          </section>
+        )}
+
+        {selectedTab === 'resources' && selectedResourceId ? (
           <section className="detail-panel">
             <div className="section-header">
               <h2>Resource preview</h2>
@@ -144,7 +192,8 @@ function StudyLinkAI() {
                 return <p>Selected resource could not be found.</p>;
               }
 
-              const isDataPreview = selectedResource.url.startsWith('data:');
+              const resourceUrl = selectedResource.url || selectedResource.fallbackUrl;
+              const isDataPreview = typeof resourceUrl === 'string' && resourceUrl.startsWith('data:');
 
               return (
                 <>
@@ -152,22 +201,27 @@ function StudyLinkAI() {
                   {isDataPreview ? (
                     <iframe
                       title={selectedResource.title}
-                      src={selectedResource.url}
+                      src={resourceUrl}
                       className="resource-preview-frame"
                       sandbox="allow-same-origin allow-scripts allow-popups"
                     />
-                  ) : (
+                  ) : resourceUrl ? (
                     <div className="detail-summary-card">
-                      <p>This resource cannot be previewed in-app, but it is available to open directly.</p>
+                      <p>This resource is available to open directly.</p>
                       <div className="detail-action-row">
-                        <button
-                          type="button"
+                        <a
+                          href={resourceUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
                           className="button button-primary button-sm"
-                          onClick={() => navigate(`/resources/${encodeURIComponent(selectedResource.id)}?courseCode=${encodeURIComponent(selectedResource.courseCode || '')}`)}
                         >
                           Open resource
-                        </button>
+                        </a>
                       </div>
+                    </div>
+                  ) : (
+                    <div className="detail-summary-card">
+                      <p>This resource has no URL to open.</p>
                     </div>
                   )}
                 </>

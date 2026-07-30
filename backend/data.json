@@ -303,6 +303,17 @@
       "type": "ppt",
       "url": "/assets/trees.pptx",
       "downloads": 0
+    },
+    {
+      "enrollments": [],
+      "id": 3,
+      "title": "short answers",
+      "resource_type": "Resource",
+      "url": "https://www.youtube.com/shorts/QP1zbmtOjuw",
+      "description": null,
+      "usage_notes": "Uploaded by user.",
+      "audience": "All students",
+      "created_by_user_id": 3
     }
   ],
   "users": [
@@ -360,6 +371,50 @@
       "major": "",
       "year_of_study": "",
       "bio": ""
+    },
+    {
+      "id": 1,
+      "email": "demo@studylink.local",
+      "full_name": "StudyLink Demo User",
+      "password_hash": "",
+      "university": "USIU-Africa",
+      "role": "student",
+      "major": "Computer Science",
+      "year_of_study": "Year 3",
+      "bio": "Coordinates course projects and shares revision plans."
+    },
+    {
+      "id": 2,
+      "email": "violet@studylink.local",
+      "full_name": "Talemwa Violet",
+      "password_hash": "",
+      "university": "USIU-Africa",
+      "role": "student",
+      "major": "Computer Science",
+      "year_of_study": "Year 2",
+      "bio": "Enjoys collaborative problem solving and exam prep sessions."
+    },
+    {
+      "id": 3,
+      "email": "eugene@studylink.local",
+      "full_name": "Eugene Juma",
+      "password_hash": "",
+      "university": "USIU-Africa",
+      "role": "student",
+      "major": "Software Engineering",
+      "year_of_study": "Year 3",
+      "bio": "Focuses on project work, dashboards, and presentation planning."
+    },
+    {
+      "id": 4,
+      "email": "amina@studylink.local",
+      "full_name": "Amina Hassan",
+      "password_hash": "",
+      "university": "USIU-Africa",
+      "role": "student",
+      "major": "Applied Technology",
+      "year_of_study": "Year 1",
+      "bio": "Likes peer mentoring and joining new study circles."
     }
   ],
   "courses": [

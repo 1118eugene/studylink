@@ -8,6 +8,7 @@ type ResourceItem = {
   title: string;
   type: string;
   url: string;
+  fallbackUrl?: string;
   description: string;
   usageNotes: string;
   audience: string;
@@ -85,6 +86,11 @@ function LearningHub() {
   const [selectedSchool, setSelectedSchool] = useState('All schools');
   const [selectedType, setSelectedType] = useState('All types');
   const [hiddenResourceIds, setHiddenResourceIds] = useState<string[]>(() => loadHiddenResources());
+  const [newResourceTitle, setNewResourceTitle] = useState('');
+  const [newResourceUrl, setNewResourceUrl] = useState('');
+  const [newResourceFile, setNewResourceFile] = useState<File | null>(null);
+  const [resourceUploading, setResourceUploading] = useState(false);
+  const [resourceUploadStatus, setResourceUploadStatus] = useState<string>('');
 
   useEffect(() => {
     setSelectedView(initialView);
@@ -224,11 +230,109 @@ function LearningHub() {
   }, [baseResources, searchTerm, selectedSchool, selectedType, selectedView]);
 
   const handleAccess = async (resource: ResourceItem) => {
+    const resourceUrl = resource.url || resource.fallbackUrl;
+    if (resourceUrl) {
+      window.open(resourceUrl, '_blank', 'noopener,noreferrer');
+      return;
+    }
+
     const id = String(resource.id);
     const queryParams = new URLSearchParams();
     if (resource.courseCode) queryParams.set('courseCode', resource.courseCode);
 
     navigate(`/resources/${encodeURIComponent(id)}?${queryParams.toString()}`);
+  };
+
+  const handleAddLibraryResource = async () => {
+    if (!newResourceTitle) {
+      setResourceUploadStatus('A title is required.');
+      return;
+    }
+
+    let url = newResourceUrl;
+    if (!url && newResourceFile) {
+      setResourceUploading(true);
+      setResourceUploadStatus('Uploading file...');
+      try {
+        const dataUrl = await new Promise<string>((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(String(reader.result));
+          reader.onerror = reject;
+          reader.readAsDataURL(newResourceFile as Blob);
+        });
+        url = dataUrl.split(',')[1];
+        const resp = await apiFetch('/api/uploads', {
+          method: 'POST',
+          body: JSON.stringify({ filename: newResourceFile.name, data: url }),
+        });
+        if (!resp.ok) {
+          const errorJson = await resp.json().catch(() => null);
+          throw new Error(errorJson?.message || 'Upload failed');
+        }
+        const json = await resp.json();
+        url = json.url;
+        setResourceUploadStatus('File uploaded successfully.');
+      } catch (error) {
+        setResourceUploadStatus('Upload failed. Please try again.');
+        setResourceUploading(false);
+        return;
+      } finally {
+        setResourceUploading(false);
+      }
+    }
+
+    if (!url) {
+      setResourceUploadStatus('Provide a URL or upload a file.');
+      return;
+    }
+
+    try {
+      const resp = await apiFetch('/api/resources', {
+        method: 'POST',
+        body: JSON.stringify({
+          title: newResourceTitle,
+          resourceType: newResourceUrl?.toLowerCase().includes('pdf') || newResourceFile?.name.toLowerCase().endsWith('.pdf') ? 'PDF' : 'Resource',
+          url,
+          description: '',
+          usageNotes: 'Uploaded by user.',
+          audience: 'All students',
+        }),
+      });
+      if (!resp.ok) {
+        const errorJson = await resp.json().catch(() => null);
+        throw new Error(errorJson?.message || 'Unable to save resource.');
+      }
+      const created = await resp.json();
+      const savedResource = created.resource;
+      if (savedResource) {
+        setApiLibraryResources((current) => [
+          ...current,
+          {
+            id: savedResource.id,
+            title: savedResource.title,
+            type: savedResource.type || 'Resource',
+            url: savedResource.url,
+            description: savedResource.description || 'Uploaded learning resource.',
+            usageNotes: savedResource.usageNotes || 'Open and review.',
+            audience: savedResource.audience || 'All students',
+            downloads: savedResource.download_count || 0,
+            courseCode: savedResource.courseCode || '',
+            school: savedResource.school || 'General',
+            program: savedResource.program || 'General Studies',
+            courseTitle: savedResource.course || 'Shared resource',
+            isCatalog: false,
+            isApiResource: false,
+            category: getResourceCategory(savedResource),
+          },
+        ]);
+      }
+      setNewResourceTitle('');
+      setNewResourceUrl('');
+      setNewResourceFile(null);
+      setResourceUploadStatus('Resource added successfully.');
+    } catch (error) {
+      setResourceUploadStatus('Failed to save resource.');
+    }
   };
 
   const handleHide = async (resource: ResourceItem) => {
@@ -307,6 +411,37 @@ function LearningHub() {
         </section>
 
         <section className="workspace-toolbar library-toolbar">
+          <div className="resource-upload-panel">
+            <h3>Add or upload a resource</h3>
+            <input
+              placeholder="Title"
+              value={newResourceTitle}
+              onChange={(event) => setNewResourceTitle(event.target.value)}
+              className="search-input"
+              style={{ marginBottom: 8 }}
+            />
+            <input
+              placeholder="URL (optional if uploading)"
+              value={newResourceUrl}
+              onChange={(event) => setNewResourceUrl(event.target.value)}
+              className="search-input"
+              style={{ marginBottom: 8 }}
+            />
+            <input
+              type="file"
+              onChange={(event) => setNewResourceFile(event.target.files && event.target.files[0] ? event.target.files[0] : null)}
+              style={{ marginBottom: 8 }}
+            />
+            <button
+              type="button"
+              className="button button-primary"
+              onClick={handleAddLibraryResource}
+              disabled={resourceUploading}
+            >
+              {resourceUploading ? 'Uploading…' : 'Add / Upload resource'}
+            </button>
+            {resourceUploadStatus ? <p className="resource-upload-status">{resourceUploadStatus}</p> : null}
+          </div>
           <input
             type="text"
             value={searchTerm}

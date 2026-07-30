@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { addNotification } from '../lib/notifications';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { apiFetch } from '../lib/apiClient';
 import { getAllCatalogResources } from '../lib/studylinkContent';
@@ -8,6 +9,7 @@ interface ResourceItem {
   title: string;
   type: string;
   url: string;
+  fallbackUrl?: string;
   description: string;
   usageNotes: string;
   audience: string;
@@ -108,8 +110,9 @@ function ResourceDetail() {
       }
     }
 
-    if (resource.url) {
-      window.open(resource.url, '_blank', 'noopener,noreferrer');
+    const openUrl = resource.url || resource.fallbackUrl;
+    if (openUrl) {
+      window.open(openUrl, '_blank', 'noopener,noreferrer');
     }
   };
 
@@ -163,6 +166,33 @@ function ResourceDetail() {
                 </a>
               )
             ) : null}
+              {resource.url && resource.url.startsWith('data:') ? (
+                <button
+                  type="button"
+                  className="button button-secondary"
+                  onClick={async () => {
+                    try {
+                      const [, meta, body] = resource.url.match(/^data:([^;]+);base64,(.*)$/) || [];
+                      const ext = meta && meta.includes('html') ? 'html' : (meta && meta.split('/')[1]) || 'bin';
+                      const filename = `${resource.id || 'resource'}.${ext}`;
+                      const resp = await apiFetch('/api/uploads', { method: 'POST', body: JSON.stringify({ filename, data: body }) });
+                      if (resp.ok) {
+                        const data = await resp.json();
+                        window.open(data.url, '_blank', 'noopener,noreferrer');
+                        addNotification({ id: `download-${Date.now()}`, title: 'Saved', message: 'Resource saved and opened.', createdAt: new Date().toISOString() });
+                      } else {
+                        addNotification({ id: `download-fail-${Date.now()}`, title: 'Save failed', message: 'Could not save resource.' , createdAt: new Date().toISOString() });
+                      }
+                    } catch (err) {
+                      // eslint-disable-next-line no-console
+                      console.error(err);
+                      addNotification({ id: `download-ex-${Date.now()}`, title: 'Error', message: 'Failed to save resource.' , createdAt: new Date().toISOString() });
+                    }
+                  }}
+                >
+                  Download
+                </button>
+              ) : null}
             <Link to="/learning?view=library" className="button button-secondary">
               Back to learning hub
             </Link>

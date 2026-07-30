@@ -1,5 +1,8 @@
 const API_BASE = (import.meta.env.VITE_API_BASE_URL || '').trim();
-const FALLBACK_BACKEND = 'https://studylinkbackend-4a7r.onrender.com';
+// Prefer a local backend during development when running on localhost
+const FALLBACK_BACKEND = (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'))
+  ? 'http://localhost:4000'
+  : 'https://studylinkbackend-4a7r.onrender.com';
 
 export const getStoredToken = () => {
   if (typeof localStorage === 'undefined') return '';

@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { apiFetch } from '../lib/apiClient';
 import { buildCourseContent, buildStudyLinkAiResponse, saveSupplementalEnrollmentCode } from '../lib/studylinkContent';
+import { addNotification } from '../lib/notifications';
 
 const hubTabs = [
   { key: 'overview', label: 'Overview' },
@@ -59,6 +60,45 @@ function CourseDetail() {
     [course?.code, submittedQuestion],
   );
 
+  const [curatedResults, setCuratedResults] = useState<any[]>([]);
+  const [fetchingCurated, setFetchingCurated] = useState(false);
+  const [audienceFilter, setAudienceFilter] = useState('all');
+
+  useEffect(() => {
+    if (!course?.code) return;
+    apiFetch(`/api/ai/links?courseCode=${encodeURIComponent(course.code)}`)
+      .then((resp) => (resp.ok ? resp.json() : null))
+      .then((data) => {
+        if (data && Array.isArray(data.links)) {
+          setCuratedResults((prev) => [...data.links, ...prev]);
+        }
+      })
+      .catch(() => {
+        // ignore
+      });
+  }, [course?.code]);
+
+  async function fetchCuratedResults(topic?: string) {
+    if (!course) return;
+    setFetchingCurated(true);
+    try {
+      const response = await apiFetch('/api/ai/fetch', { method: 'POST', body: JSON.stringify({ courseCode: course.code, topic: topic || aiResponse.headline }) });
+      if (response.ok) {
+        const data = await response.json();
+        setCuratedResults(data.results || []);
+        addNotification({ id: `fetch-${course.code}-${Date.now()}`, title: 'Curated results', message: 'Curated results fetched.', createdAt: new Date().toISOString() });
+      } else {
+        addNotification({ id: `fetch-fail-${Date.now()}`, title: 'Fetch failed', message: 'Could not fetch curated results.', createdAt: new Date().toISOString() });
+      }
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error(err);
+      addNotification({ id: `fetch-ex-${Date.now()}`, title: 'Fetch error', message: 'Error fetching curated results.', createdAt: new Date().toISOString() });
+    } finally {
+      setFetchingCurated(false);
+    }
+  }
+
   const handleEnroll = async () => {
     if (!course) return;
     try {
@@ -76,16 +116,116 @@ function CourseDetail() {
 
   const renderResourceGrid = (items: any[], buttonLabel: string) => (
     <div className="detail-card-grid">
-      {items.map((item) => (
-        <article key={item.id} className="detail-summary-card">
-          <strong>{item.title}</strong>
-          <p>{item.description}</p>
-          <span>{item.audience}</span>
-          <button type="button" className="button button-secondary button-sm" onClick={() => window.open(item.url, '_blank', 'noopener,noreferrer')}>
-            {buttonLabel}
-          </button>
-        </article>
-      ))}
+      {items.map((item) => {
+        const itemUrl = item.url || item.fallbackUrl;
+        const externalUrl = item.url;
+        const isDataUrl = typeof item.url === 'string' && item.url.startsWith('data:');
+        const isFallbackDataUrl = typeof item.fallbackUrl === 'string' && item.fallbackUrl.startsWith('data:');
+
+        return (
+          <article key={item.id} className="detail-summary-card">
+            <strong>{item.title}</strong>
+            <p>{item.description}</p>
+            <span>{item.audience}</span>
+            <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.75rem', flexWrap: 'wrap' }}>
+              {itemUrl ? (
+                <a
+                  href={itemUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="button button-secondary button-sm"
+                >
+                  {buttonLabel}
+                </a>
+              ) : null}
+              {item.fallbackUrl && externalUrl ? (
+                <a
+                  href={externalUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="button button-tertiary button-sm"
+                >
+                  Open external
+                </a>
+              ) : null}
+              {isDataUrl ? (
+                <button
+                  type="button"
+                  className="button button-primary button-sm"
+                  onClick={async () => {
+                    try {
+                      const [, meta, body] = item.url.match(/^data:([^;]+);base64,(.*)$/) || [];
+                      const ext = meta && meta.includes('html') ? 'html' : (meta && meta.split('/')[1]) || 'bin';
+                      const filename = `${item.id || 'resource'}.${ext}`;
+                      const resp = await apiFetch('/api/uploads', { method: 'POST', body: JSON.stringify({ filename, data: body }) });
+                      if (resp.ok) {
+                        const data = await resp.json();
+                        window.open(data.url, '_blank', 'noopener,noreferrer');
+                        addNotification({ id: `download-${Date.now()}`, title: 'Saved', message: 'Resource saved and opened.', createdAt: new Date().toISOString() });
+                      } else {
+                        addNotification({ id: `download-fail-${Date.now()}`, title: 'Save failed', message: 'Could not save resource.', createdAt: new Date().toISOString() });
+                      }
+                    } catch (err) {
+                      // eslint-disable-next-line no-console
+                      console.error(err);
+                      addNotification({ id: `download-ex-${Date.now()}`, title: 'Error', message: 'Failed to save resource.', createdAt: new Date().toISOString() });
+                    }
+                  }}
+                >
+                  Download
+                </button>
+              ) : null}
+              {isFallbackDataUrl ? (
+                <button
+                  type="button"
+                  className="button button-primary button-sm"
+                  onClick={async () => {
+                    try {
+                      const [, meta, body] = item.fallbackUrl.match(/^data:([^;]+);base64,(.*)$/) || [];
+                      const ext = meta && meta.includes('html') ? 'html' : (meta && meta.split('/')[1]) || 'bin';
+                      const filename = `${item.id || 'resource'}.${ext}`;
+                      const resp = await apiFetch('/api/uploads', { method: 'POST', body: JSON.stringify({ filename, data: body }) });
+                      if (resp.ok) {
+                        const data = await resp.json();
+                        window.open(data.url, '_blank', 'noopener,noreferrer');
+                        addNotification({ id: `download-${Date.now()}`, title: 'Saved', message: 'Resource saved and opened.', createdAt: new Date().toISOString() });
+                      } else {
+                        addNotification({ id: `download-fail-${Date.now()}`, title: 'Save failed', message: 'Could not save resource.', createdAt: new Date().toISOString() });
+                      }
+                    } catch (err) {
+                      // eslint-disable-next-line no-console
+                      console.error(err);
+                      addNotification({ id: `download-ex-${Date.now()}`, title: 'Error', message: 'Failed to save resource.', createdAt: new Date().toISOString() });
+                    }
+                  }}
+                >
+                  Download in-app
+                </button>
+              ) : null}
+            </div>
+          </article>
+        );
+      })}
+    </div>
+  );
+
+  function filterByAudience(items: any[]) {
+    if (!audienceFilter || audienceFilter === 'all') return items;
+    return items.filter((it) => String(it.audience || '').toLowerCase().includes(String(audienceFilter).toLowerCase()));
+  }
+
+  const renderEmptyCategory = (label: string) => (
+    <div className="empty-state">
+      <p className="empty-text">No {label.toLowerCase()} are available for this course right now.</p>
+      <p className="empty-help">Try the AI guide or the Learning Hub to find related notes, videos, or practice resources.</p>
+      <div className="detail-action-row" style={{ gap: '0.75rem', flexWrap: 'wrap', marginTop: '1rem' }}>
+        <Link to={`/ask-ai?course=${encodeURIComponent(course?.code || '')}`} className="button button-primary button-sm">
+          Ask StudyLink AI
+        </Link>
+        <Link to="/learning?view=library" className="button button-secondary button-sm">
+          Open Learning Hub
+        </Link>
+      </div>
     </div>
   );
 
@@ -119,66 +259,78 @@ function CourseDetail() {
             </div>
           </div>
         );
-      case 'notes':
+      case 'notes': {
+        const items = filterByAudience(resourcesByType.notes);
         return (
           <div className="detail-panel">
             <div className="section-header">
               <h3>Course notes</h3>
               <span className="panel-pill">{resourcesByType.notes.length}</span>
             </div>
-            {renderResourceGrid(resourcesByType.notes, 'Open note')}
+            {items.length ? renderResourceGrid(items, 'Open note') : renderEmptyCategory('Notes')}
           </div>
         );
-      case 'pdfs':
+      }
+      case 'pdfs': {
+        const items = filterByAudience(resourcesByType.pdfs);
         return (
           <div className="detail-panel">
             <div className="section-header">
               <h3>PDFs and guides</h3>
               <span className="panel-pill">{resourcesByType.pdfs.length}</span>
             </div>
-            {renderResourceGrid(resourcesByType.pdfs, 'Open PDF')}
+            {items.length ? renderResourceGrid(items, 'Open PDF') : renderEmptyCategory('PDFs')}
           </div>
         );
-      case 'podcasts':
+      }
+      case 'podcasts': {
+        const items = filterByAudience(resourcesByType.podcasts);
         return (
           <div className="detail-panel">
             <div className="section-header">
               <h3>Learning podcasts</h3>
               <span className="panel-pill">{resourcesByType.podcasts.length}</span>
             </div>
-            {renderResourceGrid(resourcesByType.podcasts, 'Open podcast guide')}
+            {items.length ? renderResourceGrid(items, 'Open podcast guide') : renderEmptyCategory('Podcasts')}
           </div>
         );
-      case 'videos':
+      }
+      case 'videos': {
+        const items = filterByAudience(resourcesByType.videos);
         return (
           <div className="detail-panel">
             <div className="section-header">
               <h3>Video companions</h3>
               <span className="panel-pill">{resourcesByType.videos.length}</span>
             </div>
-            {renderResourceGrid(resourcesByType.videos, 'Open video guide')}
+            {items.length ? renderResourceGrid(items, 'Open video guide') : renderEmptyCategory('Videos')}
           </div>
         );
-      case 'quizzes':
+      }
+      case 'quizzes': {
+        const items = filterByAudience(resourcesByType.quizzes);
         return (
           <div className="detail-panel">
             <div className="section-header">
               <h3>MCQs and quiz drills</h3>
               <span className="panel-pill">{resourcesByType.quizzes.length}</span>
             </div>
-            {renderResourceGrid(resourcesByType.quizzes, 'Open MCQ drill')}
+            {items.length ? renderResourceGrid(items, 'Open MCQ drill') : renderEmptyCategory('MCQs')}
           </div>
         );
-      case 'papers':
+      }
+      case 'papers': {
+        const items = filterByAudience(resourcesByType.papers);
         return (
           <div className="detail-panel">
             <div className="section-header">
               <h3>Past papers</h3>
               <span className="panel-pill">{resourcesByType.papers.length}</span>
             </div>
-            {renderResourceGrid(resourcesByType.papers, 'Open paper')}
+            {items.length ? renderResourceGrid(items, 'Open paper') : renderEmptyCategory('Past papers')}
           </div>
         );
+      }
       case 'groups':
         return (
           <div className="detail-panel">
@@ -256,6 +408,14 @@ function CourseDetail() {
               onChange={(event) => setQuestion(event.target.value)}
               placeholder="Ask StudyLink AI about this course..."
               className="studylink-input"
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                  e.preventDefault();
+                  setSubmittedQuestion(question);
+                  // also fetch curated results immediately
+                  fetchCuratedResults(question);
+                }
+              }}
             />
             <div className="detail-action-row" style={{ marginTop: '1rem' }}>
               <button type="button" className="button button-primary" onClick={() => setSubmittedQuestion(question)}>
@@ -346,9 +506,155 @@ function CourseDetail() {
             </button>
           ))}
         </div>
+        <div className="hub-section" style={{ display: 'grid', gridTemplateColumns: '1fr 360px', gap: '1.5rem' }}>
+          <div>
+            <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', marginBottom: '0.6rem' }}>
+              <label className="mini-label" style={{ marginRight: '0.5rem' }}>Audience:</label>
+              <select value={audienceFilter} onChange={(e) => setAudienceFilter(e.target.value)} style={{ padding: '0.45rem 0.6rem', borderRadius: 8 }}>
+                <option value="all">All</option>
+                <option value="All enrolled students">All enrolled students</option>
+                <option value="Students revising beyond class hours">Students revising beyond class hours</option>
+                <option value="Visual learners">Visual learners</option>
+                <option value="Students preparing for exams">Students preparing for exams</option>
+              </select>
+              <div style={{ marginLeft: 'auto', color: '#64748b', fontSize: '0.9rem' }}>{course?.resources.length} total resources</div>
+            </div>
 
-        <div className="hub-section">
-          {renderTabContent()}
+            {renderTabContent()}
+          </div>
+
+          <aside className="detail-panel" style={{ alignSelf: 'start' }}>
+            <div className="section-header">
+              <h3>StudyLink AI — Quick research</h3>
+              <button
+                type="button"
+                className="text-button"
+                onClick={() => setSubmittedQuestion(question)}
+              >
+                Refresh
+              </button>
+            </div>
+
+            <p style={{ marginTop: 0 }}>{aiResponse.explanation}</p>
+
+            <div style={{ marginTop: '1rem' }}>
+              <strong>Recommended next steps</strong>
+              <ul className="detail-list compact-list">
+                {aiResponse.nextSteps.map((step) => <li key={step}>{step}</li>)}
+              </ul>
+            </div>
+
+            <div style={{ marginTop: '1rem' }}>
+              <strong>Recommended resources</strong>
+              <div className="detail-card-grid" style={{ marginTop: '0.5rem' }}>
+                {aiResponse.recommendedResources.map((resource) => {
+                  const isExternal = typeof resource.url === 'string' && /^https?:\/\//i.test(resource.url);
+                  return (
+                    <article key={resource.id} className="detail-summary-card">
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+                        <strong style={{ fontSize: '0.95rem' }}>{resource.title}</strong>
+                        {isExternal ? <span className="badge">External</span> : null}
+                      </div>
+                      <p style={{ marginTop: '0.35rem' }}>{resource.description}</p>
+                      <div style={{ marginTop: '0.5rem', display: 'flex', gap: '0.5rem' }}>
+                        <button type="button" className="button button-secondary button-sm" onClick={() => window.open(resource.url, '_blank', 'noopener,noreferrer')}>{isExternal ? 'Open external' : 'Open'}</button>
+                        {resource.fallbackUrl ? (
+                          <button type="button" className="button button-tertiary button-sm" onClick={() => window.open(resource.fallbackUrl, '_blank', 'noopener,noreferrer')}>Open in-app</button>
+                        ) : null}
+                      </div>
+                    </article>
+                  );
+                })}
+              </div>
+            </div>
+
+              {curatedResults.length > 0 ? (
+                <div style={{ marginTop: '1rem' }}>
+                  <strong>Curated results</strong>
+                  <div className="detail-card-grid" style={{ marginTop: '0.5rem' }}>
+                    {curatedResults.map((r: any, idx: number) => (
+                      <article key={`${r.url}-${idx}`} className="detail-summary-card">
+                        <strong style={{ fontSize: '0.95rem' }}>{r.label}</strong>
+                        <p style={{ marginTop: '0.35rem' }}>{r.source} · {r.type}</p>
+                        <div style={{ marginTop: '0.5rem', display: 'flex', gap: '0.5rem' }}>
+                          <a className="button button-secondary button-sm" href={r.url} target="_blank" rel="noreferrer">Open</a>
+                          <button
+                            type="button"
+                            className="button button-primary button-sm"
+                            onClick={async () => {
+                              try {
+                                const resp = await apiFetch('/api/ai/accept', { method: 'POST', body: JSON.stringify({ courseCode: course?.code, resource: r }) });
+                                if (resp.ok) {
+                                    addNotification({ id: `accept-${Date.now()}`, title: 'Saved', message: 'Curated link saved to backend.', createdAt: new Date().toISOString() });
+                                    // Refresh persisted curated links
+                                    try {
+                                      const linksResp = await apiFetch(`/api/ai/links?courseCode=${encodeURIComponent(course?.code)}`);
+                                      if (linksResp.ok) {
+                                        const linksData = await linksResp.json();
+                                        setCuratedResults((prev) => [...(linksData.links || []), ...prev]);
+                                      }
+                                    } catch {
+                                      // ignore
+                                    }
+                                } else {
+                                  addNotification({ id: `accept-fail-${Date.now()}`, title: 'Save failed', message: 'Could not save curated link.', createdAt: new Date().toISOString() });
+                                }
+                              } catch (err) {
+                                // eslint-disable-next-line no-console
+                                console.error(err);
+                                addNotification({ id: `accept-ex-${Date.now()}`, title: 'Save error', message: 'Error saving curated link.', createdAt: new Date().toISOString() });
+                              }
+                            }}
+                          >
+                            Add to course
+                          </button>
+                          <button
+                            type="button"
+                            className="button button-tertiary button-sm"
+                            onClick={async () => {
+                              try {
+                                const resp = await apiFetch('/api/ai/flag', { method: 'POST', body: JSON.stringify({ courseCode: course?.code, resource: r, reason: 'user_report' }) });
+                                if (resp.ok) {
+                                  addNotification({ id: `flag-${Date.now()}`, title: 'Flagged', message: 'This resource was flagged for review.', createdAt: new Date().toISOString() });
+                                } else {
+                                  addNotification({ id: `flag-fail-${Date.now()}`, title: 'Flag failed', message: 'Could not flag the resource.', createdAt: new Date().toISOString() });
+                                }
+                              } catch (err) {
+                                // eslint-disable-next-line no-console
+                                console.error(err);
+                                addNotification({ id: `flag-ex-${Date.now()}`, title: 'Flag error', message: 'Error flagging resource.', createdAt: new Date().toISOString() });
+                              }
+                            }}
+                          >
+                            Flag
+                          </button>
+                        </div>
+                      </article>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
+
+            <div style={{ marginTop: '1rem' }}>
+              <strong>Research mode</strong>
+              <p style={{ marginTop: 0 }}>Ask StudyLink AI to fetch curated external notes, PDFs, MCQs and past papers. Use the question box at the bottom of the hub to refine your request.</p>
+              <div style={{ marginTop: '0.5rem' }}>
+                <button type="button" className="button button-primary button-sm" disabled={fetchingCurated} onClick={() => fetchCuratedResults(aiResponse.headline)}>
+                  {fetchingCurated ? 'Fetching…' : 'Fetch curated results'}
+                </button>
+              </div>
+            </div>
+            {aiResponse.externalLinks && aiResponse.externalLinks.length > 0 ? (
+              <div style={{ marginTop: '1rem' }}>
+                <strong>Quick searches</strong>
+                <ul className="detail-list compact-list" style={{ marginTop: '0.5rem' }}>
+                  {aiResponse.externalLinks.map((link) => (
+                    <li key={link.url}><a href={link.url} target="_blank" rel="noreferrer">{link.label}</a></li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
+          </aside>
         </div>
       </div>
     </section>
