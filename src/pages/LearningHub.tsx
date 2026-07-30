@@ -116,6 +116,24 @@ function LearningHub() {
         const resourcesData = resourcesResponse.ok ? await resourcesResponse.json() : { resources: [] };
 
         setCatalogCourses(buildMergedCourses(courseData.courses || []));
+        const libraryResourcesFromApi = (libraryData.resources || []).map((resource: any) => ({
+          id: resource.id,
+          title: resource.title,
+          type: resource.type || 'Resource',
+          url: resource.url,
+          description: resource.description || 'Saved from your StudyLink activity.',
+          usageNotes: resource.usageNotes || 'Open and review.',
+          audience: resource.audience || 'All students',
+          downloads: resource.downloads || 0,
+          courseCode: resource.courseCode || '',
+          school: resource.school || 'General',
+          program: resource.program || 'General Studies',
+          courseTitle: resource.course || 'Saved resource',
+          isCatalog: false,
+          isApiResource: true,
+          category: getResourceCategory(resource),
+        }));
+
         setApiLibraryResources(libraryData.resources || []);
         setAllResources([
           ...catalogResources,
@@ -136,6 +154,7 @@ function LearningHub() {
             isApiResource: false,
             category: getResourceCategory(resource),
           })),
+          ...libraryResourcesFromApi,
         ]);
       } catch {
         if (!mounted) return;
@@ -197,7 +216,7 @@ function LearningHub() {
     return Array.from(dedupe.values()).filter((resource) => !hiddenResourceIds.includes(String(resource.id)));
   }, [apiLibraryResources, enrolledCourses, hiddenResourceIds]);
 
-  const baseResources = selectedView === 'library' ? libraryResources : allResources;
+  const baseResources = selectedView === 'library' ? (libraryResources.length > 0 ? libraryResources : allResources) : allResources;
 
   const schoolOptions = useMemo(
     () => ['All schools', ...Array.from(new Set(baseResources.map((resource) => resource.school).filter(Boolean)))],
@@ -305,26 +324,26 @@ function LearningHub() {
       const created = await resp.json();
       const savedResource = created.resource;
       if (savedResource) {
-        setApiLibraryResources((current) => [
-          ...current,
-          {
-            id: savedResource.id,
-            title: savedResource.title,
-            type: savedResource.type || 'Resource',
-            url: savedResource.url,
-            description: savedResource.description || 'Uploaded learning resource.',
-            usageNotes: savedResource.usageNotes || 'Open and review.',
-            audience: savedResource.audience || 'All students',
-            downloads: savedResource.download_count || 0,
-            courseCode: savedResource.courseCode || '',
-            school: savedResource.school || 'General',
-            program: savedResource.program || 'General Studies',
-            courseTitle: savedResource.course || 'Shared resource',
-            isCatalog: false,
-            isApiResource: false,
-            category: getResourceCategory(savedResource),
-          },
-        ]);
+        const newResourceItem = {
+          id: savedResource.id,
+          title: savedResource.title,
+          type: savedResource.type || 'Resource',
+          url: savedResource.url,
+          description: savedResource.description || 'Uploaded learning resource.',
+          usageNotes: savedResource.usageNotes || 'Open and review.',
+          audience: savedResource.audience || 'All students',
+          downloads: savedResource.download_count || 0,
+          courseCode: savedResource.courseCode || '',
+          school: savedResource.school || 'General',
+          program: savedResource.program || 'General Studies',
+          courseTitle: savedResource.course || 'Shared resource',
+          isCatalog: false,
+          isApiResource: true,
+          category: getResourceCategory(savedResource),
+        };
+
+        setApiLibraryResources((current) => [...current, savedResource]);
+        setAllResources((current) => [...current, newResourceItem]);
       }
       setNewResourceTitle('');
       setNewResourceUrl('');
