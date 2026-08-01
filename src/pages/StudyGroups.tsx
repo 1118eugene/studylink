@@ -109,24 +109,38 @@ function StudyGroups({ initialShowForm = false }: StudyGroupsProps) {
   };
 
   const loadGroupIntoForm = (group: StudyGroup) => {
-    setEditingGroupId(group.id);
-    setShowGroupForm(true);
-    setGroupForm({
-      name: group.name || '',
-      description: group.description || '',
-      courseName: group.course || '',
-      courseCode: group.courseCode || '',
-      meetingType: group.meetingType || 'Hybrid',
-      imageUrl: group.image || '',
-      whoCanJoin: group.whoCanJoin || '',
-      joinRequirements: (group.joinRequirements || []).join('\n'),
-      groupRules: (group.groupRules || []).join('\n'),
-      memberBenefits: (group.memberBenefits || []).join('\n'),
-      newMemberSteps: (group.newMemberSteps || []).join('\n'),
-      communicationChannel: group.communicationChannel || '',
-      whatsappLink: (group as any).whatsappLink || '',
-      scheduleNotes: group.scheduleNotes || '',
-    });
+    try {
+      // ensure UI opens immediately
+      setEditingGroupId(group.id);
+      setShowGroupForm(true);
+      setGroupForm({
+        name: group.name || '',
+        description: group.description || '',
+        courseName: group.course || '',
+        courseCode: group.courseCode || '',
+        meetingType: group.meetingType || 'Hybrid',
+        imageUrl: group.image || '',
+        whoCanJoin: group.whoCanJoin || '',
+        joinRequirements: (group.joinRequirements || []).join('\n'),
+        groupRules: (group.groupRules || []).join('\n'),
+        memberBenefits: (group.memberBenefits || []).join('\n'),
+        newMemberSteps: (group.newMemberSteps || []).join('\n'),
+        communicationChannel: group.communicationChannel || '',
+        whatsappLink: (group as any).whatsappLink || '',
+        scheduleNotes: group.scheduleNotes || '',
+      });
+      // debug log to help diagnose client-side issues
+      // eslint-disable-next-line no-console
+      console.log('Loaded group into edit form', group.id, group.name);
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error('Error loading group into form', err);
+      // show user-friendly alert so we can capture the message
+      alert('Failed to open edit form. Check console for details.');
+      // still attempt to open the form with minimal fields
+      setEditingGroupId(group.id || null);
+      setShowGroupForm(true);
+    }
   };
 
   const saveGroup = async (event: React.FormEvent<HTMLFormElement>) => {
