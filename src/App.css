@@ -1452,18 +1452,30 @@ nav {
 }
 
 .notification-panel {
-  /* Use fixed positioning so the panel is never clipped by sidebar or other containers */
-  position: fixed;
-  right: 28px;
-  top: 72px;
-  width: min(360px, 94vw);
-  max-height: 60vh;
+  /* Anchored inside the sidebar footer: narrow and vertically scrollable */
+  position: absolute;
+  right: 8px;
+  bottom: 56px;
+  width: 220px;
+  max-height: 50vh;
   background: #ffffff;
   border: 1px solid #dbe4f0;
-  border-radius: 22px;
-  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.15);
-  padding: 1rem;
-  z-index: 9999;
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
+  padding: 0.5rem;
+  z-index: 60;
+}
+
+@media (max-width: 1080px) {
+  /* On smaller screens the sidebar becomes full-width; prefer modal fallback. */
+  .notification-panel {
+    position: static;
+    width: 100%;
+    max-height: 40vh;
+    border-radius: 8px;
+    box-shadow: none;
+    padding: 0.75rem;
+  }
 }
 
 .notification-panel-header {
