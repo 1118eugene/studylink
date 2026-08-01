@@ -15,7 +15,20 @@ function NotificationBell() {
 
   return (
     <div className="notification-bell">
-      <button type="button" className="notification-toggle button-secondary" onClick={() => setOpen((value) => !value)}>
+      <button
+        type="button"
+        className="notification-toggle button-secondary"
+        onClick={() => {
+          setOpen((value) => {
+            const next = !value;
+            if (next) {
+              // refresh from storage when opening so the user sees all historical items
+              setNotifications(loadNotifications());
+            }
+            return next;
+          });
+        }}
+      >
         <span>🔔</span>
         {unreadCount > 0 ? <span className="notification-count">{unreadCount}</span> : null}
       </button>
@@ -28,10 +41,10 @@ function NotificationBell() {
             </button>
           </div>
           {notifications.length === 0 ? (
-            <p className="notification-empty">No new alerts yet.</p>
+            <p className="notification-empty">No notifications yet.</p>
           ) : (
             <div className="notification-list">
-              {notifications.slice(0, 6).map((item) => (
+              {notifications.map((item) => (
                 <article key={item.id} className="notification-item">
                   <p className="notification-title">{item.title}</p>
                   <p className="notification-message">{item.message}</p>
