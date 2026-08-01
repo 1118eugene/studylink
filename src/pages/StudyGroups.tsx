@@ -438,9 +438,7 @@ function StudyGroups({ initialShowForm = false }: StudyGroupsProps) {
                 <div className="group-footer">
                   <div className="group-actions">
                     <Link to={`/groups/${group.id}`} className="action-link">View details</Link>
-                    {(currentUser && (currentUser.id === (group as any).ownerUserId || currentUser.role === 'admin')) ? (
-                      <button type="button" className="action-link" onClick={() => loadGroupIntoForm(group)}>Edit</button>
-                    ) : null}
+                    <button type="button" className="action-link" onClick={() => loadGroupIntoForm(group)}>Edit</button>
                     <button type="button" className="action-link action-danger" onClick={() => deleteGroup(group.id)}>Delete</button>
                   </div>
                   <button
