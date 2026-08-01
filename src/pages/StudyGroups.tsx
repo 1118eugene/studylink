@@ -471,7 +471,16 @@ function StudyGroups({ initialShowForm = false }: StudyGroupsProps) {
                 <div className="group-footer">
                   <div className="group-actions">
                     <Link to={`/groups/${group.id}`} className="action-link">View details</Link>
-                    <button type="button" className="action-link" onClick={() => loadGroupIntoForm(group)}>Edit</button>
+                    <button
+                      type="button"
+                      className="action-link"
+                      onClick={() => loadGroupIntoForm(group)}
+                      onMouseDown={() => loadGroupIntoForm(group)}
+                      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { loadGroupIntoForm(group); } }}
+                      style={{ pointerEvents: 'auto' }}
+                    >
+                      Edit
+                    </button>
                     <button type="button" className="action-link action-danger" onClick={() => deleteGroup(group.id)}>Delete</button>
                   </div>
                   <button
