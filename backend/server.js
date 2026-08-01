@@ -143,6 +143,7 @@ function toGroupSummary(row) {
     meetingType: row.meeting_type || 'Hybrid',
     members: toNumber(row.member_count),
     image: row.image_url || '',
+    ownerUserId: row.owner_user_id || null,
     joinRequirements: toArray(row.join_requirements),
     groupRules: toArray(row.group_rules),
     memberBenefits: toArray(row.member_benefits),

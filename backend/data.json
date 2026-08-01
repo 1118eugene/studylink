@@ -259,6 +259,34 @@
       "communication_channel": null,
       "schedule_notes": null,
       "owner_user_id": 5
+    },
+    {
+      "id": 8,
+      "name": "warriors",
+      "description": "how business is relating with it",
+      "course_name": "business information sytem",
+      "course_code": "6780",
+      "meeting_type": "Hybrid",
+      "image_url": "https://www.google.com/imgres?q=images&imgurl=https%3A%2F%2Fstatic.vecteezy.com%2Fvite%2Fassets%2Fphoto-masthead-375-BoK_p8LG.webp&imgrefurl=https%3A%2F%2Fwww.vecteezy.com%2Ffree-photos&docid=ibTdn4unYxO9nM&tbnid=7F8_kUgVrrg0YM&vet=12ahUKEwihrMzV7f6VAxVlOPsDHb9ZEcgQnPAOegQIPBAA..i&w=750&h=864&hcb=2&ved=2ahUKEwihrMzV7f6VAxVlOPsDHb9ZEcgQnPAOegQIPBAA",
+      "who_can_join": "anyone",
+      "join_requirements": [
+        "working internet"
+      ],
+      "group_rules": [
+        "keep time",
+        "cordination",
+        "commitment"
+      ],
+      "member_benefits": [
+        "everything is done in group so you get to learn from your peers"
+      ],
+      "new_member_steps": [
+        "just join when you are ready"
+      ],
+      "communication_channel": "whatsapp",
+      "schedule_notes": "access from the learning hub",
+      "owner_user_id": 3,
+      "enrollments": []
     }
   ],
   "resources": [
@@ -314,6 +342,17 @@
       "usage_notes": "Uploaded by user.",
       "audience": "All students",
       "created_by_user_id": 3
+    },
+    {
+      "id": 4,
+      "title": "apt1050",
+      "resource_type": "PDF",
+      "url": "/uploads/1785568196534_APT1050DATABASESYSTEMS-WEEK1.pdf",
+      "description": null,
+      "usage_notes": "Uploaded by user.",
+      "audience": "All students",
+      "created_by_user_id": 3,
+      "enrollments": []
     }
   ],
   "users": [

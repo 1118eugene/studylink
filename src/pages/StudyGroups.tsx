@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Modal from '../components/Modal';
 import { apiFetch } from '../lib/apiClient';
 import { addNotification } from '../lib/notifications';
+import { getStoredUser } from '../lib/session';
 
 interface StudyGroup {
   id: number;
@@ -55,6 +56,7 @@ function StudyGroups({ initialShowForm = false }: StudyGroupsProps) {
     whatsappLink: '',
     scheduleNotes: '',
   });
+  const currentUser = getStoredUser();
 
   const loadGroups = async () => {
     try {
@@ -153,8 +155,10 @@ function StudyGroups({ initialShowForm = false }: StudyGroupsProps) {
         body: JSON.stringify(payload),
       });
 
+      const data = await response.json().catch(() => null);
       if (!response.ok) {
-        throw new Error('Unable to save group');
+        const message = data?.message || 'Unable to save group.';
+        throw new Error(message);
       }
 
       await loadGroups();
@@ -162,7 +166,7 @@ function StudyGroups({ initialShowForm = false }: StudyGroupsProps) {
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error);
-      alert('Could not save the group. Please try again.');
+      alert(error instanceof Error ? error.message : 'Could not save the group. Please try again.');
     }
   };
 
@@ -434,7 +438,9 @@ function StudyGroups({ initialShowForm = false }: StudyGroupsProps) {
                 <div className="group-footer">
                   <div className="group-actions">
                     <Link to={`/groups/${group.id}`} className="action-link">View details</Link>
-                    <button type="button" className="action-link" onClick={() => loadGroupIntoForm(group)}>Edit</button>
+                    {(currentUser && (currentUser.id === (group as any).ownerUserId || currentUser.role === 'admin')) ? (
+                      <button type="button" className="action-link" onClick={() => loadGroupIntoForm(group)}>Edit</button>
+                    ) : null}
                     <button type="button" className="action-link action-danger" onClick={() => deleteGroup(group.id)}>Delete</button>
                   </div>
                   <button
