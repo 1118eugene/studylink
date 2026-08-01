@@ -444,7 +444,16 @@ function StudyGroups({ initialShowForm = false }: StudyGroupsProps) {
         ) : (
           <div className="groups-grid elevated-groups-grid">
             {filteredGroups.map((group) => (
-              <article key={group.id} className="group-card polished-group-card">
+              <article key={group.id} className="group-card polished-group-card" style={{ position: 'relative' }}>
+                {/* Debug: floating edit button to bypass possible overlay blocking clicks */}
+                <button
+                  type="button"
+                  title="Force edit"
+                  onClick={() => { console.log('Debug force edit', group.id); loadGroupIntoForm(group); }}
+                  style={{ position: 'absolute', right: 12, top: 12, zIndex: 9999, background: '#fff', border: '1px solid #e2e8f0', borderRadius: 6, padding: '6px 8px', cursor: 'pointer' }}
+                >
+                  ✎
+                </button>
                 {group.image ? (
                   <img className="group-image" src={group.image} alt={group.name} loading="lazy" />
                 ) : (
