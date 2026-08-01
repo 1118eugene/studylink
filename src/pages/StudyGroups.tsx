@@ -161,7 +161,26 @@ function StudyGroups({ initialShowForm = false }: StudyGroupsProps) {
         throw new Error(message);
       }
 
-      await loadGroups();
+      // If the server returned the created/updated group, apply it to local state
+      if (data?.group) {
+        const updatedGroup = data.group;
+        setGroups((current) => {
+          if (editingGroupId) {
+            return current.map((g) => (g.id === updatedGroup.id ? updatedGroup : g));
+          }
+          return [updatedGroup, ...current];
+        });
+        addNotification({
+          id: `group-saved-${Date.now()}`,
+          title: editingGroupId ? 'Group updated' : 'Group created',
+          message: `${updatedGroup.name} saved successfully.`,
+          createdAt: new Date().toISOString(),
+        });
+      } else {
+        // fallback: reload the list
+        await loadGroups();
+      }
+
       resetGroupForm();
     } catch (error) {
       // eslint-disable-next-line no-console
