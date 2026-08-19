@@ -1148,8 +1148,6 @@ nav {
 }
 
 .sidebar-shell .subtle,
-.sidebar-user span,
-.sidebar-user-label,
 .sidebar-section-label,
 .sidebar-brand-subtitle {
   color: #8ea0bd;
@@ -1212,43 +1210,6 @@ nav {
 .sidebar-toggle-icon {
   font-size: 0.9rem;
   line-height: 1;
-}
-
-.sidebar-user {
-  padding: 0.9rem;
-  border-radius: 18px;
-  background: linear-gradient(180deg, rgba(148, 163, 184, 0.12), rgba(15, 23, 42, 0.32));
-  border: 1px solid rgba(148, 163, 184, 0.14);
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.sidebar-user-copy {
-  min-width: 0;
-  display: grid;
-  gap: 0.12rem;
-}
-
-.sidebar-user-label,
-.sidebar-user-copy strong,
-.sidebar-user-copy span {
-  margin: 0;
-}
-
-.sidebar-user strong {
-  color: #ffffff;
-  font-size: 0.92rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.sidebar-user span {
-  font-size: 0.8rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .sidebar-nav {
@@ -1349,7 +1310,6 @@ nav {
 }
 
 .sidebar-collapsed .sidebar-brand-subtitle,
-.sidebar-collapsed .sidebar-user-copy,
 .sidebar-collapsed .sidebar-section-label,
 .sidebar-collapsed .sidebar-profile-link .nav-label,
 .sidebar-collapsed .sidebar-logout .nav-label {
@@ -1364,16 +1324,11 @@ nav {
   display: none;
 }
 
-.sidebar-collapsed .sidebar-user,
 .sidebar-collapsed .sidebar-link,
 .sidebar-collapsed .sidebar-profile-link,
 .sidebar-collapsed .sidebar-logout,
 .sidebar-collapsed .notification-toggle {
   justify-content: center;
-}
-
-.sidebar-collapsed .sidebar-user {
-  padding: 0.5rem;
 }
 
 .sidebar-collapsed .sidebar-nav {
@@ -1426,7 +1381,6 @@ nav {
     gap: 0.5rem;
   }
 
-  .sidebar-user,
   .sidebar-link,
   .sidebar-profile-link,
   .sidebar-logout,
@@ -1451,7 +1405,6 @@ nav {
   }
 
   .sidebar-collapsed .sidebar-brand-subtitle,
-  .sidebar-collapsed .sidebar-user-copy,
   .sidebar-collapsed .sidebar-section-label,
   .sidebar-collapsed .sidebar-link .nav-label {
     display: inline;
@@ -1888,7 +1841,6 @@ nav {
     gap: 0.5rem;
   }
 
-  .sidebar-user,
   .sidebar-link,
   .sidebar-profile-link,
   .sidebar-logout,

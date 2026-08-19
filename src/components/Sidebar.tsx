@@ -2,7 +2,7 @@ import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import logo from '../assets/images/studylinklogo.png';
 import NotificationBell from './NotificationBell';
-import { clearStoredAuth, getInitials, getStoredUser } from '../lib/session';
+import { clearStoredAuth, getStoredUser } from '../lib/session';
 
 const mainNavItems = [
   { label: 'Schools', path: '/schools', icon: '\u{1F3EB}' },
@@ -45,15 +45,6 @@ function Sidebar() {
         >
           <span className="sidebar-toggle-icon" aria-hidden="true">{collapsed ? '\u2192' : '\u2190'}</span>
         </button>
-      </div>
-
-      <div className="sidebar-user">
-        <div className="sidebar-user-badge">{getInitials(currentUser?.name || 'Student')}</div>
-        <div className="sidebar-user-copy">
-          <p className="sidebar-user-label">Signed in as</p>
-          <strong>{currentUser?.name || 'Student'}</strong>
-          <span>{currentUser?.university || 'StudyLink member'}</span>
-        </div>
       </div>
 
       <nav className="sidebar-nav">
