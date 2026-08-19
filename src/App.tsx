@@ -129,7 +129,6 @@ function App() {
             title="Open sidebar"
           >
             <span aria-hidden="true">{'\u2630'}</span>
-            <span>Sidebar</span>
           </button>
         ) : null}
         <Routes>
