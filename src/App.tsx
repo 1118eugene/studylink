@@ -52,6 +52,7 @@ function App() {
   const location = useLocation();
   const [isAuthenticated, setIsAuthenticated] = useState(() => !!getStoredUser());
   const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' ? window.innerWidth <= 1080 : false);
+  const [isDesktopSidebarVisible, setIsDesktopSidebarVisible] = useState(true);
 
   useEffect(() => {
     setIsAuthenticated(!!getStoredUser());
@@ -67,6 +68,12 @@ function App() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  useEffect(() => {
+    if (isMobile) {
+      setIsDesktopSidebarVisible(true);
+    }
+  }, [isMobile]);
+
   const mobileNavLinks = [
     { label: 'Schools', path: '/schools', icon: '\u{1F3EB}' },
     { label: 'Courses', path: '/courses', icon: '\u{1F4D8}' },
@@ -74,13 +81,13 @@ function App() {
     { label: 'AI', path: '/ask-ai', icon: '\u{1F916}' },
     { label: 'Profile', path: '/profile', icon: '\u{1F464}' },
   ];
-  const showDesktopSidebar = isAuthenticated && !isMobile;
+  const showDesktopSidebar = isAuthenticated && !isMobile && isDesktopSidebarVisible;
   const currentUser = getStoredUser();
 
   return (
     <div className={`app-shell ${isAuthenticated ? 'authenticated-shell' : 'public-shell'}`}>
       {!isAuthenticated ? <Header /> : null}
-      {showDesktopSidebar ? <Sidebar /> : null}
+      {showDesktopSidebar ? <Sidebar onNavigate={() => setIsDesktopSidebarVisible(false)} /> : null}
       {isAuthenticated && isMobile ? (
         <>
           <div className="mobile-auth-header">
@@ -112,7 +119,19 @@ function App() {
           </div>
         </>
       ) : null}
-      <main className={isAuthenticated ? 'app-content' : 'app-content public-content'}>
+      <main className={isAuthenticated ? `app-content ${showDesktopSidebar ? '' : 'app-content-wide'}`.trim() : 'app-content public-content'}>
+        {isAuthenticated && !isMobile && !isDesktopSidebarVisible ? (
+          <button
+            type="button"
+            className="sidebar-reopen"
+            onClick={() => setIsDesktopSidebarVisible(true)}
+            aria-label="Open sidebar"
+            title="Open sidebar"
+          >
+            <span aria-hidden="true">{'\u2630'}</span>
+            <span>Sidebar</span>
+          </button>
+        ) : null}
         <Routes>
           <Route path="/" element={isAuthenticated ? <Navigate to="/schools" replace /> : <Home />} />
 

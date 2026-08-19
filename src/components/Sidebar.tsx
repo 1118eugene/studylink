@@ -14,7 +14,11 @@ const mainNavItems = [
   { label: 'Dashboard', path: '/dashboard', icon: '\u25EB' },
 ];
 
-function Sidebar() {
+type SidebarProps = {
+  onNavigate?: () => void;
+};
+
+function Sidebar({ onNavigate }: SidebarProps) {
   const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
   const currentUser = getStoredUser();
@@ -55,6 +59,7 @@ function Sidebar() {
             to={item.path}
             className={({ isActive }) => (isActive ? 'sidebar-link active' : 'sidebar-link')}
             title={collapsed ? item.label : undefined}
+            onClick={onNavigate}
           >
             <span className="sidebar-link-icon" aria-hidden="true">{item.icon}</span>
             <span className="nav-label">{item.label}</span>
@@ -65,6 +70,7 @@ function Sidebar() {
             to="/admin/academic"
             className={({ isActive }) => (isActive ? 'sidebar-link active' : 'sidebar-link')}
             title={collapsed ? 'Academic Admin' : undefined}
+            onClick={onNavigate}
           >
             <span className="sidebar-link-icon" aria-hidden="true">{'\u2699'}</span>
             <span className="nav-label">Academic Admin</span>
@@ -73,7 +79,7 @@ function Sidebar() {
       </nav>
 
       <div className="sidebar-footer">
-        <NavLink to="/profile" className="profile-link sidebar-profile-link" aria-label="Profile" title={collapsed ? 'Profile' : undefined}>
+        <NavLink to="/profile" className="profile-link sidebar-profile-link" aria-label="Profile" title={collapsed ? 'Profile' : undefined} onClick={onNavigate}>
           <span className="sidebar-link-icon" aria-hidden="true">{'\u{1F464}'}</span>
           <span className="nav-label">Profile</span>
         </NavLink>
