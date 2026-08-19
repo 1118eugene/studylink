@@ -68,11 +68,11 @@ function App() {
   }, []);
 
   const mobileNavLinks = [
-    { label: 'Schools', path: '/schools', icon: '🏫' },
-    { label: 'Courses', path: '/courses', icon: '📘' },
-    { label: 'Learning', path: '/learning?view=library', icon: '📚' },
-    { label: 'AI', path: '/ask-ai', icon: '🤖' },
-    { label: 'Profile', path: '/profile', icon: '👤' },
+    { label: 'Schools', path: '/schools', icon: '\u{1F3EB}' },
+    { label: 'Courses', path: '/courses', icon: '\u{1F4D8}' },
+    { label: 'Learning', path: '/learning?view=library', icon: '\u{1F4DA}' },
+    { label: 'AI', path: '/ask-ai', icon: '\u{1F916}' },
+    { label: 'Profile', path: '/profile', icon: '\u{1F464}' },
   ];
   const showDesktopSidebar = isAuthenticated && !isMobile;
   const currentUser = getStoredUser();
