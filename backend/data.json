@@ -49,6 +49,12 @@
           "email": "eugenonyango@gmail.com",
           "name": "eugen juma",
           "enrolledAt": 1784974105750
+        },
+        {
+          "user_id": 2,
+          "email": "eugeneonyango@gmail.com",
+          "name": "violet eugene",
+          "enrolledAt": 1785573185162
         }
       ],
       "id": 3,
@@ -261,6 +267,7 @@
       "owner_user_id": 5
     },
     {
+      "enrollments": [],
       "id": 8,
       "name": "warriors",
       "description": "how business is relating with it",
@@ -285,7 +292,33 @@
       ],
       "communication_channel": "whatsapp",
       "schedule_notes": "access from the learning hub",
-      "owner_user_id": 3,
+      "owner_user_id": 3
+    },
+    {
+      "id": 9,
+      "name": "lions",
+      "description": "we want to solve maths problems",
+      "course_name": "Mth2045",
+      "course_code": "567",
+      "meeting_type": "Online",
+      "image_url": null,
+      "who_can_join": "anyone",
+      "join_requirements": [
+        "stable working internet"
+      ],
+      "group_rules": [
+        "working in groups",
+        "help each"
+      ],
+      "member_benefits": [
+        "it will ensure you learn beyond expectations"
+      ],
+      "new_member_steps": [
+        "click join group"
+      ],
+      "communication_channel": null,
+      "schedule_notes": null,
+      "owner_user_id": 2,
       "enrollments": []
     }
   ],
@@ -344,6 +377,7 @@
       "created_by_user_id": 3
     },
     {
+      "enrollments": [],
       "id": 4,
       "title": "apt1050",
       "resource_type": "PDF",
@@ -351,7 +385,17 @@
       "description": null,
       "usage_notes": "Uploaded by user.",
       "audience": "All students",
-      "created_by_user_id": 3,
+      "created_by_user_id": 3
+    },
+    {
+      "id": 5,
+      "title": "apt2090",
+      "resource_type": "Resource",
+      "url": "/uploads/1785572989866_APT2090_LAB_5_6.docx",
+      "description": null,
+      "usage_notes": "Uploaded by user.",
+      "audience": "All students",
+      "created_by_user_id": 2,
       "enrollments": []
     }
   ],
@@ -598,6 +642,11 @@
       "course_id": 3,
       "user_id": 3,
       "enrolled_at": "2026-07-27T16:28:30.256Z"
+    },
+    {
+      "course_id": 7,
+      "user_id": 2,
+      "enrolled_at": "2026-08-01T08:23:05.754Z"
     }
   ],
   "contact_messages": [],
