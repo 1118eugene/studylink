@@ -2,7 +2,7 @@ const API_BASE = (import.meta.env.VITE_API_BASE_URL || '').trim();
 // Prefer a local backend during development when running on localhost
 const FALLBACK_BACKEND = (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'))
   ? 'http://localhost:4000'
-  : 'https://studylinkbackend-4a7r.onrender.com';
+  : '';
 
 export const getStoredToken = () => {
   if (typeof localStorage === 'undefined') return '';
@@ -42,7 +42,7 @@ export const apiFetch = async (path: string, options: RequestInit = {}) => {
   const resp = await tryFetch(primaryUrl, init);
   // If primary fetch failed (network) try fallback
   if (!resp) {
-    if (typeof window !== 'undefined') {
+    if (FALLBACK_BACKEND) {
       const fallbackUrl = `${FALLBACK_BACKEND}${path}`;
       const fallbackResp = await tryFetch(fallbackUrl, init);
       if (fallbackResp) return fallbackResp;

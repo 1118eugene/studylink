@@ -1,4 +1,5 @@
 import express from 'express';
+import 'express-async-errors';
 import cors from 'cors';
 import fs from 'fs';
 import path from 'path';
@@ -17,10 +18,6 @@ import {
 } from './lib/db.js';
 
 const app = express();
-
-app.get('/', (req, res) => {
-  res.send('STUDYLINK backend is running!');
-});
 
 const PORT = process.env.PORT || 4000;
 const clientDistPath = path.resolve(process.cwd(), 'dist');
@@ -306,15 +303,20 @@ app.post('/api/auth/signup', async (req, res) => {
 
 app.post('/api/auth/login', async (req, res) => {
   const { email, password } = req.body;
+  const normalizedEmail = typeof email === 'string' ? email.trim() : '';
+  const suppliedPassword = typeof password === 'string' ? password : '';
 
-  if (!email || !password) {
+  if (!normalizedEmail || !suppliedPassword) {
     return res.status(400).json({ message: 'Email and password are required.' });
   }
 
-  const userRecord = await findUserByEmail(email);
-  const localDevelopmentUser = isLocalStore() && userRecord && !userRecord.password_hash;
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail)) {
+    return res.status(400).json({ message: 'Enter a valid email address.' });
+  }
 
-  if (!userRecord || (!localDevelopmentUser && (!userRecord.password_hash || !verifyPassword(password, userRecord.password_hash)))) {
+  const userRecord = await findUserByEmail(normalizedEmail);
+
+  if (!userRecord || !userRecord.password_hash || !verifyPassword(suppliedPassword, userRecord.password_hash)) {
     return res.status(401).json({ message: 'Invalid email or password.' });
   }
 
@@ -1348,8 +1350,21 @@ app.use((_req, res) => {
   res.status(404).json({ message: 'Route not found. Use /api/health or the frontend app.' });
 });
 
+app.use((error, _req, res, next) => {
+  if (res.headersSent) {
+    return next(error);
+  }
+
+  console.error('Request failed:', error);
+  return res.status(500).json({ message: 'The request could not be completed.' });
+});
+
 async function start() {
-  if (process.env.NODE_ENV === 'production' && (!process.env.AUTH_SECRET || process.env.AUTH_SECRET === 'dev-auth-secret-change-me')) {
+  if (process.env.NODE_ENV === 'production' && !process.env.DATABASE_URL) {
+    throw new Error('DATABASE_URL must be configured in production.');
+  }
+
+  if (process.env.NODE_ENV === 'production' && !process.env.AUTH_SECRET) {
     throw new Error('AUTH_SECRET must be configured in production.');
   }
 
@@ -1365,5 +1380,3 @@ start().catch((error) => {
   console.error('Failed to start backend server:', error);
   process.exit(1);
 });
-
-

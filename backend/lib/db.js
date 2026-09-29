@@ -1363,9 +1363,8 @@ export async function query(text, params = []) {
   try {
     return await pool.query(text, params);
   } catch (error) {
-    console.warn('Postgres query failed, falling back to local store:', error?.message || error);
-    useLocalStore = true;
-    return localQuery(text, params);
+    console.error('Postgres query failed:', error?.message || error);
+    throw error;
   }
 }
 

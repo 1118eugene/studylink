@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 
-const AUTH_SECRET = process.env.AUTH_SECRET || 'dev-auth-secret-change-me';
+const AUTH_SECRET = process.env.AUTH_SECRET || crypto.randomBytes(32).toString('hex');
 const PASSWORD_ALGORITHM = 'scrypt';
 const PASSWORD_KEY_LENGTH = 64;
 
