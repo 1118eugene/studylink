@@ -1,10 +1,16 @@
 node_modules/
 dist/
+build/
 .expo/
+apps/mobile/web-build/
+apps/mobile/dist/
 .env
 .env.*
 !.env.example
 !**/.env.example
+apps/api/backend/data.local.json
+apps/api/backend/data.local.*.bak.json
+apps/api/public/uploads/*
 .DS_Store
 npm-debug.log*
 yarn-debug.log*

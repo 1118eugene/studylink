@@ -1,44 +1,34 @@
 {
   "name": "studylink",
   "private": true,
-  "version": "0.1.0",
-  "description": "StudyLink is a mobile-based student study group coordination and academic networking system for university students.",
   "type": "module",
   "engines": {
     "node": "^20.19.0 || >=22.12.0"
   },
+  "workspaces": [
+    "apps/web",
+    "apps/mobile",
+    "apps/api",
+    "packages/*"
+  ],
   "scripts": {
-    "dev:frontend": "vite",
-    "dev:backend": "node backend/server.js",
-    "dev": "node scripts/dev.js",
-    "server": "node backend/server.js",
-    "db:migrate": "node scripts/migrate.js",
-    "db:seed": "node scripts/migrate.js --seed",
-    "db:migrate:pg": "node scripts/migrate-pg.js",
-    "db:seed:pg": "node scripts/migrate-pg.js --seed",
-    "import:curated": "node scripts/import-curated-to-pg.js",
-    "build": "tsc && vite build",
-    "preview": "vite preview",
-    "typecheck": "tsc --noEmit",
-    "smoke": "node scripts/smoke.js"
-  },
-  "dependencies": {
-    "@floating-ui/react": "^0.27.20",
-    "cors": "^2.8.5",
-    "express": "^4.18.2",
-    "express-async-errors": "^3.1.1",
-    "pg": "^8.22.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "react-router-dom": "^7.18.4"
+    "dev": "node apps/api/scripts/dev.js",
+    "dev:all": "node apps/api/scripts/dev.js",
+    "dev:web": "npm run dev --workspace @studylink/web",
+    "dev:mobile": "npm run start --workspace @studylink/mobile",
+    "dev:mobile:web": "npm run web --workspace @studylink/mobile",
+    "dev:api": "npm run server --workspace @studylink/api",
+    "build": "npm run build:web",
+    "build:web": "npm run build --workspace @studylink/web",
+    "build:mobile": "npm run build:web --workspace @studylink/mobile",
+    "typecheck": "npm run typecheck --workspace @studylink/mobile && npm run typecheck --workspace @studylink/web",
+    "smoke": "npm run smoke --workspace @studylink/api",
+    "test:api": "npm run test:api --workspace @studylink/api",
+    "test": "npm run test:api && npm run build:web && npm run typecheck",
+    "migrate": "npm run migrate --workspace @studylink/api",
+    "preview:web": "npm run preview --workspace @studylink/web"
   },
   "devDependencies": {
-    "@types/node": "^26.1.1",
-    "@types/react": "^18.3.4",
-    "@types/react-dom": "^18.3.0",
-    "@vitejs/plugin-react": "^5.2.0",
-    "concurrently": "^9.0.1",
-    "typescript": "^5.6.0",
-    "vite": "^7.3.6"
+    "concurrently": "^9.0.1"
   }
 }

@@ -1,89 +1,73 @@
 # StudyLink
 
-StudyLink is a private student study-group coordination and academic networking app built with React, TypeScript, Vite, Express, and PostgreSQL.
+StudyLink helps students find course peers, organise study groups and sessions, and share academic resources. The project contains independent web, mobile, and API workspaces, plus a small package of shared contracts.
 
-## What It Does
+## Requirements
 
-The app supports authenticated dashboards, courses, student-created study groups, scheduled sessions, shared resources, and a native mobile client. Students can report groups and resources for review; moderators and administrators can dismiss reports or remove reported content from the review queue. Report decisions are written to the audit log.
+- Node.js 20.19+ or 22.12+
+- npm
+- PostgreSQL for persistent, multi-user deployment (optional for local development)
 
-## Development
+## Install and run
 
-Use Node.js 20.19+ or 22.12+.
-
-Install dependencies:
+From this directory:
 
 ```bash
 npm install
-```
-
-Run the app:
-
-```bash
 npm run dev
 ```
 
-The dev launcher starts the backend, starts Vite on a free port, and opens the site in your browser.
+The development launcher starts the API and web app on available local ports and opens the web app. To run them separately, use `npm run dev:api` and `npm run dev:web`.
 
-For local development without PostgreSQL, the backend uses `backend/data.json`. This fallback is for development only; it is not durable hosting storage.
+For the Expo application in a browser, use `npm run dev:mobile:web`. For a device or simulator, use `npm run dev:mobile` and then choose an Expo target. Set `EXPO_PUBLIC_API_URL` in `apps/mobile/.env` to an API address reachable from that device; `localhost` only works when the API runs on the same device.
 
-## Mobile App
+Copy the workspace examples when you need per-app environment files:
 
-Install and start the Expo client from `mobile/`:
+- `apps/api/.env.example` → `apps/api/.env`
+- `apps/web/.env.example` → `apps/web/.env`
+- `apps/mobile/.env.example` → `apps/mobile/.env`
 
-```bash
-cd mobile
-npm install
-```
+Keep real credentials out of source control. Production requires `DATABASE_URL` and a strong `AUTH_SECRET`; configure `CORS_ORIGIN` with the deployed client origins.
 
-Copy `mobile/.env.example` to `mobile/.env` and set `EXPO_PUBLIC_API_BASE_URL` to the running API URL. For a physical device, use a network-accessible address for your development machine rather than `localhost`. Then run `npm start`.
+## Data and migrations
 
-## Production
+Without `DATABASE_URL`, the API uses its local JSON adapter. It reads initial sample content from `apps/api/backend/data.json` and writes mutable state to `apps/api/backend/data.local.json` by default. Set `STUDYLINK_DATA_PATH` to use a different file. This adapter is for local demos and tests, not production or concurrent use.
 
-Build the frontend:
+Uploaded files are stored under `apps/api/public/uploads` by default. Set `STUDYLINK_UPLOADS_PATH` to use a different location. A deployed service needs durable, access-controlled file storage before uploads can be considered production-ready.
 
-```bash
-npm run build
-```
-
-Set `DATABASE_URL` for PostgreSQL and `CORS_ORIGIN` for the deployed frontend URL, then start the server with:
+With PostgreSQL configured, apply migrations using:
 
 ```bash
-npm run server
+npm run migrate
 ```
 
-Production requires both `DATABASE_URL` and `AUTH_SECRET`; the server refuses to start without them. In development, an unset `AUTH_SECRET` is generated randomly for that process, so local tokens do not survive a server restart. Apply the database migrations before starting the service:
+Database migrations live in `apps/api/backend/db/migrations`. Configure the API process with `DATABASE_URL`, `AUTH_SECRET`, `PORT`, and `CORS_ORIGIN` as appropriate.
+
+## Build and test
 
 ```bash
-npm run db:migrate
+npm test
+npm run build:mobile
 ```
 
-Migration `007_content_reports.sql` adds persistent moderation reports and their review status. For development without PostgreSQL, report submissions and decisions are stored in `backend/data.json`.
+`npm test` runs the API integration tests against an isolated temporary JSON store, builds the web app, and typechecks the mobile and web workspaces. The API tests start and stop their own local server and remove their temporary state and uploads. `npm run build:mobile` exports the Expo app for web.
 
-Optionally load the sample academic content with `npm run db:seed`. The local JSON fallback must not be used for production data.
+Other useful commands include `npm run smoke` for the health/authentication smoke check and `npm run typecheck` for both client workspaces.
 
-Run the API smoke checks with `npm run smoke`. Without credentials it checks health and confirms protected access is rejected; to exercise the academic API routes too, set `SMOKE_AUTH_TOKEN` to a valid bearer token. Set `SMOKE_REQUIRE_DATABASE=true` to fail unless PostgreSQL is connected.
+## Project structure
 
-Configure Render to build the backend from this repository root using `Dockerfile`, then set `DATABASE_URL`, `AUTH_SECRET`, and `CORS_ORIGIN` in the Render service environment. Configure the frontend's `VITE_API_BASE_URL` in Vercel to the Render backend's public URL. Keep deployment platform settings in their respective dashboards; no Render manifest is maintained in this repository.
-
-The Render Docker image contains only the backend/API; Vercel is responsible for the frontend. To build and run the backend container manually from the repository root:
-
-```bash
-docker build -t studylink .
-docker run -p 4000:4000 -e DATABASE_URL=... -e AUTH_SECRET=... -e CORS_ORIGIN=... studylink
+```text
+apps/
+  api/       Express API, database adapter, migrations, scripts
+  mobile/    Expo / React Native app (native and web)
+  web/       React / TypeScript / Vite web app
+packages/
+  shared/    Shared API contracts and report constants
+docs/        Architecture, workflow, demo, and report traceability
 ```
 
-The backend can serve a local `dist/` build if one exists, but the Render image deliberately does not package the frontend.
-Uploaded files are currently stored on the server's local filesystem. Hosted environments with ephemeral disks need persistent disk or object-storage integration before uploaded files can be considered durable.
+See [the architecture overview](./docs/architecture.md), [the demo guide](./docs/demo.md), [the team workflow](./docs/team-workflow.md), and [requirements traceability](./docs/requirements-traceability.md) for more.
 
-## Project Structure
+## Scope notes
 
-- `src/` - frontend application source
-- `src/components/` - shared UI components
-- `src/pages/` - page-level screens
-- `backend/` - API server, auth, and database access
-- `backend/db/` - migrations and seed data
-- `scripts/` - development and migration scripts
-
-## Notes
-
-The StudyLink AI resource finder currently returns curated/example search links; it is not connected to a live AI or search provider. PostgreSQL provisioning, the frontend/backend deployment URLs, and durable upload storage must be configured for a production deployment.
+The optional StudyLink AI resource finder currently returns curated/example links; it is not connected to a live AI provider. Accessibility, performance, and low-bandwidth behavior still need formal audits and measurements. Review the traceability document before presenting the prototype as production-ready.
