@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: studylink-api
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/health
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: AUTH_SECRET
+        sync: false
+      - key: CORS_ORIGIN
+        sync: false
