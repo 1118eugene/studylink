@@ -133,7 +133,8 @@ async function main() {
     String(frontendPort),
     '--strictPort',
   ], 'frontend', {
-    VITE_API_URL: proxyTarget,
+    VITE_API_URL: '',
+    VITE_API_PROXY_TARGET: proxyTarget,
   });
   const backend = start(npmCommand, ['run', 'dev:api'], 'backend', {
     PORT: String(backendPort),

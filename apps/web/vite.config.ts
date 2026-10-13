@@ -10,7 +10,7 @@ export default defineConfig(({ mode }) => {
       allowedHosts: ['localhost', '127.0.0.1', '.loca.lt'],
       proxy: {
         '/api': {
-          target: env.VITE_API_URL || 'http://localhost:4000',
+          target: env.VITE_API_PROXY_TARGET || env.VITE_API_URL || 'http://localhost:4000',
           changeOrigin: true,
         },
       },
