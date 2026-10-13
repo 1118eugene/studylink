@@ -1,0 +1,3686 @@
+{
+  "route": "/library",
+  "finalUrl": "http://127.0.0.1:5188/learning?view=library",
+  "status": 200,
+  "capturedAt": "2026-10-13T18:49:09.939Z",
+  "text": [
+    "StudyLink",
+    "STUDENT WORKSPACE",
+    "←",
+    "WORKSPACE",
+    "🏫",
+    "Schools",
+    "📘",
+    "Courses",
+    "📚",
+    "Learning Hub",
+    "✦",
+    "StudyLink AI",
+    "👥",
+    "Study Groups",
+    "🗓",
+    "Sessions",
+    "◫",
+    "Dashboard",
+    "👤",
+    "Profile",
+    "🔔",
+    "↗",
+    "Logout",
+    "LEARNING HUB",
+    "Central library for notes, PDFs, quizzes, and shared study resources.",
+    "Open what you need quickly and keep study materials in one place.",
+    "0",
+    "Library-ready resources",
+    "145",
+    "All learning resources",
+    "My learning shelf",
+    "Choose the learning area you want without leaving the same workspace.",
+    "My Library",
+    "All Resources",
+    "Notes and PDFs",
+    "Podcasts",
+    "Practice and Past Papers",
+    "Open courses",
+    "Add or upload a resource",
+    "Add / Upload resource",
+    "All schools",
+    "School of Science and Technology",
+    "School of Business",
+    "School of Pharmacy",
+    "School of Humanities and Social Sciences",
+    "General",
+    "All types",
+    "Note",
+    "PDF",
+    "Podcast",
+    "Video",
+    "MCQ",
+    "Past Paper",
+    "Guide",
+    "pdf",
+    "ppt",
+    "Resource",
+    "Notes",
+    "APT3060",
+    "APT3060 Note 1: MVVM and state management",
+    "Structured study notes for MVVM and state management in Mobile Programming.",
+    "SCHOOL / PROGRAM",
+    "School of Science and Technology - Applied Computer Technology",
+    "USAGE",
+    "Open the curated external note; use the in-app note as a quick summary.",
+    "Open",
+    "Hide",
+    "Notes",
+    "APT3060",
+    "APT3060 Note 2: Retrofit networking flow",
+    "Structured study notes for Retrofit networking flow in Mobile Programming.",
+    "SCHOOL / PROGRAM",
+    "School of Science and Technology - Applied Computer Technology",
+    "USAGE",
+    "Open the curated external note; use the in-app note as a quick summary.",
+    "Open",
+    "Hide",
+    "Notes",
+    "APT3060",
+    "APT3060 Note 3: Room database revision",
+    "Structured study notes for Room database revision in Mobile Programming.",
+    "SCHOOL / PROGRAM",
+    "School of Science and Technology - Applied Computer Technology",
+    "USAGE",
+    "Open the curated external note; use the in-app note as a quick summary.",
+    "Open",
+    "Hide",
+    "PDFs",
+    "APT3060",
+    "APT3060 PDF 1: Course outline and weekly plan",
+    "Course outline and weekly plan prepared for Mobile Programming.",
+    "SCHOOL / PROGRAM",
+    "School of Science and Technology - Applied Computer Technology",
+    "USAGE",
+    "Open the curated external PDF/resource; the in-app PDF gives a concise guide.",
+    "Open",
+    "Hide",
+    "PDFs",
+    "APT3060",
+    "APT3060 PDF 2: Mobile UI design checklist",
+    "Mobile UI design checklist prepared for Mobile Programming.",
+    "SCHOOL / PROGRAM",
+    "School of Science and Technology - Applied Computer Technology",
+    "USAGE",
+    "Open the curated external PDF/resource; the in-app PDF gives a concise guide.",
+    "Open",
+    "Hide",
+    "Podcasts",
+    "APT3060",
+    "APT3060 Podcast 1: Understanding mobile architecture without fear",
+    "Audio-style revision guide covering understanding mobile architecture without fear.",
+    "SCHOOL / PROGRAM",
+    "School of Science and Technology - Applied Computer Technology",
+    "USAGE",
+    "Open the curated external podcast; use the in-app notes for a concise summary.",
+    "Open",
+    "Hide",
+    "Podcasts",
+    "APT3060",
+    "APT3060 Podcast 2: How to remember API and storage workflows",
+    "Audio-style revision guide covering how to remember api and storage workflows.",
+    "SCHOOL / PROGRAM",
+    "School of Science and Technology - Applied Computer Technology",
+    "USAGE",
+    "Open the curated external podcast; use the in-app notes for a concise summary.",
+    "Open",
+    "Hide",
+    "Videos",
+    "APT3060",
+    "APT3060 Video Guide 1: Lifecycle walkthrough",
+    "Visual explanation pack for lifecycle walkthrough.",
+    "SCHOOL / PROGRAM",
+    "School of Science and Technology - Applied Computer Technology",
+    "USAGE",
+    "Open the curated external video/search; use the in-app guide for a concise walkthrough.",
+    "Open",
+    "Hide",
+    "Videos",
+    "APT3060",
+    "APT3060 Video Guide 2: Navigation and state visual guide",
+    "Visual explanation pack for navigation and state visual guide.",
+    "SCHOOL / PROGRAM",
+    "School of Science and Technology - Applied Computer Technology",
+    "USAGE",
+    "Open the curated external video/search; use the in-app guide for a concise walkthrough.",
+    "Open",
+    "Hide",
+    "MCQs",
+    "APT3060",
+    "APT3060 MCQ Drill 1: Activity lifecycle",
+    "Practice questions for activity lifecycle in Mobile Programming.",
+    "SCHOOL / PROGRAM",
+    "School of Science and Technology - Applied Computer Technology",
+    "USAGE",
+    "Open the curated external MCQ; use the in-app drill for immediate practice and explanations.",
+    "Open",
+    "Hide",
+    "MCQs",
+    "APT3060",
+    "APT3060 MCQ Drill 2: Data persistence",
+    "Practice questions for data persistence in Mobile Programming.",
+    "SCHOOL / PROGRAM",
+    "School of Science and Technology - Applied Computer Technology",
+    "USAGE",
+    "Open the curated external MCQ; use the in-app drill for immediate practice and explanations.",
+    "Open",
+    "Hide",
+    "Past papers",
+    "APT3060",
+    "APT3060 Past Paper 1: Architecture patterns and debugging",
+    "Exam-style practice paper focused on architecture patterns and debugging.",
+    "SCHOOL / PROGRAM",
+    "School of Science and Technology - Applied Computer Technology",
+    "USAGE",
+    "Open the curated external past paper; use the in-app past paper for quick practice.",
+    "Open",
+    "Hide",
+    "Past papers",
+    "APT3060",
+    "APT3060 Past Paper 2: API, storage, and UI integration",
+    "Exam-style practice paper focused on api, storage, and ui integration.",
+    "SCHOOL / PROGRAM",
+    "School of Science and Technology - Applied Computer Technology",
+    "USAGE",
+    "Open the curated external past paper; use the in-app past paper for quick practice.",
+    "Open",
+    "Hide",
+    "Guides",
+    "APT3060",
+    "APT3060 Group Support Guide",
+    "Peer-support roadmap showing how to use StudyLink for Mobile Programming.",
+    "SCHOOL / PROGRAM",
+    "School of Science and Technology - Applied Computer Technology",
+    "USAGE",
+    "Start here if you do not know which resource to open first.",
+    "Open",
+    "Hide",
+    "Notes",
+    "APT3025",
+    "APT3025 Note 1: Regression fundamentals",
+    "Structured study notes for Regression fundamentals in Machine Learning.",
+    "SCHOOL / PROGRAM",
+    "School of Science and Technology - Applied Computer Technology",
+    "USAGE",
+    "Open the curated external note; use the in-app note as a quick summary.",
+    "Open",
+    "Hide",
+    "Notes",
+    "APT3025",
+    "APT3025 Note 2: Classification and confusion matrix",
+    "Structured study notes for Classification and confusion matrix in Machine Learning.",
+    "SCHOOL / PROGRAM",
+    "School of Science and Technology - Applied Computer Technology",
+    "USAGE",
+    "Open the curated external note; use the in-app note as a quick summary.",
+    "Open",
+    "Hide",
+    "Notes",
+    "APT3025",
+    "APT3025 Note 3: Bias, variance, and model tuning",
+    "Structured study notes for Bias, variance, and model tuning in Machine Learning.",
+    "SCHOOL / PROGRAM",
+    "School of Science and Technology - Applied Computer Technology",
+    "USAGE",
+    "Open the curated external note; use the in-app note as a quick summary.",
+    "Open",
+    "Hide",
+    "PDFs",
+    "APT3025",
+    "APT3025 PDF 1: ML formulas quick sheet",
+    "ML formulas quick sheet prepared for Machine Learning.",
+    "SCHOOL / PROGRAM",
+    "School of Science and Technology - Applied Computer Technology",
+    "USAGE",
+    "Open the curated external PDF/resource; the in-app PDF gives a concise guide.",
+    "Open",
+    "Hide",
+    "PDFs",
+    "APT3025",
+    "APT3025 PDF 2: Evaluation metrics handbook",
+    "Evaluation metrics handbook prepared for Machine Learning.",
+    "SCHOOL / PROGRAM",
+    "School of Science and Technology - Applied Computer Technology",
+    "USAGE",
+    "Open the curated external PDF/resource; the in-app PDF gives a concise guide.",
+    "Open",
+    "Hide",
+    "Podcasts",
+    "APT3025",
+    "APT3025 Podcast 1: Machine learning for non-experts",
+    "Audio-style revision guide covering machine learning for non-experts.",
+    "SCHOOL / PROGRAM",
+    "School of Science and Technology - Applied Computer Technology",
+    "USAGE",
+    "Open the curated external podcast; use the in-app notes for a concise summary.",
+    "Open",
+    "Hide",
+    "Podcasts",
+    "APT3025",
+    "APT3025 Podcast 2: Remembering metrics before exams",
+    "Audio-style revision guide covering remembering metrics before exams.",
+    "SCHOOL / PROGRAM",
+    "School of Science and Technology - Applied Computer Technology",
+    "USAGE",
+    "Open the curated external podcast; use the in-app notes for a concise summary.",
+    "Open",
+    "Hide",
+    "Videos",
+    "APT3025",
+    "APT3025 Video Guide 1: How supervised learning works",
+    "Visual explanation pack for how supervised learning works.",
+    "SCHOOL / PROGRAM",
+    "School of Science and Technology - Applied Computer Technology",
+    "USAGE",
+    "Open the curated external video/search; use the in-app guide for a concise walkthrough.",
+    "Open",
+    "Hide",
+    "Videos",
+    "APT3025",
+    "APT3025 Video Guide 2: Visualizing underfitting and overfitting",
+    "Visual explanation pack for visualizing underfitting and overfitting.",
+    "SCHOOL / PROGRAM",
+    "School of Science and Technology - Applied Computer Technology",
+    "USAGE",
+    "Open the curated external video/search; use the in-app guide for a concise walkthrough.",
+    "Open",
+    "Hide",
+    "MCQs",
+    "APT3025",
+    "APT3025 MCQ Drill 1: Model evaluation",
+    "Practice questions for model evaluation in Machine Learning.",
+    "SCHOOL / PROGRAM",
+    "School of Science and Technology - Applied Computer Technology",
+    "USAGE",
+    "Open the curated external MCQ; use the in-app drill for immediate practice and explanations.",
+    "Open",
+    "Hide",
+    "MCQs",
+    "APT3025",
+    "APT3025 MCQ Drill 2: Feature engineering",
+    "Practice questions for feature engineering in Machine Learning.",
+    "SCHOOL / PROGRAM",
+    "School of Science and Technology - Applied Computer Technology",
+    "USAGE",
+    "Open the curated external MCQ; use the in-app drill for immediate practice and explanations.",
+    "Open",
+    "Hide",
+    "Past papers",
+    "APT3025",
+    "APT3025 Past Paper 1: Regression and classification",
+    "Exam-style practice paper focused on regression and classification.",
+    "SCHOOL / PROGRAM",
+    "School of Science and Technology - Applied Computer Technology",
+    "USAGE",
+    "Open the curated external past paper; use the in-app past paper for quick practice.",
+    "Open",
+    "Hide",
+    "Past papers",
+    "APT3025",
+    "APT3025 Past Paper 2: Metrics and model improvement",
+    "Exam-style practice paper focused on metrics and model improvement.",
+    "SCHOOL / PROGRAM",
+    "School of Science and Technology - Applied Computer Technology",
+    "USAGE",
+    "Open the curated external past paper; use the in-app past paper for quick practice.",
+    "Open",
+    "Hide",
+    "Guides",
+    "APT3025",
+    "APT3025 Group Support Guide",
+    "Peer-support roadmap showing how to use StudyLink for Machine Learning.",
+    "SCHOOL / PROGRAM",
+    "School of Science and Technology - Applied Computer Technology",
+    "USAGE",
+    "Start here if you do not know which resource to open first.",
+    "Open",
+    "Hide",
+    "Notes",
+    "CS201",
+    "CS201 Note 1: Recursion fundamentals",
+    "Structured study notes for Recursion fundamentals in Data Structures and Algorithms.",
+    "SCHOOL / PROGRAM",
+    "School of Science and Technology - Computer Science",
+    "USAGE",
+    "Open the curated external note; use the in-app note as a quick summary.",
+    "Open",
+    "Hide",
+    "Notes",
+    "CS201",
+    "CS201 Note 2: Tree traversal strategies",
+    "Structured study notes for Tree traversal strategies in Data Structures and Algorithms.",
+    "SCHOOL / PROGRAM",
+    "School of Science and Technology - Computer Science",
+    "USAGE",
+    "Open the curated external note; use the in-app note as a quick summary.",
+    "Open",
+    "Hide",
+    "Notes",
+    "CS201",
+    "CS201 Note 3: Big O analysis",
+    "Structured study notes for Big O analysis in Data Structures and Algorithms.",
+    "SCHOOL / PROGRAM",
+    "School of Science and Technology - Computer Science",
+    "USAGE",
+    "Open the curated external note; use the in-app note as a quick summary.",
+    "Open",
+    "Hide",
+    "PDFs",
+    "CS201",
+    "CS201 PDF 1: Sorting algorithms cheat sheet",
+    "Sorting algorithms cheat sheet prepared for Data Structures and Algorithms.",
+    "SCHOOL / PROGRAM",
+    "School of Science and Technology - Computer Science",
+    "USAGE",
+    "Open the curated external PDF/resource; the in-app PDF gives a concise guide.",
+    "Open",
+    "Hide",
+    "PDFs",
+    "CS201",
+    "CS201 PDF 2: Data structure comparison table",
+    "Data structure comparison table prepared for Data Structures and Algorithms.",
+    "SCHOOL / PROGRAM",
+    "School of Science and Technology - Computer Science",
+    "USAGE",
+    "Open the curated external PDF/resource; the in-app PDF gives a concise guide.",
+    "Open",
+    "Hide",
+    "Podcasts",
+    "CS201",
+    "CS201 Podcast 1: How to think through algorithm questions",
+    "Audio-style revision guide covering how to think through algorithm questions.",
+    "SCHOOL / PROGRAM",
+    "School of Science and Technology - Computer Science",
+    "USAGE",
+    "Open the curated external podcast; use the in-app notes for a concise summary.",
+    "Open",
+    "Hide",
+    "Podcasts",
+    "CS201",
+    "CS201 Podcast 2: Beating recursion confusion",
+    "Audio-style revision guide covering beating recursion confusion.",
+    "SCHOOL / PROGRAM",
+    "School of Science and Technology - Computer Science",
+    "USAGE",
+    "Open the curated external podcast; use the in-app notes for a concise summary.",
+    "Open",
+    "Hide",
+    "Videos",
+    "CS201",
+    "CS201 Video Guide 1: Stack and queue visual explanation",
+    "Visual explanation pack for stack and queue visual explanation.",
+    "SCHOOL / PROGRAM",
+    "School of Science and Technology - Computer Science",
+    "USAGE",
+    "Open the curated external video/search; use the in-app guide for a concise walkthrough.",
+    "Open",
+    "Hide",
+    "Videos",
+    "CS201",
+    "CS201 Video Guide 2: Binary tree traversal animation guide",
+    "Visual explanation pack for binary tree traversal animation guide.",
+    "SCHOOL / PROGRAM",
+    "School of Science and Technology - Computer Science",
+    "USAGE",
+    "Open the curated external video/search; use the in-app guide for a concise walkthrough.",
+    "Open",
+    "Hide",
+    "MCQs",
+    "CS201",
+    "CS201 MCQ Drill 1: Algorithm complexity",
+    "Practice questions for algorithm complexity in Data Structures and Algorithms.",
+    "SCHOOL / PROGRAM",
+    "School of Science and Technology - Computer Science",
+    "USAGE",
+    "Open the curated external MCQ; use the in-app drill for immediate practice and explanations.",
+    "Open",
+    "Hide",
+    "MCQs",
+    "CS201",
+    "CS201 MCQ Drill 2: Trees and graphs",
+    "Practice questions for trees and graphs in Data Structures and Algorithms.",
+    "SCHOOL / PROGRAM",
+    "School of Science and Technology - Computer Science",
+    "USAGE",
+    "Open the curated external MCQ; use the in-app drill for immediate practice and explanations.",
+    "Open",
+    "Hide",
+    "Past papers",
+    "CS201",
+    "CS201 Past Paper 1: Sorting and searching",
+    "Exam-style practice paper focused on sorting and searching.",
+    "SCHOOL / PROGRAM",
+    "School of Science and Technology - Computer Science",
+    "USAGE",
+    "Open the curated external past paper; use the in-app past paper for quick practice.",
+    "Open",
+    "Hide",
+    "Past papers",
+    "CS201",
+    "CS201 Past Paper 2: Recursion and complexity",
+    "Exam-style practice paper focused on recursion and complexity.",
+    "SCHOOL / PROGRAM",
+    "School of Science and Technology - Computer Science",
+    "USAGE",
+    "Open the curated external past paper; use the in-app past paper for quick practice.",
+    "Open",
+    "Hide",
+    "Guides",
+    "CS201",
+    "CS201 Group Support Guide",
+    "Peer-support roadmap showing how to use StudyLink for Data Structures and Algorithms.",
+    "SCHOOL / PROGRAM",
+    "School of Science and Technology - Computer Science",
+    "USAGE",
+    "Start here if you do not know which resource to open first.",
+    "Open",
+    "Hide",
+    "Notes",
+    "BUS101",
+    "BUS101 Note 1: Business environment basics",
+    "Structured study notes for Business environment basics in Introduction to Business.",
+    "SCHOOL / PROGRAM",
+    "School of Business - Business Administration",
+    "USAGE",
+    "Open the curated external note; use the in-app note as a quick summary.",
+    "Open",
+    "Hide",
+    "Notes",
+    "BUS101",
+    "BUS101 Note 2: Entrepreneurship overview",
+    "Structured study notes for Entrepreneurship overview in Introduction to Business.",
+    "SCHOOL / PROGRAM",
+    "School of Business - Business Administration",
+    "USAGE",
+    "Open the curated external note; use the in-app note as a quick summary.",
+    "Open",
+    "Hide",
+    "Notes",
+    "BUS101",
+    "BUS101 Note 3: Management functions",
+    "Structured study notes for Management functions in Introduction to Business.",
+    "SCHOOL / PROGRAM",
+    "School of Business - Business Administration",
+    "USAGE",
+    "Open the curated external note; use the in-app note as a quick summary.",
+    "Open",
+    "Hide",
+    "PDFs",
+    "BUS101",
+    "BUS101 PDF 1: Business terms handbook",
+    "Business terms handbook prepared for Introduction to Business.",
+    "SCHOOL / PROGRAM",
+    "School of Business - Business Administration",
+    "USAGE",
+    "Open the curated external PDF/resource; the in-app PDF gives a concise guide.",
+    "Open",
+    "Hide",
+    "PDFs",
+    "BUS101",
+    "BUS101 PDF 2: Case study analysis template",
+    "Case study analysis template prepared for Introduction to Business.",
+    "SCHOOL / PROGRAM",
+    "School of Business - Business Administration",
+    "USAGE",
+    "Open the curated external PDF/resource; the in-app PDF gives a concise guide.",
+    "Open",
+    "Hide",
+    "Podcasts",
+    "BUS101",
+    "BUS101 Podcast 1: Business concepts in everyday language",
+    "Audio-style revision guide covering business concepts in everyday language.",
+    "SCHOOL / PROGRAM",
+    "School of Business - Business Administration",
+    "USAGE",
+    "Open the curated external podcast; use the in-app notes for a concise summary.",
+    "Open",
+    "Hide",
+    "Podcasts",
+    "BUS101",
+    "BUS101 Podcast 2: Preparing for business presentations",
+    "Audio-style revision guide covering preparing for business presentations.",
+    "SCHOOL / PROGRAM",
+    "School of Business - Business Administration",
+    "USAGE",
+    "Open the curated external podcast; use the in-app notes for a concise summary.",
+    "Open",
+    "Hide",
+    "Videos",
+    "BUS101",
+    "BUS101 Video Guide 1: Management functions explained",
+    "Visual explanation pack for management functions explained.",
+    "SCHOOL / PROGRAM",
+    "School of Business - Business Administration",
+    "USAGE",
+    "Open the curated external video/search; use the in-app guide for a concise walkthrough.",
+    "Open",
+    "Hide",
+    "Videos",
+    "BUS101",
+    "BUS101 Video Guide 2: Marketing mix visual summary",
+    "Visual explanation pack for marketing mix visual summary.",
+    "SCHOOL / PROGRAM",
+    "School of Business - Business Administration",
+    "USAGE",
+    "Open the curated external video/search; use the in-app guide for a concise walkthrough.",
+    "Open",
+    "Hide",
+    "MCQs",
+    "BUS101",
+    "BUS101 MCQ Drill 1: Entrepreneurship and strategy",
+    "Practice questions for entrepreneurship and strategy in Introduction to Business.",
+    "SCHOOL / PROGRAM",
+    "School of Business - Business Administration",
+    "USAGE",
+    "Open the curated external MCQ; use the in-app drill for immediate practice and explanations.",
+    "Open",
+    "Hide",
+    "MCQs",
+    "BUS101",
+    "BUS101 MCQ Drill 2: Marketing principles",
+    "Practice questions for marketing principles in Introduction to Business.",
+    "SCHOOL / PROGRAM",
+    "School of Business - Business Administration",
+    "USAGE",
+    "Open the curated external MCQ; use the in-app drill for immediate practice and explanations.",
+    "Open",
+    "Hide",
+    "Past papers",
+    "BUS101",
+    "BUS101 Past Paper 1: Case study interpretation",
+    "Exam-style practice paper focused on case study interpretation.",
+    "SCHOOL / PROGRAM",
+    "School of Business - Business Administration",
+    "USAGE",
+    "Open the curated external past paper; use the in-app past paper for quick practice.",
+    "Open",
+    "Hide",
+    "Past papers",
+    "BUS101",
+    "BUS101 Past Paper 2: Business environment and management",
+    "Exam-style practice paper focused on business environment and management.",
+    "SCHOOL / PROGRAM",
+    "School of Business - Business Administration",
+    "USAGE",
+    "Open the curated external past paper; use the in-app past paper for quick practice.",
+    "Open",
+    "Hide",
+    "Guides",
+    "BUS101",
+    "BUS101 Group Support Guide",
+    "Peer-support roadmap showing how to use StudyLink for Introduction to Business.",
+    "SCHOOL / PROGRAM",
+    "School of Business - Business Administration",
+    "USAGE",
+    "Start here if you do not know which resource to open first.",
+    "Open",
+    "Hide",
+    "Notes",
+    "ACC210",
+    "ACC210 Note 1: Double entry rules",
+    "Structured study notes for Double entry rules in Financial Accounting.",
+    "SCHOOL / PROGRAM",
+    "School of Business - Accounting and Finance",
+    "USAGE",
+    "Open the curated external note; use the in-app note as a quick summary.",
+    "Open",
+    "Hide",
+    "Notes",
+    "ACC210",
+    "ACC210 Note 2: Trial balance preparation",
+    "Structured study notes for Trial balance preparation in Financial Accounting.",
+    "SCHOOL / PROGRAM",
+    "School of Business - Accounting and Finance",
+    "USAGE",
+    "Open the curated external note; use the in-app note as a quick summary.",
+    "Open",
+    "Hide",
+    "Notes",
+    "ACC210",
+    "ACC210 Note 3: Financial statements overview",
+    "Structured study notes for Financial statements overview in Financial Accounting.",
+    "SCHOOL / PROGRAM",
+    "School of Business - Accounting and Finance",
+    "USAGE",
+    "Open the curated external note; use the in-app note as a quick summary.",
+    "Open",
+    "Hide",
+    "PDFs",
+    "ACC210",
+    "ACC210 PDF 1: Accounting formula sheet",
+    "Accounting formula sheet prepared for Financial Accounting.",
+    "SCHOOL / PROGRAM",
+    "School of Business - Accounting and Finance",
+    "USAGE",
+    "Open the curated external PDF/resource; the in-app PDF gives a concise guide.",
+    "Open",
+    "Hide",
+    "PDFs",
+    "ACC210",
+    "ACC210 PDF 2: Ledger practice pack",
+    "Ledger practice pack prepared for Financial Accounting.",
+    "SCHOOL / PROGRAM",
+    "School of Business - Accounting and Finance",
+    "USAGE",
+    "Open the curated external PDF/resource; the in-app PDF gives a concise guide.",
+    "Open",
+    "Hide",
+    "Podcasts",
+    "ACC210",
+    "ACC210 Podcast 1: Understanding debits and credits",
+    "Audio-style revision guide covering understanding debits and credits.",
+    "SCHOOL / PROGRAM",
+    "School of Business - Accounting and Finance",
+    "USAGE",
+    "Open the curated external podcast; use the in-app notes for a concise summary.",
+    "Open",
+    "Hide",
+    "Podcasts",
+    "ACC210",
+    "ACC210 Podcast 2: How to avoid accounting mistakes",
+    "Audio-style revision guide covering how to avoid accounting mistakes.",
+    "SCHOOL / PROGRAM",
+    "School of Business - Accounting and Finance",
+    "USAGE",
+    "Open the curated external podcast; use the in-app notes for a concise summary.",
+    "Open",
+    "Hide",
+    "Videos",
+    "ACC210",
+    "ACC210 Video Guide 1: Ledger posting walkthrough",
+    "Visual explanation pack for ledger posting walkthrough.",
+    "SCHOOL / PROGRAM",
+    "School of Business - Accounting and Finance",
+    "USAGE",
+    "Open the curated external video/search; use the in-app guide for a concise walkthrough.",
+    "Open",
+    "Hide",
+    "Videos",
+    "ACC210",
+    "ACC210 Video Guide 2: Statement preparation visual guide",
+    "Visual explanation pack for statement preparation visual guide.",
+    "SCHOOL / PROGRAM",
+    "School of Business - Accounting and Finance",
+    "USAGE",
+    "Open the curated external video/search; use the in-app guide for a concise walkthrough.",
+    "Open",
+    "Hide",
+    "MCQs",
+    "ACC210",
+    "ACC210 MCQ Drill 1: Double entry",
+    "Practice questions for double entry in Financial Accounting.",
+    "SCHOOL / PROGRAM",
+    "School of Business - Accounting and Finance",
+    "USAGE",
+    "Open the curated external MCQ; use the in-app drill for immediate practice and explanations.",
+    "Open",
+    "Hide",
+    "MCQs",
+    "ACC210",
+    "ACC210 MCQ Drill 2: Statement interpretation",
+    "Practice questions for statement interpretation in Financial Accounting.",
+    "SCHOOL / PROGRAM",
+    "School of Business - Accounting and Finance",
+    "USAGE",
+    "Open the curated external MCQ; use the in-app drill for immediate practice and explanations.",
+    "Open",
+    "Hide",
+    "Past papers",
+    "ACC210",
+    "ACC210 Past Paper 1: Ledger and trial balance",
+    "Exam-style practice paper focused on ledger and trial balance.",
+    "SCHOOL / PROGRAM",
+    "School of Business - Accounting and Finance",
+    "USAGE",
+    "Open the curated external past paper; use the in-app past paper for quick practice.",
+    "Open",
+    "Hide",
+    "Past papers",
+    "ACC210",
+    "ACC210 Past Paper 2: Statement preparation",
+    "Exam-style practice paper focused on statement preparation.",
+    "SCHOOL / PROGRAM",
+    "School of Business - Accounting and Finance",
+    "USAGE",
+    "Open the curated external past paper; use the in-app past paper for quick practice.",
+    "Open",
+    "Hide",
+    "Guides",
+    "ACC210",
+    "ACC210 Group Support Guide",
+    "Peer-support roadmap showing how to use StudyLink for Financial Accounting.",
+    "SCHOOL / PROGRAM",
+    "School of Business - Accounting and Finance",
+    "USAGE",
+    "Start here if you do not know which resource to open first.",
+    "Open",
+    "Hide",
+    "Notes",
+    "PHR220",
+    "PHR220 Note 1: Pharmacokinetics summary",
+    "Structured study notes for Pharmacokinetics summary in Pharmacology Fundamentals.",
+    "SCHOOL / PROGRAM",
+    "School of Pharmacy - Pharmacy",
+    "USAGE",
+    "Open the curated external note; use the in-app note as a quick summary.",
+    "Open",
+    "Hide",
+    "Notes",
+    "PHR220",
+    "PHR220 Note 2: Pharmacodynamics essentials",
+    "Structured study notes for Pharmacodynamics essentials in Pharmacology Fundamentals.",
+    "SCHOOL / PROGRAM",
+    "School of Pharmacy - Pharmacy",
+    "USAGE",
+    "Open the curated external note; use the in-app note as a quick summary.",
+    "Open",
+    "Hide",
+    "Notes",
+    "PHR220",
+    "PHR220 Note 3: Adverse effects revision",
+    "Structured study notes for Adverse effects revision in Pharmacology Fundamentals.",
+    "SCHOOL / PROGRAM",
+    "School of Pharmacy - Pharmacy",
+    "USAGE",
+    "Open the curated external note; use the in-app note as a quick summary.",
+    "Open",
+    "Hide",
+    "PDFs",
+    "PHR220",
+    "PHR220 PDF 1: Drug classification handbook",
+    "Drug classification handbook prepared for Pharmacology Fundamentals.",
+    "SCHOOL / PROGRAM",
+    "School of Pharmacy - Pharmacy",
+    "USAGE",
+    "Open the curated external PDF/resource; the in-app PDF gives a concise guide.",
+    "Open",
+    "Hide",
+    "PDFs",
+    "PHR220",
+    "PHR220 PDF 2: Dosage revision summary",
+    "Dosage revision summary prepared for Pharmacology Fundamentals.",
+    "SCHOOL / PROGRAM",
+    "School of Pharmacy - Pharmacy",
+    "USAGE",
+    "Open the curated external PDF/resource; the in-app PDF gives a concise guide.",
+    "Open",
+    "Hide",
+    "Podcasts",
+    "PHR220",
+    "PHR220 Podcast 1: Memorizing pharmacology without overload",
+    "Audio-style revision guide covering memorizing pharmacology without overload.",
+    "SCHOOL / PROGRAM",
+    "School of Pharmacy - Pharmacy",
+    "USAGE",
+    "Open the curated external podcast; use the in-app notes for a concise summary.",
+    "Open",
+    "Hide",
+    "Podcasts",
+    "PHR220",
+    "PHR220 Podcast 2: How to organize drug classes for exams",
+    "Audio-style revision guide covering how to organize drug classes for exams.",
+    "SCHOOL / PROGRAM",
+    "School of Pharmacy - Pharmacy",
+    "USAGE",
+    "Open the curated external podcast; use the in-app notes for a concise summary.",
+    "Open",
+    "Hide",
+    "Videos",
+    "PHR220",
+    "PHR220 Video Guide 1: ADME visual breakdown",
+    "Visual explanation pack for adme visual breakdown.",
+    "SCHOOL / PROGRAM",
+    "School of Pharmacy - Pharmacy",
+    "USAGE",
+    "Open the curated external video/search; use the in-app guide for a concise walkthrough.",
+    "Open",
+    "Hide",
+    "Videos",
+    "PHR220",
+    "PHR220 Video Guide 2: Drug mechanism comparison",
+    "Visual explanation pack for drug mechanism comparison.",
+    "SCHOOL / PROGRAM",
+    "School of Pharmacy - Pharmacy",
+    "USAGE",
+    "Open the curated external video/search; use the in-app guide for a concise walkthrough.",
+    "Open",
+    "Hide",
+    "MCQs",
+    "PHR220",
+    "PHR220 MCQ Drill 1: Drug classifications",
+    "Practice questions for drug classifications in Pharmacology Fundamentals.",
+    "SCHOOL / PROGRAM",
+    "School of Pharmacy - Pharmacy",
+    "USAGE",
+    "Open the curated external MCQ; use the in-app drill for immediate practice and explanations.",
+    "Open",
+    "Hide",
+    "MCQs",
+    "PHR220",
+    "PHR220 MCQ Drill 2: Adverse effects",
+    "Practice questions for adverse effects in Pharmacology Fundamentals.",
+    "SCHOOL / PROGRAM",
+    "School of Pharmacy - Pharmacy",
+    "USAGE",
+    "Open the curated external MCQ; use the in-app drill for immediate practice and explanations.",
+    "Open",
+    "Hide",
+    "Past papers",
+    "PHR220",
+    "PHR220 Past Paper 1: Pharmacokinetics and dynamics",
+    "Exam-style practice paper focused on pharmacokinetics and dynamics.",
+    "SCHOOL / PROGRAM",
+    "School of Pharmacy - Pharmacy",
+    "USAGE",
+    "Open the curated external past paper; use the in-app past paper for quick practice.",
+    "Open",
+    "Hide",
+    "Past papers",
+    "PHR220",
+    "PHR220 Past Paper 2: Classification and safety",
+    "Exam-style practice paper focused on classification and safety.",
+    "SCHOOL / PROGRAM",
+    "School of Pharmacy - Pharmacy",
+    "USAGE",
+    "Open the curated external past paper; use the in-app past paper for quick practice.",
+    "Open",
+    "Hide",
+    "Guides",
+    "PHR220",
+    "PHR220 Group Support Guide",
+    "Peer-support roadmap showing how to use StudyLink for Pharmacology Fundamentals.",
+    "SCHOOL / PROGRAM",
+    "School of Pharmacy - Pharmacy",
+    "USAGE",
+    "Start here if you do not know which resource to open first.",
+    "Open",
+    "Hide",
+    "Notes",
+    "NUR230",
+    "NUR230 Note 1: Patient assessment flow",
+    "Structured study notes for Patient assessment flow in Medical-Surgical Nursing.",
+    "SCHOOL / PROGRAM",
+    "School of Pharmacy - Nursing",
+    "USAGE",
+    "Open the curated external note; use the in-app note as a quick summary.",
+    "Open",
+    "Hide",
+    "Notes",
+    "NUR230",
+    "NUR230 Note 2: Care plan writing",
+    "Structured study notes for Care plan writing in Medical-Surgical Nursing.",
+    "SCHOOL / PROGRAM",
+    "School of Pharmacy - Nursing",
+    "USAGE",
+    "Open the curated external note; use the in-app note as a quick summary.",
+    "Open",
+    "Hide",
+    "Notes",
+    "NUR230",
+    "NUR230 Note 3: Intervention priorities",
+    "Structured study notes for Intervention priorities in Medical-Surgical Nursing.",
+    "SCHOOL / PROGRAM",
+    "School of Pharmacy - Nursing",
+    "USAGE",
+    "Open the curated external note; use the in-app note as a quick summary.",
+    "Open",
+    "Hide",
+    "PDFs",
+    "NUR230",
+    "NUR230 PDF 1: Care plan template",
+    "Care plan template prepared for Medical-Surgical Nursing.",
+    "SCHOOL / PROGRAM",
+    "School of Pharmacy - Nursing",
+    "USAGE",
+    "Open the curated external PDF/resource; the in-app PDF gives a concise guide.",
+    "Open",
+    "Hide",
+    "PDFs",
+    "NUR230",
+    "NUR230 PDF 2: Adult care revision handbook",
+    "Adult care revision handbook prepared for Medical-Surgical Nursing.",
+    "SCHOOL / PROGRAM",
+    "School of Pharmacy - Nursing",
+    "USAGE",
+    "Open the curated external PDF/resource; the in-app PDF gives a concise guide.",
+    "Open",
+    "Hide",
+    "Podcasts",
+    "NUR230",
+    "NUR230 Podcast 1: Thinking like a nurse in exams",
+    "Audio-style revision guide covering thinking like a nurse in exams.",
+    "SCHOOL / PROGRAM",
+    "School of Pharmacy - Nursing",
+    "USAGE",
+    "Open the curated external podcast; use the in-app notes for a concise summary.",
+    "Open",
+    "Hide",
+    "Podcasts",
+    "NUR230",
+    "NUR230 Podcast 2: Making care plans easier to remember",
+    "Audio-style revision guide covering making care plans easier to remember.",
+    "SCHOOL / PROGRAM",
+    "School of Pharmacy - Nursing",
+    "USAGE",
+    "Open the curated external podcast; use the in-app notes for a concise summary.",
+    "Open",
+    "Hide",
+    "Videos",
+    "NUR230",
+    "NUR230 Video Guide 1: Assessment sequence visual guide",
+    "Visual explanation pack for assessment sequence visual guide.",
+    "SCHOOL / PROGRAM",
+    "School of Pharmacy - Nursing",
+    "USAGE",
+    "Open the curated external video/search; use the in-app guide for a concise walkthrough.",
+    "Open",
+    "Hide",
+    "Videos",
+    "NUR230",
+    "NUR230 Video Guide 2: Documentation and intervention review",
+    "Visual explanation pack for documentation and intervention review.",
+    "SCHOOL / PROGRAM",
+    "School of Pharmacy - Nursing",
+    "USAGE",
+    "Open the curated external video/search; use the in-app guide for a concise walkthrough.",
+    "Open",
+    "Hide",
+    "MCQs",
+    "NUR230",
+    "NUR230 MCQ Drill 1: Patient priorities",
+    "Practice questions for patient priorities in Medical-Surgical Nursing.",
+    "SCHOOL / PROGRAM",
+    "School of Pharmacy - Nursing",
+    "USAGE",
+    "Open the curated external MCQ; use the in-app drill for immediate practice and explanations.",
+    "Open",
+    "Hide",
+    "MCQs",
+    "NUR230",
+    "NUR230 MCQ Drill 2: Care planning",
+    "Practice questions for care planning in Medical-Surgical Nursing.",
+    "SCHOOL / PROGRAM",
+    "School of Pharmacy - Nursing",
+    "USAGE",
+    "Open the curated external MCQ; use the in-app drill for immediate practice and explanations.",
+    "Open",
+    "Hide",
+    "Past papers",
+    "NUR230",
+    "NUR230 Past Paper 1: Adult care scenarios",
+    "Exam-style practice paper focused on adult care scenarios.",
+    "SCHOOL / PROGRAM",
+    "School of Pharmacy - Nursing",
+    "USAGE",
+    "Open the curated external past paper; use the in-app past paper for quick practice.",
+    "Open",
+    "Hide",
+    "Past papers",
+    "NUR230",
+    "NUR230 Past Paper 2: Assessment and documentation",
+    "Exam-style practice paper focused on assessment and documentation.",
+    "SCHOOL / PROGRAM",
+    "School of Pharmacy - Nursing",
+    "USAGE",
+    "Open the curated external past paper; use the in-app past paper for quick practice.",
+    "Open",
+    "Hide",
+    "Guides",
+    "NUR230",
+    "NUR230 Group Support Guide",
+    "Peer-support roadmap showing how to use StudyLink for Medical-Surgical Nursing.",
+    "SCHOOL / PROGRAM",
+    "School of Pharmacy - Nursing",
+    "USAGE",
+    "Start here if you do not know which resource to open first.",
+    "Open",
+    "Hide",
+    "Notes",
+    "ENG201",
+    "ENG201 Note 1: Essay structure essentials",
+    "Structured study notes for Essay structure essentials in Academic Writing.",
+    "SCHOOL / PROGRAM",
+    "School of Humanities and Social Sciences - Communication and Writing Studies",
+    "USAGE",
+    "Open the curated external note; use the in-app note as a quick summary.",
+    "Open",
+    "Hide",
+    "Notes",
+    "ENG201",
+    "ENG201 Note 2: Referencing basics",
+    "Structured study notes for Referencing basics in Academic Writing.",
+    "SCHOOL / PROGRAM",
+    "School of Humanities and Social Sciences - Communication and Writing Studies",
+    "USAGE",
+    "Open the curated external note; use the in-app note as a quick summary.",
+    "Open",
+    "Hide",
+    "Notes",
+    "ENG201",
+    "ENG201 Note 3: Editing checklist",
+    "Structured study notes for Editing checklist in Academic Writing.",
+    "SCHOOL / PROGRAM",
+    "School of Humanities and Social Sciences - Communication and Writing Studies",
+    "USAGE",
+    "Open the curated external note; use the in-app note as a quick summary.",
+    "Open",
+    "Hide",
+    "PDFs",
+    "ENG201",
+    "ENG201 PDF 1: Academic writing starter pack",
+    "Academic writing starter pack prepared for Academic Writing.",
+    "SCHOOL / PROGRAM",
+    "School of Humanities and Social Sciences - Communication and Writing Studies",
+    "USAGE",
+    "Open the curated external PDF/resource; the in-app PDF gives a concise guide.",
+    "Open",
+    "Hide",
+    "PDFs",
+    "ENG201",
+    "ENG201 PDF 2: Citation and referencing guide",
+    "Citation and referencing guide prepared for Academic Writing.",
+    "SCHOOL / PROGRAM",
+    "School of Humanities and Social Sciences - Communication and Writing Studies",
+    "USAGE",
+    "Open the curated external PDF/resource; the in-app PDF gives a concise guide.",
+    "Open",
+    "Hide",
+    "Podcasts",
+    "ENG201",
+    "ENG201 Podcast 1: Writing strong paragraphs",
+    "Audio-style revision guide covering writing strong paragraphs.",
+    "SCHOOL / PROGRAM",
+    "School of Humanities and Social Sciences - Communication and Writing Studies",
+    "USAGE",
+    "Open the curated external podcast; use the in-app notes for a concise summary.",
+    "Open",
+    "Hide",
+    "Podcasts",
+    "ENG201",
+    "ENG201 Podcast 2: How to beat essay-writing stress",
+    "Audio-style revision guide covering how to beat essay-writing stress.",
+    "SCHOOL / PROGRAM",
+    "School of Humanities and Social Sciences - Communication and Writing Studies",
+    "USAGE",
+    "Open the curated external podcast; use the in-app notes for a concise summary.",
+    "Open",
+    "Hide",
+    "Videos",
+    "ENG201",
+    "ENG201 Video Guide 1: Essay planning map",
+    "Visual explanation pack for essay planning map.",
+    "SCHOOL / PROGRAM",
+    "School of Humanities and Social Sciences - Communication and Writing Studies",
+    "USAGE",
+    "Open the curated external video/search; use the in-app guide for a concise walkthrough.",
+    "Open",
+    "Hide",
+    "Videos",
+    "ENG201",
+    "ENG201 Video Guide 2: Editing and proofreading workflow",
+    "Visual explanation pack for editing and proofreading workflow.",
+    "SCHOOL / PROGRAM",
+    "School of Humanities and Social Sciences - Communication and Writing Studies",
+    "USAGE",
+    "Open the curated external video/search; use the in-app guide for a concise walkthrough.",
+    "Open",
+    "Hide",
+    "MCQs",
+    "ENG201",
+    "ENG201 MCQ Drill 1: Referencing",
+    "Practice questions for referencing in Academic Writing.",
+    "SCHOOL / PROGRAM",
+    "School of Humanities and Social Sciences - Communication and Writing Studies",
+    "USAGE",
+    "Open the curated external MCQ; use the in-app drill for immediate practice and explanations.",
+    "Open",
+    "Hide",
+    "MCQs",
+    "ENG201",
+    "ENG201 MCQ Drill 2: Argument structure",
+    "Practice questions for argument structure in Academic Writing.",
+    "SCHOOL / PROGRAM",
+    "School of Humanities and Social Sciences - Communication and Writing Studies",
+    "USAGE",
+    "Open the curated external MCQ; use the in-app drill for immediate practice and explanations.",
+    "Open",
+    "Hide",
+    "Past papers",
+    "ENG201",
+    "ENG201 Past Paper 1: Essay planning and citation",
+    "Exam-style practice paper focused on essay planning and citation.",
+    "SCHOOL / PROGRAM",
+    "School of Humanities and Social Sciences - Communication and Writing Studies",
+    "USAGE",
+    "Open the curated external past paper; use the in-app past paper for quick practice.",
+    "Open",
+    "Hide",
+    "Past papers",
+    "ENG201",
+    "ENG201 Past Paper 2: Editing and structure",
+    "Exam-style practice paper focused on editing and structure.",
+    "SCHOOL / PROGRAM",
+    "School of Humanities and Social Sciences - Communication and Writing Studies",
+    "USAGE",
+    "Open the curated external past paper; use the in-app past paper for quick practice.",
+    "Open",
+    "Hide",
+    "Guides",
+    "ENG201",
+    "ENG201 Group Support Guide",
+    "Peer-support roadmap showing how to use StudyLink for Academic Writing.",
+    "SCHOOL / PROGRAM",
+    "School of Humanities and Social Sciences - Communication and Writing Studies",
+    "USAGE",
+    "Start here if you do not know which resource to open first.",
+    "Open",
+    "Hide",
+    "Notes",
+    "PSY210",
+    "PSY210 Note 1: Piaget and Erikson comparison",
+    "Structured study notes for Piaget and Erikson comparison in Developmental Psychology.",
+    "SCHOOL / PROGRAM",
+    "School of Humanities and Social Sciences - Psychology",
+    "USAGE",
+    "Open the curated external note; use the in-app note as a quick summary.",
+    "Open",
+    "Hide",
+    "Notes",
+    "PSY210",
+    "PSY210 Note 2: Adolescence overview",
+    "Structured study notes for Adolescence overview in Developmental Psychology.",
+    "SCHOOL / PROGRAM",
+    "School of Humanities and Social Sciences - Psychology",
+    "USAGE",
+    "Open the curated external note; use the in-app note as a quick summary.",
+    "Open",
+    "Hide",
+    "Notes",
+    "PSY210",
+    "PSY210 Note 3: Adult development summary",
+    "Structured study notes for Adult development summary in Developmental Psychology.",
+    "SCHOOL / PROGRAM",
+    "School of Humanities and Social Sciences - Psychology",
+    "USAGE",
+    "Open the curated external note; use the in-app note as a quick summary.",
+    "Open",
+    "Hide",
+    "PDFs",
+    "PSY210",
+    "PSY210 PDF 1: Developmental theory comparison chart",
+    "Developmental theory comparison chart prepared for Developmental Psychology.",
+    "SCHOOL / PROGRAM",
+    "School of Humanities and Social Sciences - Psychology",
+    "USAGE",
+    "Open the curated external PDF/resource; the in-app PDF gives a concise guide.",
+    "Open",
+    "Hide",
+    "PDFs",
+    "PSY210",
+    "PSY210 PDF 2: Stage-by-stage revision booklet",
+    "Stage-by-stage revision booklet prepared for Developmental Psychology.",
+    "SCHOOL / PROGRAM",
+    "School of Humanities and Social Sciences - Psychology",
+    "USAGE",
+    "Open the curated external PDF/resource; the in-app PDF gives a concise guide.",
+    "Open",
+    "Hide",
+    "Podcasts",
+    "PSY210",
+    "PSY210 Podcast 1: Remembering psychology theorists",
+    "Audio-style revision guide covering remembering psychology theorists.",
+    "SCHOOL / PROGRAM",
+    "School of Humanities and Social Sciences - Psychology",
+    "USAGE",
+    "Open the curated external podcast; use the in-app notes for a concise summary.",
+    "Open",
+    "Hide",
+    "Podcasts",
+    "PSY210",
+    "PSY210 Podcast 2: How to compare development stages",
+    "Audio-style revision guide covering how to compare development stages.",
+    "SCHOOL / PROGRAM",
+    "School of Humanities and Social Sciences - Psychology",
+    "USAGE",
+    "Open the curated external podcast; use the in-app notes for a concise summary.",
+    "Open",
+    "Hide",
+    "Videos",
+    "PSY210",
+    "PSY210 Video Guide 1: Theory comparison visual guide",
+    "Visual explanation pack for theory comparison visual guide.",
+    "SCHOOL / PROGRAM",
+    "School of Humanities and Social Sciences - Psychology",
+    "USAGE",
+    "Open the curated external video/search; use the in-app guide for a concise walkthrough.",
+    "Open",
+    "Hide",
+    "Videos",
+    "PSY210",
+    "PSY210 Video Guide 2: Human development timeline",
+    "Visual explanation pack for human development timeline.",
+    "SCHOOL / PROGRAM",
+    "School of Humanities and Social Sciences - Psychology",
+    "USAGE",
+    "Open the curated external video/search; use the in-app guide for a concise walkthrough.",
+    "Open",
+    "Hide",
+    "MCQs",
+    "PSY210",
+    "PSY210 MCQ Drill 1: Developmental stages",
+    "Practice questions for developmental stages in Developmental Psychology.",
+    "SCHOOL / PROGRAM",
+    "School of Humanities and Social Sciences - Psychology",
+    "USAGE",
+    "Open the curated external MCQ; use the in-app drill for immediate practice and explanations.",
+    "Open",
+    "Hide",
+    "MCQs",
+    "PSY210",
+    "PSY210 MCQ Drill 2: Theory comparison",
+    "Practice questions for theory comparison in Developmental Psychology.",
+    "SCHOOL / PROGRAM",
+    "School of Humanities and Social Sciences - Psychology",
+    "USAGE",
+    "Open the curated external MCQ; use the in-app drill for immediate practice and explanations.",
+    "Open",
+    "Hide",
+    "Past papers",
+    "PSY210",
+    "PSY210 Past Paper 1: Theorists and stages",
+    "Exam-style practice paper focused on theorists and stages.",
+    "SCHOOL / PROGRAM",
+    "School of Humanities and Social Sciences - Psychology",
+    "USAGE",
+    "Open the curated external past paper; use the in-app past paper for quick practice.",
+    "Open",
+    "Hide",
+    "Past papers",
+    "PSY210",
+    "PSY210 Past Paper 2: Behavior and development",
+    "Exam-style practice paper focused on behavior and development.",
+    "SCHOOL / PROGRAM",
+    "School of Humanities and Social Sciences - Psychology",
+    "USAGE",
+    "Open the curated external past paper; use the in-app past paper for quick practice.",
+    "Open",
+    "Hide",
+    "Guides",
+    "PSY210",
+    "PSY210 Group Support Guide",
+    "Peer-support roadmap showing how to use StudyLink for Developmental Psychology.",
+    "SCHOOL / PROGRAM",
+    "School of Humanities and Social Sciences - Psychology",
+    "USAGE",
+    "Start here if you do not know which resource to open first.",
+    "Open",
+    "Hide",
+    "Notes",
+    "LAW110",
+    "LAW110 Note 1: Separation of powers",
+    "Structured study notes for Separation of powers in Introduction to Constitutional Law.",
+    "SCHOOL / PROGRAM",
+    "School of Humanities and Social Sciences - Law",
+    "USAGE",
+    "Open the curated external note; use the in-app note as a quick summary.",
+    "Open",
+    "Hide",
+    "Notes",
+    "LAW110",
+    "LAW110 Note 2: Bill of rights overview",
+    "Structured study notes for Bill of rights overview in Introduction to Constitutional Law.",
+    "SCHOOL / PROGRAM",
+    "School of Humanities and Social Sciences - Law",
+    "USAGE",
+    "Open the curated external note; use the in-app note as a quick summary.",
+    "Open",
+    "Hide",
+    "Notes",
+    "LAW110",
+    "LAW110 Note 3: Judicial review essentials",
+    "Structured study notes for Judicial review essentials in Introduction to Constitutional Law.",
+    "SCHOOL / PROGRAM",
+    "School of Humanities and Social Sciences - Law",
+    "USAGE",
+    "Open the curated external note; use the in-app note as a quick summary.",
+    "Open",
+    "Hide",
+    "PDFs",
+    "LAW110",
+    "LAW110 PDF 1: Constitutional principles booklet",
+    "Constitutional principles booklet prepared for Introduction to Constitutional Law.",
+    "SCHOOL / PROGRAM",
+    "School of Humanities and Social Sciences - Law",
+    "USAGE",
+    "Open the curated external PDF/resource; the in-app PDF gives a concise guide.",
+    "Open",
+    "Hide",
+    "PDFs",
+    "LAW110",
+    "LAW110 PDF 2: Rights revision guide",
+    "Rights revision guide prepared for Introduction to Constitutional Law.",
+    "SCHOOL / PROGRAM",
+    "School of Humanities and Social Sciences - Law",
+    "USAGE",
+    "Open the curated external PDF/resource; the in-app PDF gives a concise guide.",
+    "Open",
+    "Hide",
+    "Podcasts",
+    "LAW110",
+    "LAW110 Podcast 1: Understanding constitutional law simply",
+    "Audio-style revision guide covering understanding constitutional law simply.",
+    "SCHOOL / PROGRAM",
+    "School of Humanities and Social Sciences - Law",
+    "USAGE",
+    "Open the curated external podcast; use the in-app notes for a concise summary.",
+    "Open",
+    "Hide",
+    "Podcasts",
+    "LAW110",
+    "LAW110 Podcast 2: How to answer legal essay questions",
+    "Audio-style revision guide covering how to answer legal essay questions.",
+    "SCHOOL / PROGRAM",
+    "School of Humanities and Social Sciences - Law",
+    "USAGE",
+    "Open the curated external podcast; use the in-app notes for a concise summary.",
+    "Open",
+    "Hide",
+    "Videos",
+    "LAW110",
+    "LAW110 Video Guide 1: Government structure visual guide",
+    "Visual explanation pack for government structure visual guide.",
+    "SCHOOL / PROGRAM",
+    "School of Humanities and Social Sciences - Law",
+    "USAGE",
+    "Open the curated external video/search; use the in-app guide for a concise walkthrough.",
+    "Open",
+    "Hide",
+    "Videos",
+    "LAW110",
+    "LAW110 Video Guide 2: Rights and interpretation overview",
+    "Visual explanation pack for rights and interpretation overview.",
+    "SCHOOL / PROGRAM",
+    "School of Humanities and Social Sciences - Law",
+    "USAGE",
+    "Open the curated external video/search; use the in-app guide for a concise walkthrough.",
+    "Open",
+    "Hide",
+    "MCQs",
+    "LAW110",
+    "LAW110 MCQ Drill 1: Rights and freedoms",
+    "Practice questions for rights and freedoms in Introduction to Constitutional Law.",
+    "SCHOOL / PROGRAM",
+    "School of Humanities and Social Sciences - Law",
+    "USAGE",
+    "Open the curated external MCQ; use the in-app drill for immediate practice and explanations.",
+    "Open",
+    "Hide",
+    "MCQs",
+    "LAW110",
+    "LAW110 MCQ Drill 2: Legal interpretation",
+    "Practice questions for legal interpretation in Introduction to Constitutional Law.",
+    "SCHOOL / PROGRAM",
+    "School of Humanities and Social Sciences - Law",
+    "USAGE",
+    "Open the curated external MCQ; use the in-app drill for immediate practice and explanations.",
+    "Open",
+    "Hide",
+    "Past papers",
+    "LAW110",
+    "LAW110 Past Paper 1: Constitutional principles",
+    "Exam-style practice paper focused on constitutional principles.",
+    "SCHOOL / PROGRAM",
+    "School of Humanities and Social Sciences - Law",
+    "USAGE",
+    "Open the curated external past paper; use the in-app past paper for quick practice.",
+    "Open",
+    "Hide",
+    "Past papers",
+    "LAW110",
+    "LAW110 Past Paper 2: Rights and judicial review",
+    "Exam-style practice paper focused on rights and judicial review.",
+    "SCHOOL / PROGRAM",
+    "School of Humanities and Social Sciences - Law",
+    "USAGE",
+    "Open the curated external past paper; use the in-app past paper for quick practice.",
+    "Open",
+    "Hide",
+    "Guides",
+    "LAW110",
+    "LAW110 Group Support Guide",
+    "Peer-support roadmap showing how to use StudyLink for Introduction to Constitutional Law.",
+    "SCHOOL / PROGRAM",
+    "School of Humanities and Social Sciences - Law",
+    "USAGE",
+    "Start here if you do not know which resource to open first.",
+    "Open",
+    "Hide",
+    "PDFs",
+    "SHARED RESOURCE",
+    "Recursion Notes",
+    "Shared resource from the StudyLink backend.",
+    "SCHOOL / PROGRAM",
+    "General - General Studies",
+    "USAGE",
+    "Open and review.",
+    "Open",
+    "Hide",
+    "Guides",
+    "SHARED RESOURCE",
+    "Binary Trees Slides",
+    "Shared resource from the StudyLink backend.",
+    "SCHOOL / PROGRAM",
+    "General - General Studies",
+    "USAGE",
+    "Open and review.",
+    "Open",
+    "Hide",
+    "Guides",
+    "SHARED RESOURCE",
+    "short answers",
+    "Shared resource from the StudyLink backend.",
+    "SCHOOL / PROGRAM",
+    "General - General Studies",
+    "USAGE",
+    "Uploaded by user.",
+    "Open",
+    "Hide",
+    "PDFs",
+    "SHARED RESOURCE",
+    "apt1050",
+    "Shared resource from the StudyLink backend.",
+    "SCHOOL / PROGRAM",
+    "General - General Studies",
+    "USAGE",
+    "Uploaded by user.",
+    "Open",
+    "Hide",
+    "Guides",
+    "SHARED RESOURCE",
+    "apt2090",
+    "Shared resource from the StudyLink backend.",
+    "SCHOOL / PROGRAM",
+    "General - General Studies",
+    "USAGE",
+    "Uploaded by user.",
+    "Open",
+    "Hide"
+  ],
+  "textStrings": [
+    "StudyLink",
+    "Student workspace",
+    "←",
+    "Workspace",
+    "🏫",
+    "Schools",
+    "📘",
+    "Courses",
+    "📚",
+    "Learning Hub",
+    "✦",
+    "StudyLink AI",
+    "👥",
+    "Study Groups",
+    "🗓",
+    "Sessions",
+    "◫",
+    "Dashboard",
+    "👤",
+    "Profile",
+    "🔔",
+    "↗",
+    "Logout",
+    "Central library for notes, PDFs, quizzes, and shared study resources.",
+    "Open what you need quickly and keep study materials in one place.",
+    "0",
+    "Library-ready resources",
+    "145",
+    "All learning resources",
+    "My learning shelf",
+    "Choose the learning area you want without leaving the same workspace.",
+    "Open courses",
+    "Add or upload a resource",
+    "Add / Upload resource",
+    "Notes",
+    "APT3060",
+    "APT3060 Note 1: MVVM and state management",
+    "Structured study notes for MVVM and state management in Mobile Programming.",
+    "School / Program",
+    "School of Science and Technology - Applied Computer Technology",
+    "Usage",
+    "Open the curated external note; use the in-app note as a quick summary.",
+    "Open",
+    "Hide",
+    "APT3060 Note 2: Retrofit networking flow",
+    "Structured study notes for Retrofit networking flow in Mobile Programming.",
+    "APT3060 Note 3: Room database revision",
+    "Structured study notes for Room database revision in Mobile Programming.",
+    "PDFs",
+    "APT3060 PDF 1: Course outline and weekly plan",
+    "Course outline and weekly plan prepared for Mobile Programming.",
+    "Open the curated external PDF/resource; the in-app PDF gives a concise guide.",
+    "APT3060 PDF 2: Mobile UI design checklist",
+    "Mobile UI design checklist prepared for Mobile Programming.",
+    "Podcasts",
+    "APT3060 Podcast 1: Understanding mobile architecture without fear",
+    "Audio-style revision guide covering understanding mobile architecture without fear.",
+    "Open the curated external podcast; use the in-app notes for a concise summary.",
+    "APT3060 Podcast 2: How to remember API and storage workflows",
+    "Audio-style revision guide covering how to remember api and storage workflows.",
+    "Videos",
+    "APT3060 Video Guide 1: Lifecycle walkthrough",
+    "Visual explanation pack for lifecycle walkthrough.",
+    "Open the curated external video/search; use the in-app guide for a concise walkthrough.",
+    "APT3060 Video Guide 2: Navigation and state visual guide",
+    "Visual explanation pack for navigation and state visual guide.",
+    "MCQs",
+    "APT3060 MCQ Drill 1: Activity lifecycle",
+    "Practice questions for activity lifecycle in Mobile Programming.",
+    "Open the curated external MCQ; use the in-app drill for immediate practice and explanations.",
+    "APT3060 MCQ Drill 2: Data persistence",
+    "Practice questions for data persistence in Mobile Programming.",
+    "Past papers",
+    "APT3060 Past Paper 1: Architecture patterns and debugging",
+    "Exam-style practice paper focused on architecture patterns and debugging.",
+    "Open the curated external past paper; use the in-app past paper for quick practice.",
+    "APT3060 Past Paper 2: API, storage, and UI integration",
+    "Exam-style practice paper focused on api, storage, and ui integration.",
+    "Guides",
+    "APT3060 Group Support Guide",
+    "Peer-support roadmap showing how to use StudyLink for Mobile Programming.",
+    "Start here if you do not know which resource to open first.",
+    "APT3025",
+    "APT3025 Note 1: Regression fundamentals",
+    "Structured study notes for Regression fundamentals in Machine Learning.",
+    "APT3025 Note 2: Classification and confusion matrix",
+    "Structured study notes for Classification and confusion matrix in Machine Learning.",
+    "APT3025 Note 3: Bias, variance, and model tuning",
+    "Structured study notes for Bias, variance, and model tuning in Machine Learning.",
+    "APT3025 PDF 1: ML formulas quick sheet",
+    "ML formulas quick sheet prepared for Machine Learning.",
+    "APT3025 PDF 2: Evaluation metrics handbook",
+    "Evaluation metrics handbook prepared for Machine Learning.",
+    "APT3025 Podcast 1: Machine learning for non-experts",
+    "Audio-style revision guide covering machine learning for non-experts.",
+    "APT3025 Podcast 2: Remembering metrics before exams",
+    "Audio-style revision guide covering remembering metrics before exams.",
+    "APT3025 Video Guide 1: How supervised learning works",
+    "Visual explanation pack for how supervised learning works.",
+    "APT3025 Video Guide 2: Visualizing underfitting and overfitting",
+    "Visual explanation pack for visualizing underfitting and overfitting.",
+    "APT3025 MCQ Drill 1: Model evaluation",
+    "Practice questions for model evaluation in Machine Learning.",
+    "APT3025 MCQ Drill 2: Feature engineering",
+    "Practice questions for feature engineering in Machine Learning.",
+    "APT3025 Past Paper 1: Regression and classification",
+    "Exam-style practice paper focused on regression and classification.",
+    "APT3025 Past Paper 2: Metrics and model improvement",
+    "Exam-style practice paper focused on metrics and model improvement.",
+    "APT3025 Group Support Guide",
+    "Peer-support roadmap showing how to use StudyLink for Machine Learning.",
+    "CS201",
+    "CS201 Note 1: Recursion fundamentals",
+    "Structured study notes for Recursion fundamentals in Data Structures and Algorithms.",
+    "School of Science and Technology - Computer Science",
+    "CS201 Note 2: Tree traversal strategies",
+    "Structured study notes for Tree traversal strategies in Data Structures and Algorithms.",
+    "CS201 Note 3: Big O analysis",
+    "Structured study notes for Big O analysis in Data Structures and Algorithms.",
+    "CS201 PDF 1: Sorting algorithms cheat sheet",
+    "Sorting algorithms cheat sheet prepared for Data Structures and Algorithms.",
+    "CS201 PDF 2: Data structure comparison table",
+    "Data structure comparison table prepared for Data Structures and Algorithms.",
+    "CS201 Podcast 1: How to think through algorithm questions",
+    "Audio-style revision guide covering how to think through algorithm questions.",
+    "CS201 Podcast 2: Beating recursion confusion",
+    "Audio-style revision guide covering beating recursion confusion.",
+    "CS201 Video Guide 1: Stack and queue visual explanation",
+    "Visual explanation pack for stack and queue visual explanation.",
+    "CS201 Video Guide 2: Binary tree traversal animation guide",
+    "Visual explanation pack for binary tree traversal animation guide.",
+    "CS201 MCQ Drill 1: Algorithm complexity",
+    "Practice questions for algorithm complexity in Data Structures and Algorithms.",
+    "CS201 MCQ Drill 2: Trees and graphs",
+    "Practice questions for trees and graphs in Data Structures and Algorithms.",
+    "CS201 Past Paper 1: Sorting and searching",
+    "Exam-style practice paper focused on sorting and searching.",
+    "CS201 Past Paper 2: Recursion and complexity",
+    "Exam-style practice paper focused on recursion and complexity.",
+    "CS201 Group Support Guide",
+    "Peer-support roadmap showing how to use StudyLink for Data Structures and Algorithms.",
+    "BUS101",
+    "BUS101 Note 1: Business environment basics",
+    "Structured study notes for Business environment basics in Introduction to Business.",
+    "School of Business - Business Administration",
+    "BUS101 Note 2: Entrepreneurship overview",
+    "Structured study notes for Entrepreneurship overview in Introduction to Business.",
+    "BUS101 Note 3: Management functions",
+    "Structured study notes for Management functions in Introduction to Business.",
+    "BUS101 PDF 1: Business terms handbook",
+    "Business terms handbook prepared for Introduction to Business.",
+    "BUS101 PDF 2: Case study analysis template",
+    "Case study analysis template prepared for Introduction to Business.",
+    "BUS101 Podcast 1: Business concepts in everyday language",
+    "Audio-style revision guide covering business concepts in everyday language.",
+    "BUS101 Podcast 2: Preparing for business presentations",
+    "Audio-style revision guide covering preparing for business presentations.",
+    "BUS101 Video Guide 1: Management functions explained",
+    "Visual explanation pack for management functions explained.",
+    "BUS101 Video Guide 2: Marketing mix visual summary",
+    "Visual explanation pack for marketing mix visual summary.",
+    "BUS101 MCQ Drill 1: Entrepreneurship and strategy",
+    "Practice questions for entrepreneurship and strategy in Introduction to Business.",
+    "BUS101 MCQ Drill 2: Marketing principles",
+    "Practice questions for marketing principles in Introduction to Business.",
+    "BUS101 Past Paper 1: Case study interpretation",
+    "Exam-style practice paper focused on case study interpretation.",
+    "BUS101 Past Paper 2: Business environment and management",
+    "Exam-style practice paper focused on business environment and management.",
+    "BUS101 Group Support Guide",
+    "Peer-support roadmap showing how to use StudyLink for Introduction to Business.",
+    "ACC210",
+    "ACC210 Note 1: Double entry rules",
+    "Structured study notes for Double entry rules in Financial Accounting.",
+    "School of Business - Accounting and Finance",
+    "ACC210 Note 2: Trial balance preparation",
+    "Structured study notes for Trial balance preparation in Financial Accounting.",
+    "ACC210 Note 3: Financial statements overview",
+    "Structured study notes for Financial statements overview in Financial Accounting.",
+    "ACC210 PDF 1: Accounting formula sheet",
+    "Accounting formula sheet prepared for Financial Accounting.",
+    "ACC210 PDF 2: Ledger practice pack",
+    "Ledger practice pack prepared for Financial Accounting.",
+    "ACC210 Podcast 1: Understanding debits and credits",
+    "Audio-style revision guide covering understanding debits and credits.",
+    "ACC210 Podcast 2: How to avoid accounting mistakes",
+    "Audio-style revision guide covering how to avoid accounting mistakes.",
+    "ACC210 Video Guide 1: Ledger posting walkthrough",
+    "Visual explanation pack for ledger posting walkthrough.",
+    "ACC210 Video Guide 2: Statement preparation visual guide",
+    "Visual explanation pack for statement preparation visual guide.",
+    "ACC210 MCQ Drill 1: Double entry",
+    "Practice questions for double entry in Financial Accounting.",
+    "ACC210 MCQ Drill 2: Statement interpretation",
+    "Practice questions for statement interpretation in Financial Accounting.",
+    "ACC210 Past Paper 1: Ledger and trial balance",
+    "Exam-style practice paper focused on ledger and trial balance.",
+    "ACC210 Past Paper 2: Statement preparation",
+    "Exam-style practice paper focused on statement preparation.",
+    "ACC210 Group Support Guide",
+    "Peer-support roadmap showing how to use StudyLink for Financial Accounting.",
+    "PHR220",
+    "PHR220 Note 1: Pharmacokinetics summary",
+    "Structured study notes for Pharmacokinetics summary in Pharmacology Fundamentals.",
+    "School of Pharmacy - Pharmacy",
+    "PHR220 Note 2: Pharmacodynamics essentials",
+    "Structured study notes for Pharmacodynamics essentials in Pharmacology Fundamentals.",
+    "PHR220 Note 3: Adverse effects revision",
+    "Structured study notes for Adverse effects revision in Pharmacology Fundamentals.",
+    "PHR220 PDF 1: Drug classification handbook",
+    "Drug classification handbook prepared for Pharmacology Fundamentals.",
+    "PHR220 PDF 2: Dosage revision summary",
+    "Dosage revision summary prepared for Pharmacology Fundamentals.",
+    "PHR220 Podcast 1: Memorizing pharmacology without overload",
+    "Audio-style revision guide covering memorizing pharmacology without overload.",
+    "PHR220 Podcast 2: How to organize drug classes for exams",
+    "Audio-style revision guide covering how to organize drug classes for exams.",
+    "PHR220 Video Guide 1: ADME visual breakdown",
+    "Visual explanation pack for adme visual breakdown.",
+    "PHR220 Video Guide 2: Drug mechanism comparison",
+    "Visual explanation pack for drug mechanism comparison.",
+    "PHR220 MCQ Drill 1: Drug classifications",
+    "Practice questions for drug classifications in Pharmacology Fundamentals.",
+    "PHR220 MCQ Drill 2: Adverse effects",
+    "Practice questions for adverse effects in Pharmacology Fundamentals.",
+    "PHR220 Past Paper 1: Pharmacokinetics and dynamics",
+    "Exam-style practice paper focused on pharmacokinetics and dynamics.",
+    "PHR220 Past Paper 2: Classification and safety",
+    "Exam-style practice paper focused on classification and safety.",
+    "PHR220 Group Support Guide",
+    "Peer-support roadmap showing how to use StudyLink for Pharmacology Fundamentals.",
+    "NUR230",
+    "NUR230 Note 1: Patient assessment flow",
+    "Structured study notes for Patient assessment flow in Medical-Surgical Nursing.",
+    "School of Pharmacy - Nursing",
+    "NUR230 Note 2: Care plan writing",
+    "Structured study notes for Care plan writing in Medical-Surgical Nursing.",
+    "NUR230 Note 3: Intervention priorities",
+    "Structured study notes for Intervention priorities in Medical-Surgical Nursing.",
+    "NUR230 PDF 1: Care plan template",
+    "Care plan template prepared for Medical-Surgical Nursing.",
+    "NUR230 PDF 2: Adult care revision handbook",
+    "Adult care revision handbook prepared for Medical-Surgical Nursing.",
+    "NUR230 Podcast 1: Thinking like a nurse in exams",
+    "Audio-style revision guide covering thinking like a nurse in exams.",
+    "NUR230 Podcast 2: Making care plans easier to remember",
+    "Audio-style revision guide covering making care plans easier to remember.",
+    "NUR230 Video Guide 1: Assessment sequence visual guide",
+    "Visual explanation pack for assessment sequence visual guide.",
+    "NUR230 Video Guide 2: Documentation and intervention review",
+    "Visual explanation pack for documentation and intervention review.",
+    "NUR230 MCQ Drill 1: Patient priorities",
+    "Practice questions for patient priorities in Medical-Surgical Nursing.",
+    "NUR230 MCQ Drill 2: Care planning",
+    "Practice questions for care planning in Medical-Surgical Nursing.",
+    "NUR230 Past Paper 1: Adult care scenarios",
+    "Exam-style practice paper focused on adult care scenarios.",
+    "NUR230 Past Paper 2: Assessment and documentation",
+    "Exam-style practice paper focused on assessment and documentation.",
+    "NUR230 Group Support Guide",
+    "Peer-support roadmap showing how to use StudyLink for Medical-Surgical Nursing.",
+    "ENG201",
+    "ENG201 Note 1: Essay structure essentials",
+    "Structured study notes for Essay structure essentials in Academic Writing.",
+    "School of Humanities and Social Sciences - Communication and Writing Studies",
+    "ENG201 Note 2: Referencing basics",
+    "Structured study notes for Referencing basics in Academic Writing.",
+    "ENG201 Note 3: Editing checklist",
+    "Structured study notes for Editing checklist in Academic Writing.",
+    "ENG201 PDF 1: Academic writing starter pack",
+    "Academic writing starter pack prepared for Academic Writing.",
+    "ENG201 PDF 2: Citation and referencing guide",
+    "Citation and referencing guide prepared for Academic Writing.",
+    "ENG201 Podcast 1: Writing strong paragraphs",
+    "Audio-style revision guide covering writing strong paragraphs.",
+    "ENG201 Podcast 2: How to beat essay-writing stress",
+    "Audio-style revision guide covering how to beat essay-writing stress.",
+    "ENG201 Video Guide 1: Essay planning map",
+    "Visual explanation pack for essay planning map.",
+    "ENG201 Video Guide 2: Editing and proofreading workflow",
+    "Visual explanation pack for editing and proofreading workflow.",
+    "ENG201 MCQ Drill 1: Referencing",
+    "Practice questions for referencing in Academic Writing.",
+    "ENG201 MCQ Drill 2: Argument structure",
+    "Practice questions for argument structure in Academic Writing.",
+    "ENG201 Past Paper 1: Essay planning and citation",
+    "Exam-style practice paper focused on essay planning and citation.",
+    "ENG201 Past Paper 2: Editing and structure",
+    "Exam-style practice paper focused on editing and structure.",
+    "ENG201 Group Support Guide",
+    "Peer-support roadmap showing how to use StudyLink for Academic Writing.",
+    "PSY210",
+    "PSY210 Note 1: Piaget and Erikson comparison",
+    "Structured study notes for Piaget and Erikson comparison in Developmental Psychology.",
+    "School of Humanities and Social Sciences - Psychology",
+    "PSY210 Note 2: Adolescence overview",
+    "Structured study notes for Adolescence overview in Developmental Psychology.",
+    "PSY210 Note 3: Adult development summary",
+    "Structured study notes for Adult development summary in Developmental Psychology.",
+    "PSY210 PDF 1: Developmental theory comparison chart",
+    "Developmental theory comparison chart prepared for Developmental Psychology.",
+    "PSY210 PDF 2: Stage-by-stage revision booklet",
+    "Stage-by-stage revision booklet prepared for Developmental Psychology.",
+    "PSY210 Podcast 1: Remembering psychology theorists",
+    "Audio-style revision guide covering remembering psychology theorists.",
+    "PSY210 Podcast 2: How to compare development stages",
+    "Audio-style revision guide covering how to compare development stages.",
+    "PSY210 Video Guide 1: Theory comparison visual guide",
+    "Visual explanation pack for theory comparison visual guide.",
+    "PSY210 Video Guide 2: Human development timeline",
+    "Visual explanation pack for human development timeline.",
+    "PSY210 MCQ Drill 1: Developmental stages",
+    "Practice questions for developmental stages in Developmental Psychology.",
+    "PSY210 MCQ Drill 2: Theory comparison",
+    "Practice questions for theory comparison in Developmental Psychology.",
+    "PSY210 Past Paper 1: Theorists and stages",
+    "Exam-style practice paper focused on theorists and stages.",
+    "PSY210 Past Paper 2: Behavior and development",
+    "Exam-style practice paper focused on behavior and development.",
+    "PSY210 Group Support Guide",
+    "Peer-support roadmap showing how to use StudyLink for Developmental Psychology.",
+    "LAW110",
+    "LAW110 Note 1: Separation of powers",
+    "Structured study notes for Separation of powers in Introduction to Constitutional Law.",
+    "School of Humanities and Social Sciences - Law",
+    "LAW110 Note 2: Bill of rights overview",
+    "Structured study notes for Bill of rights overview in Introduction to Constitutional Law.",
+    "LAW110 Note 3: Judicial review essentials",
+    "Structured study notes for Judicial review essentials in Introduction to Constitutional Law.",
+    "LAW110 PDF 1: Constitutional principles booklet",
+    "Constitutional principles booklet prepared for Introduction to Constitutional Law.",
+    "LAW110 PDF 2: Rights revision guide",
+    "Rights revision guide prepared for Introduction to Constitutional Law.",
+    "LAW110 Podcast 1: Understanding constitutional law simply",
+    "Audio-style revision guide covering understanding constitutional law simply.",
+    "LAW110 Podcast 2: How to answer legal essay questions",
+    "Audio-style revision guide covering how to answer legal essay questions.",
+    "LAW110 Video Guide 1: Government structure visual guide",
+    "Visual explanation pack for government structure visual guide.",
+    "LAW110 Video Guide 2: Rights and interpretation overview",
+    "Visual explanation pack for rights and interpretation overview.",
+    "LAW110 MCQ Drill 1: Rights and freedoms",
+    "Practice questions for rights and freedoms in Introduction to Constitutional Law.",
+    "LAW110 MCQ Drill 2: Legal interpretation",
+    "Practice questions for legal interpretation in Introduction to Constitutional Law.",
+    "LAW110 Past Paper 1: Constitutional principles",
+    "Exam-style practice paper focused on constitutional principles.",
+    "LAW110 Past Paper 2: Rights and judicial review",
+    "Exam-style practice paper focused on rights and judicial review.",
+    "LAW110 Group Support Guide",
+    "Peer-support roadmap showing how to use StudyLink for Introduction to Constitutional Law.",
+    "Shared resource",
+    "Recursion Notes",
+    "Shared resource from the StudyLink backend.",
+    "General - General Studies",
+    "Open and review.",
+    "Binary Trees Slides",
+    "short answers",
+    "Uploaded by user.",
+    "apt1050",
+    "apt2090"
+  ],
+  "buttons": [
+    {
+      "label": "←",
+      "disabled": false
+    },
+    {
+      "label": "🔔",
+      "disabled": false
+    },
+    {
+      "label": "↗ Logout",
+      "disabled": false
+    },
+    {
+      "label": "Add / Upload resource",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    },
+    {
+      "label": "Open",
+      "disabled": false
+    },
+    {
+      "label": "Hide",
+      "disabled": false
+    }
+  ],
+  "links": [
+    {
+      "label": "StudyLink STUDENT WORKSPACE",
+      "href": "/schools"
+    },
+    {
+      "label": "🏫 Schools",
+      "href": "/schools"
+    },
+    {
+      "label": "📘 Courses",
+      "href": "/courses"
+    },
+    {
+      "label": "📚 Learning Hub",
+      "href": "/learning?view=library"
+    },
+    {
+      "label": "✦ StudyLink AI",
+      "href": "/ask-ai"
+    },
+    {
+      "label": "👥 Study Groups",
+      "href": "/groups"
+    },
+    {
+      "label": "🗓 Sessions",
+      "href": "/sessions"
+    },
+    {
+      "label": "◫ Dashboard",
+      "href": "/dashboard"
+    },
+    {
+      "label": "👤 Profile",
+      "href": "/profile"
+    },
+    {
+      "label": "Open courses",
+      "href": "/courses"
+    }
+  ],
+  "images": [
+    {
+      "src": "/src/assets/images/studylinklogo.png",
+      "alt": "StudyLink logo"
+    }
+  ],
+  "cardHeights": [
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 596.03125
+    },
+    {
+      "kind": "resource",
+      "height": 596.03125
+    },
+    {
+      "kind": "resource",
+      "height": 596.03125
+    },
+    {
+      "kind": "resource",
+      "height": 570.4375
+    },
+    {
+      "kind": "resource",
+      "height": 570.4375
+    },
+    {
+      "kind": "resource",
+      "height": 570.4375
+    },
+    {
+      "kind": "resource",
+      "height": 570.4375
+    },
+    {
+      "kind": "resource",
+      "height": 570.4375
+    },
+    {
+      "kind": "resource",
+      "height": 570.4375
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 514.90625
+    },
+    {
+      "kind": "resource",
+      "height": 514.90625
+    },
+    {
+      "kind": "resource",
+      "height": 514.90625
+    },
+    {
+      "kind": "resource",
+      "height": 570.4375
+    },
+    {
+      "kind": "resource",
+      "height": 570.4375
+    },
+    {
+      "kind": "resource",
+      "height": 570.4375
+    },
+    {
+      "kind": "resource",
+      "height": 570.4375
+    },
+    {
+      "kind": "resource",
+      "height": 570.4375
+    },
+    {
+      "kind": "resource",
+      "height": 570.4375
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 514.90625
+    },
+    {
+      "kind": "resource",
+      "height": 514.90625
+    },
+    {
+      "kind": "resource",
+      "height": 514.90625
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 566.09375
+    },
+    {
+      "kind": "resource",
+      "height": 566.09375
+    },
+    {
+      "kind": "resource",
+      "height": 566.09375
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 514.90625
+    },
+    {
+      "kind": "resource",
+      "height": 514.90625
+    },
+    {
+      "kind": "resource",
+      "height": 514.90625
+    },
+    {
+      "kind": "resource",
+      "height": 566.09375
+    },
+    {
+      "kind": "resource",
+      "height": 566.09375
+    },
+    {
+      "kind": "resource",
+      "height": 566.09375
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 570.4375
+    },
+    {
+      "kind": "resource",
+      "height": 570.4375
+    },
+    {
+      "kind": "resource",
+      "height": 570.4375
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 534.875
+    },
+    {
+      "kind": "resource",
+      "height": 534.875
+    },
+    {
+      "kind": "resource",
+      "height": 534.875
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 570.4375
+    },
+    {
+      "kind": "resource",
+      "height": 570.4375
+    },
+    {
+      "kind": "resource",
+      "height": 570.4375
+    },
+    {
+      "kind": "resource",
+      "height": 570.4375
+    },
+    {
+      "kind": "resource",
+      "height": 570.4375
+    },
+    {
+      "kind": "resource",
+      "height": 570.4375
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 540.5
+    },
+    {
+      "kind": "resource",
+      "height": 402.5625
+    },
+    {
+      "kind": "resource",
+      "height": 402.5625
+    },
+    {
+      "kind": "resource",
+      "height": 402.5625
+    },
+    {
+      "kind": "resource",
+      "height": 402.5625
+    }
+  ]
+}

@@ -1,0 +1,777 @@
+{
+  "route": "/courses",
+  "finalUrl": "http://127.0.0.1:5188/courses",
+  "status": 200,
+  "capturedAt": "2026-10-13T18:48:57.071Z",
+  "text": [
+    "StudyLink",
+    "STUDENT WORKSPACE",
+    "←",
+    "WORKSPACE",
+    "🏫",
+    "Schools",
+    "📘",
+    "Courses",
+    "📚",
+    "Learning Hub",
+    "✦",
+    "StudyLink AI",
+    "👥",
+    "Study Groups",
+    "🗓",
+    "Sessions",
+    "◫",
+    "Dashboard",
+    "👤",
+    "Profile",
+    "🔔",
+    "↗",
+    "Logout",
+    "COURSE DIRECTORY",
+    "Every enrolled class should give the learner notes, PDFs, podcasts, MCQs, and past-paper support.",
+    "StudyLink now treats every course as a full study hub so students can move from confusion to revision, peer support, and guided AI help without leaving the platform.",
+    "15",
+    "Course hubs",
+    "0",
+    "My enrolled courses",
+    "20",
+    "Podcast supports",
+    "All schools",
+    "School of Business",
+    "School of Science and Technology",
+    "General",
+    "School of Humanities and Social Sciences",
+    "School of Pharmacy",
+    "All programs",
+    "Accounting and Finance",
+    "Applied Computer Technology",
+    "Applied Technology",
+    "Business Administration",
+    "Computer Science",
+    "Communication and Writing Studies",
+    "Law",
+    "Mathematics",
+    "Nursing",
+    "Pharmacy",
+    "Psychology",
+    "ACC210",
+    "School of Business",
+    "Year 2",
+    "Financial Accounting",
+    "Practice journal entries, ledgers, trial balances, and statement preparation with clear accounting logic.",
+    "PROGRAM",
+    "Accounting and Finance",
+    "SUPPORT FOCUS",
+    "Reducing accounting panic by turning calculations into repeatable steps.",
+    "PDFS & NOTES",
+    "5",
+    "PODCASTS",
+    "2",
+    "Open course hub",
+    "Ask StudyLink AI",
+    "Enroll now",
+    "APT3025",
+    "School of Science and Technology",
+    "Year 4",
+    "Machine Learning",
+    "Study supervised learning, evaluation, features, and model interpretation through practical academic use cases.",
+    "PROGRAM",
+    "Applied Computer Technology",
+    "SUPPORT FOCUS",
+    "Making abstract AI and model-evaluation ideas easier to discuss and practice with peers.",
+    "PDFS & NOTES",
+    "5",
+    "PODCASTS",
+    "2",
+    "Open course hub",
+    "Ask StudyLink AI",
+    "Enroll now",
+    "APT3060",
+    "School of Science and Technology",
+    "Year 4",
+    "Mobile Programming",
+    "Design mobile learning experiences, connect APIs, manage storage, and build polished user interfaces.",
+    "PROGRAM",
+    "Applied Computer Technology",
+    "SUPPORT FOCUS",
+    "Helping students turn difficult mobile architecture concepts into practical revision steps.",
+    "PDFS & NOTES",
+    "5",
+    "PODCASTS",
+    "2",
+    "Open course hub",
+    "Ask StudyLink AI",
+    "Enroll now",
+    "APT3065",
+    "General",
+    "Year 3",
+    "Mid-Term Project",
+    "Collaborative project planning, research methods, and presentation preparation.",
+    "PROGRAM",
+    "Applied Technology",
+    "SUPPORT FOCUS",
+    "Additional academic support within StudyLink.",
+    "PDFS & NOTES",
+    "0",
+    "PODCASTS",
+    "0",
+    "Open course hub",
+    "Ask StudyLink AI",
+    "Enroll now",
+    "BUS101",
+    "School of Business",
+    "Year 1",
+    "Introduction to Business",
+    "Understand entrepreneurship, operations, and strategic decision-making.",
+    "PROGRAM",
+    "Business Administration",
+    "SUPPORT FOCUS",
+    "Helping first-year business students connect theory to real commercial examples.",
+    "PDFS & NOTES",
+    "5",
+    "PODCASTS",
+    "2",
+    "Open course hub",
+    "Ask StudyLink AI",
+    "Enroll now",
+    "CS101",
+    "General",
+    "Year 1",
+    "Introduction to Computer Science",
+    "Build a strong foundation in programming logic, problem solving, and algorithms.",
+    "PROGRAM",
+    "Computer Science",
+    "SUPPORT FOCUS",
+    "Additional academic support within StudyLink.",
+    "PDFS & NOTES",
+    "0",
+    "PODCASTS",
+    "0",
+    "Open course hub",
+    "Ask StudyLink AI",
+    "Enroll now",
+    "CS201",
+    "School of Science and Technology",
+    "Year 2",
+    "Data Structures & Algorithms",
+    "Explore efficient data handling, sorting, and optimization techniques.",
+    "PROGRAM",
+    "Computer Science",
+    "SUPPORT FOCUS",
+    "Breaking down problem-solving anxiety through repeated guided practice.",
+    "PDFS & NOTES",
+    "5",
+    "PODCASTS",
+    "2",
+    "Open course hub",
+    "Ask StudyLink AI",
+    "Enroll now",
+    "CS301",
+    "General",
+    "Year 3",
+    "Database Systems",
+    "Learn data modeling, SQL, and database design for modern applications.",
+    "PROGRAM",
+    "Computer Science",
+    "SUPPORT FOCUS",
+    "Additional academic support within StudyLink.",
+    "PDFS & NOTES",
+    "0",
+    "PODCASTS",
+    "0",
+    "Open course hub",
+    "Ask StudyLink AI",
+    "Enroll now",
+    "CS401",
+    "General",
+    "Year 4",
+    "Software Engineering",
+    "Practice team-based development, software architecture, and quality assurance.",
+    "PROGRAM",
+    "Computer Science",
+    "SUPPORT FOCUS",
+    "Additional academic support within StudyLink.",
+    "PDFS & NOTES",
+    "0",
+    "PODCASTS",
+    "0",
+    "Open course hub",
+    "Ask StudyLink AI",
+    "Enroll now",
+    "ENG201",
+    "School of Humanities and Social Sciences",
+    "Year 2",
+    "Academic Writing",
+    "Strengthen essay drafting, research, editing, and formal communication skills.",
+    "PROGRAM",
+    "Communication and Writing Studies",
+    "SUPPORT FOCUS",
+    "Helping learners who struggle to turn ideas into well-structured academic writing.",
+    "PDFS & NOTES",
+    "5",
+    "PODCASTS",
+    "2",
+    "Open course hub",
+    "Ask StudyLink AI",
+    "Enroll now",
+    "LAW110",
+    "School of Humanities and Social Sciences",
+    "Year 1",
+    "Introduction to Constitutional Law",
+    "Study constitutional structure, rights, governance, and legal interpretation in civic contexts.",
+    "PROGRAM",
+    "Law",
+    "SUPPORT FOCUS",
+    "Helping students read legal ideas in simpler language before deeper case discussion.",
+    "PDFS & NOTES",
+    "5",
+    "PODCASTS",
+    "2",
+    "Open course hub",
+    "Ask StudyLink AI",
+    "Enroll now",
+    "MATH101",
+    "General",
+    "Year 1",
+    "Calculus I",
+    "Review limits, derivatives, and real-world applications in science.",
+    "PROGRAM",
+    "Mathematics",
+    "SUPPORT FOCUS",
+    "Additional academic support within StudyLink.",
+    "PDFS & NOTES",
+    "0",
+    "PODCASTS",
+    "0",
+    "Open course hub",
+    "Ask StudyLink AI",
+    "Enroll now",
+    "NUR230",
+    "School of Pharmacy",
+    "Year 3",
+    "Medical-Surgical Nursing",
+    "Develop patient-care planning, assessment, interventions, and clinical reasoning for adult care settings.",
+    "PROGRAM",
+    "Nursing",
+    "SUPPORT FOCUS",
+    "Supporting nursing students with structured care-plan thinking and fast recall.",
+    "PDFS & NOTES",
+    "5",
+    "PODCASTS",
+    "2",
+    "Open course hub",
+    "Ask StudyLink AI",
+    "Enroll now",
+    "PHR220",
+    "School of Pharmacy",
+    "Year 2",
+    "Pharmacology Fundamentals",
+    "Study drug actions, classifications, dosage concepts, and safe patient-centered pharmacology review.",
+    "PROGRAM",
+    "Pharmacy",
+    "SUPPORT FOCUS",
+    "Helping learners memorize pharmacology safely through grouped concepts and recall patterns.",
+    "PDFS & NOTES",
+    "5",
+    "PODCASTS",
+    "2",
+    "Open course hub",
+    "Ask StudyLink AI",
+    "Enroll now",
+    "PSY210",
+    "School of Humanities and Social Sciences",
+    "Year 2",
+    "Developmental Psychology",
+    "Explore human development across stages, major theories, and behavior patterns in social contexts.",
+    "PROGRAM",
+    "Psychology",
+    "SUPPORT FOCUS",
+    "Making theory-heavy psychology content easier to compare and remember.",
+    "PDFS & NOTES",
+    "5",
+    "PODCASTS",
+    "2",
+    "Open course hub",
+    "Ask StudyLink AI",
+    "Enroll now"
+  ],
+  "textStrings": [
+    "StudyLink",
+    "Student workspace",
+    "←",
+    "Workspace",
+    "🏫",
+    "Schools",
+    "📘",
+    "Courses",
+    "📚",
+    "Learning Hub",
+    "✦",
+    "StudyLink AI",
+    "👥",
+    "Study Groups",
+    "🗓",
+    "Sessions",
+    "◫",
+    "Dashboard",
+    "👤",
+    "Profile",
+    "🔔",
+    "↗",
+    "Logout",
+    "Course Directory",
+    "Every enrolled class should give the learner notes, PDFs, podcasts, MCQs, and past-paper support.",
+    "StudyLink now treats every course as a full study hub so students can move from confusion to revision, peer support, and guided AI help without leaving the platform.",
+    "15",
+    "Course hubs",
+    "0",
+    "My enrolled courses",
+    "20",
+    "Podcast supports",
+    "ACC210",
+    "School of Business",
+    "Year 2",
+    "Financial Accounting",
+    "Practice journal entries, ledgers, trial balances, and statement preparation with clear accounting logic.",
+    "Program",
+    "Accounting and Finance",
+    "Support focus",
+    "Reducing accounting panic by turning calculations into repeatable steps.",
+    "PDFs & Notes",
+    "5",
+    "Podcasts",
+    "2",
+    "Open course hub",
+    "Ask StudyLink AI",
+    "Enroll now",
+    "APT3025",
+    "School of Science and Technology",
+    "Year 4",
+    "Machine Learning",
+    "Study supervised learning, evaluation, features, and model interpretation through practical academic use cases.",
+    "Applied Computer Technology",
+    "Making abstract AI and model-evaluation ideas easier to discuss and practice with peers.",
+    "APT3060",
+    "Mobile Programming",
+    "Design mobile learning experiences, connect APIs, manage storage, and build polished user interfaces.",
+    "Helping students turn difficult mobile architecture concepts into practical revision steps.",
+    "APT3065",
+    "General",
+    "Year 3",
+    "Mid-Term Project",
+    "Collaborative project planning, research methods, and presentation preparation.",
+    "Applied Technology",
+    "Additional academic support within StudyLink.",
+    "BUS101",
+    "Year 1",
+    "Introduction to Business",
+    "Understand entrepreneurship, operations, and strategic decision-making.",
+    "Business Administration",
+    "Helping first-year business students connect theory to real commercial examples.",
+    "CS101",
+    "Introduction to Computer Science",
+    "Build a strong foundation in programming logic, problem solving, and algorithms.",
+    "Computer Science",
+    "CS201",
+    "Data Structures & Algorithms",
+    "Explore efficient data handling, sorting, and optimization techniques.",
+    "Breaking down problem-solving anxiety through repeated guided practice.",
+    "CS301",
+    "Database Systems",
+    "Learn data modeling, SQL, and database design for modern applications.",
+    "CS401",
+    "Software Engineering",
+    "Practice team-based development, software architecture, and quality assurance.",
+    "ENG201",
+    "School of Humanities and Social Sciences",
+    "Academic Writing",
+    "Strengthen essay drafting, research, editing, and formal communication skills.",
+    "Communication and Writing Studies",
+    "Helping learners who struggle to turn ideas into well-structured academic writing.",
+    "LAW110",
+    "Introduction to Constitutional Law",
+    "Study constitutional structure, rights, governance, and legal interpretation in civic contexts.",
+    "Law",
+    "Helping students read legal ideas in simpler language before deeper case discussion.",
+    "MATH101",
+    "Calculus I",
+    "Review limits, derivatives, and real-world applications in science.",
+    "Mathematics",
+    "NUR230",
+    "School of Pharmacy",
+    "Medical-Surgical Nursing",
+    "Develop patient-care planning, assessment, interventions, and clinical reasoning for adult care settings.",
+    "Nursing",
+    "Supporting nursing students with structured care-plan thinking and fast recall.",
+    "PHR220",
+    "Pharmacology Fundamentals",
+    "Study drug actions, classifications, dosage concepts, and safe patient-centered pharmacology review.",
+    "Pharmacy",
+    "Helping learners memorize pharmacology safely through grouped concepts and recall patterns.",
+    "PSY210",
+    "Developmental Psychology",
+    "Explore human development across stages, major theories, and behavior patterns in social contexts.",
+    "Psychology",
+    "Making theory-heavy psychology content easier to compare and remember."
+  ],
+  "buttons": [
+    {
+      "label": "←",
+      "disabled": false
+    },
+    {
+      "label": "🔔",
+      "disabled": false
+    },
+    {
+      "label": "↗ Logout",
+      "disabled": false
+    },
+    {
+      "label": "Enroll now",
+      "disabled": false
+    },
+    {
+      "label": "Enroll now",
+      "disabled": false
+    },
+    {
+      "label": "Enroll now",
+      "disabled": false
+    },
+    {
+      "label": "Enroll now",
+      "disabled": false
+    },
+    {
+      "label": "Enroll now",
+      "disabled": false
+    },
+    {
+      "label": "Enroll now",
+      "disabled": false
+    },
+    {
+      "label": "Enroll now",
+      "disabled": false
+    },
+    {
+      "label": "Enroll now",
+      "disabled": false
+    },
+    {
+      "label": "Enroll now",
+      "disabled": false
+    },
+    {
+      "label": "Enroll now",
+      "disabled": false
+    },
+    {
+      "label": "Enroll now",
+      "disabled": false
+    },
+    {
+      "label": "Enroll now",
+      "disabled": false
+    },
+    {
+      "label": "Enroll now",
+      "disabled": false
+    },
+    {
+      "label": "Enroll now",
+      "disabled": false
+    },
+    {
+      "label": "Enroll now",
+      "disabled": false
+    }
+  ],
+  "links": [
+    {
+      "label": "StudyLink STUDENT WORKSPACE",
+      "href": "/schools"
+    },
+    {
+      "label": "🏫 Schools",
+      "href": "/schools"
+    },
+    {
+      "label": "📘 Courses",
+      "href": "/courses"
+    },
+    {
+      "label": "📚 Learning Hub",
+      "href": "/learning?view=library"
+    },
+    {
+      "label": "✦ StudyLink AI",
+      "href": "/ask-ai"
+    },
+    {
+      "label": "👥 Study Groups",
+      "href": "/groups"
+    },
+    {
+      "label": "🗓 Sessions",
+      "href": "/sessions"
+    },
+    {
+      "label": "◫ Dashboard",
+      "href": "/dashboard"
+    },
+    {
+      "label": "👤 Profile",
+      "href": "/profile"
+    },
+    {
+      "label": "Open course hub",
+      "href": "/courses/ACC210"
+    },
+    {
+      "label": "Ask StudyLink AI",
+      "href": "/ask-ai?course=ACC210"
+    },
+    {
+      "label": "Open course hub",
+      "href": "/courses/APT3025"
+    },
+    {
+      "label": "Ask StudyLink AI",
+      "href": "/ask-ai?course=APT3025"
+    },
+    {
+      "label": "Open course hub",
+      "href": "/courses/APT3060"
+    },
+    {
+      "label": "Ask StudyLink AI",
+      "href": "/ask-ai?course=APT3060"
+    },
+    {
+      "label": "Open course hub",
+      "href": "/courses/1"
+    },
+    {
+      "label": "Ask StudyLink AI",
+      "href": "/ask-ai?course=APT3065"
+    },
+    {
+      "label": "Open course hub",
+      "href": "/courses/2"
+    },
+    {
+      "label": "Ask StudyLink AI",
+      "href": "/ask-ai?course=BUS101"
+    },
+    {
+      "label": "Open course hub",
+      "href": "/courses/3"
+    },
+    {
+      "label": "Ask StudyLink AI",
+      "href": "/ask-ai?course=CS101"
+    },
+    {
+      "label": "Open course hub",
+      "href": "/courses/4"
+    },
+    {
+      "label": "Ask StudyLink AI",
+      "href": "/ask-ai?course=CS201"
+    },
+    {
+      "label": "Open course hub",
+      "href": "/courses/5"
+    },
+    {
+      "label": "Ask StudyLink AI",
+      "href": "/ask-ai?course=CS301"
+    },
+    {
+      "label": "Open course hub",
+      "href": "/courses/6"
+    },
+    {
+      "label": "Ask StudyLink AI",
+      "href": "/ask-ai?course=CS401"
+    },
+    {
+      "label": "Open course hub",
+      "href": "/courses/7"
+    },
+    {
+      "label": "Ask StudyLink AI",
+      "href": "/ask-ai?course=ENG201"
+    },
+    {
+      "label": "Open course hub",
+      "href": "/courses/LAW110"
+    },
+    {
+      "label": "Ask StudyLink AI",
+      "href": "/ask-ai?course=LAW110"
+    },
+    {
+      "label": "Open course hub",
+      "href": "/courses/8"
+    },
+    {
+      "label": "Ask StudyLink AI",
+      "href": "/ask-ai?course=MATH101"
+    },
+    {
+      "label": "Open course hub",
+      "href": "/courses/NUR230"
+    },
+    {
+      "label": "Ask StudyLink AI",
+      "href": "/ask-ai?course=NUR230"
+    },
+    {
+      "label": "Open course hub",
+      "href": "/courses/PHR220"
+    },
+    {
+      "label": "Ask StudyLink AI",
+      "href": "/ask-ai?course=PHR220"
+    },
+    {
+      "label": "Open course hub",
+      "href": "/courses/PSY210"
+    },
+    {
+      "label": "Ask StudyLink AI",
+      "href": "/ask-ai?course=PSY210"
+    }
+  ],
+  "images": [
+    {
+      "src": "/src/assets/images/studylinklogo.png",
+      "alt": "StudyLink logo"
+    },
+    {
+      "src": "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=900&q=80",
+      "alt": "Financial Accounting"
+    },
+    {
+      "src": "https://images.unsplash.com/photo-1555949963-aa79dcee981c?auto=format&fit=crop&w=900&q=80",
+      "alt": "Machine Learning"
+    },
+    {
+      "src": "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=900&q=80",
+      "alt": "Mobile Programming"
+    },
+    {
+      "src": "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=900&q=80",
+      "alt": "Mid-Term Project"
+    },
+    {
+      "src": "https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=900&q=80",
+      "alt": "Introduction to Business"
+    },
+    {
+      "src": "https://images.unsplash.com/photo-1516321497487-e288fb19713f?auto=format&fit=crop&w=900&q=80",
+      "alt": "Introduction to Computer Science"
+    },
+    {
+      "src": "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=900&q=80",
+      "alt": "Data Structures & Algorithms"
+    },
+    {
+      "src": "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=900&q=80",
+      "alt": "Database Systems"
+    },
+    {
+      "src": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=900&q=80",
+      "alt": "Software Engineering"
+    },
+    {
+      "src": "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=900&q=80",
+      "alt": "Academic Writing"
+    },
+    {
+      "src": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=900&q=80",
+      "alt": "Introduction to Constitutional Law"
+    },
+    {
+      "src": "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=900&q=80",
+      "alt": "Calculus I"
+    },
+    {
+      "src": "https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=900&q=80",
+      "alt": "Medical-Surgical Nursing"
+    },
+    {
+      "src": "https://images.unsplash.com/photo-1587854692152-cbe660dbde88?auto=format&fit=crop&w=900&q=80",
+      "alt": "Pharmacology Fundamentals"
+    },
+    {
+      "src": "https://images.unsplash.com/photo-1509099836639-18ba1795216d?auto=format&fit=crop&w=900&q=80",
+      "alt": "Developmental Psychology"
+    }
+  ],
+  "cardHeights": [
+    {
+      "kind": "course",
+      "height": 889.3125
+    },
+    {
+      "kind": "course",
+      "height": 889.3125
+    },
+    {
+      "kind": "course",
+      "height": 889.3125
+    },
+    {
+      "kind": "course",
+      "height": 843.125
+    },
+    {
+      "kind": "course",
+      "height": 843.125
+    },
+    {
+      "kind": "course",
+      "height": 843.125
+    },
+    {
+      "kind": "course",
+      "height": 843.125
+    },
+    {
+      "kind": "course",
+      "height": 843.125
+    },
+    {
+      "kind": "course",
+      "height": 843.125
+    },
+    {
+      "kind": "course",
+      "height": 911.0625
+    },
+    {
+      "kind": "course",
+      "height": 911.0625
+    },
+    {
+      "kind": "course",
+      "height": 911.0625
+    },
+    {
+      "kind": "course",
+      "height": 889.3125
+    },
+    {
+      "kind": "course",
+      "height": 889.3125
+    },
+    {
+      "kind": "course",
+      "height": 889.3125
+    }
+  ]
+}

@@ -1,0 +1,505 @@
+{
+  "route": "/groups/new",
+  "finalUrl": "http://127.0.0.1:5188/groups/new",
+  "status": 200,
+  "capturedAt": "2026-10-13T18:49:03.882Z",
+  "text": [
+    "StudyLink",
+    "STUDENT WORKSPACE",
+    "←",
+    "WORKSPACE",
+    "🏫",
+    "Schools",
+    "📘",
+    "Courses",
+    "📚",
+    "Learning Hub",
+    "✦",
+    "StudyLink AI",
+    "👥",
+    "Study Groups",
+    "🗓",
+    "Sessions",
+    "◫",
+    "Dashboard",
+    "👤",
+    "Profile",
+    "🔔",
+    "↗",
+    "Logout",
+    "STUDY GROUPS",
+    "Build structured learning circles with saved members, rules, and session plans.",
+    "9",
+    "Active groups",
+    "11",
+    "Saved memberships",
+    "Create or manage groups",
+    "Keep your study structure professional with requirements, rules, and scheduling notes.",
+    "New group",
+    "Create Group",
+    "Close form",
+    "Group name",
+    "Course code",
+    "Description",
+    "Course name",
+    "Meeting type",
+    "Hybrid",
+    "In-Person",
+    "Online",
+    "Image URL",
+    "Who can join",
+    "Join requirements",
+    "Group rules",
+    "Member benefits",
+    "New member steps",
+    "Communication channel",
+    "WhatsApp / chat link",
+    "Schedule notes",
+    "Create group",
+    "Member-ready group spaces",
+    "Open any group to inspect full rosters, requirements, and linked sessions.",
+    "All courses",
+    "1200",
+    "1010",
+    "3067",
+    "1121",
+    "121212",
+    "6780",
+    "567",
+    "No image yet",
+    "CS101 Beginners Group",
+    "·",
+    "Hybrid",
+    "Weekly study group for introductory CS",
+    "Join: Students connected to the course or approved by the moderator.",
+    "Sessions: 0 planned",
+    "Members: 3",
+    "View details",
+    "Edit",
+    "Delete",
+    "Join group",
+    "No image yet",
+    "Data Structures Study Circle",
+    "·",
+    "Hybrid",
+    "Deep dives into DS topics",
+    "Join: Students connected to the course or approved by the moderator.",
+    "Sessions: 0 planned",
+    "Members: 2",
+    "View details",
+    "Edit",
+    "Delete",
+    "Join group",
+    "No image yet",
+    "test",
+    "1200 · test",
+    "In-Person",
+    "test",
+    "Join: anyone",
+    "Sessions: 0 planned",
+    "Members: 2",
+    "View details",
+    "Edit",
+    "Delete",
+    "Review requirements",
+    "business management",
+    "1010 · BUS",
+    "Online",
+    "the course introduces basics concepts of business and basic understanding on how businesses are managed",
+    "Join: anybody",
+    "Sessions: 0 planned",
+    "Members: 1",
+    "View details",
+    "Edit",
+    "Delete",
+    "Review requirements",
+    "No image yet",
+    "apt3067",
+    "3067 · project course",
+    "Online",
+    "the course is about projects",
+    "Join: anyone can join",
+    "Sessions: 0 planned",
+    "Members: 1",
+    "View details",
+    "Edit",
+    "Delete",
+    "Review requirements",
+    "No image yet",
+    "Test",
+    "1121 · bus",
+    "Online",
+    "test",
+    "Join: anyone",
+    "Sessions: 0 planned",
+    "Members: 1",
+    "View details",
+    "Edit",
+    "Delete",
+    "Join group",
+    "math class",
+    "121212 · math",
+    "Hybrid",
+    "math classs",
+    "Join: Students connected to the course or approved by the moderator.",
+    "Sessions: 0 planned",
+    "Members: 1",
+    "View details",
+    "Edit",
+    "Delete",
+    "Join group",
+    "warriors",
+    "6780 · business information sytem",
+    "Hybrid",
+    "how business is relating with it",
+    "Join: anyone",
+    "Sessions: 0 planned",
+    "Members: 0",
+    "View details",
+    "Edit",
+    "Delete",
+    "Review requirements",
+    "No image yet",
+    "lions",
+    "567 · Mth2045",
+    "Online",
+    "we want to solve maths problems",
+    "Join: anyone",
+    "Sessions: 0 planned",
+    "Members: 0",
+    "View details",
+    "Edit",
+    "Delete",
+    "Review requirements"
+  ],
+  "textStrings": [
+    "StudyLink",
+    "Student workspace",
+    "←",
+    "Workspace",
+    "🏫",
+    "Schools",
+    "📘",
+    "Courses",
+    "📚",
+    "Learning Hub",
+    "✦",
+    "StudyLink AI",
+    "👥",
+    "Study Groups",
+    "🗓",
+    "Sessions",
+    "◫",
+    "Dashboard",
+    "👤",
+    "Profile",
+    "🔔",
+    "↗",
+    "Logout",
+    "Build structured learning circles with saved members, rules, and session plans.",
+    "9",
+    "Active groups",
+    "11",
+    "Saved memberships",
+    "Create or manage groups",
+    "Keep your study structure professional with requirements, rules, and scheduling notes.",
+    "New group",
+    "Create Group",
+    "Close form",
+    "Group name",
+    "Course code",
+    "Description",
+    "Course name",
+    "Meeting type",
+    "Image URL",
+    "Who can join",
+    "Join requirements",
+    "Group rules",
+    "Member benefits",
+    "New member steps",
+    "Communication channel",
+    "WhatsApp / chat link",
+    "Schedule notes",
+    "Create group",
+    "Member-ready group spaces",
+    "Open any group to inspect full rosters, requirements, and linked sessions.",
+    "No image yet",
+    "CS101 Beginners Group",
+    "·",
+    "Hybrid",
+    "Weekly study group for introductory CS",
+    "Join:",
+    "Students connected to the course or approved by the moderator.",
+    "Sessions:",
+    "0",
+    "planned",
+    "Members:",
+    "3",
+    "View details",
+    "Edit",
+    "Delete",
+    "Join group",
+    "Data Structures Study Circle",
+    "Deep dives into DS topics",
+    "2",
+    "test",
+    "1200",
+    "In-Person",
+    "anyone",
+    "Review requirements",
+    "business management",
+    "1010",
+    "BUS",
+    "Online",
+    "the course introduces basics concepts of business and basic understanding on how businesses are managed",
+    "anybody",
+    "1",
+    "apt3067",
+    "3067",
+    "project course",
+    "the course is about projects",
+    "anyone can join",
+    "Test",
+    "1121",
+    "bus",
+    "math class",
+    "121212",
+    "math",
+    "math classs",
+    "warriors",
+    "6780",
+    "business information sytem",
+    "how business is relating with it",
+    "lions",
+    "567",
+    "Mth2045",
+    "we want to solve maths problems"
+  ],
+  "buttons": [
+    {
+      "label": "←",
+      "disabled": false
+    },
+    {
+      "label": "🔔",
+      "disabled": false
+    },
+    {
+      "label": "↗ Logout",
+      "disabled": false
+    },
+    {
+      "label": "Close form",
+      "disabled": false
+    },
+    {
+      "label": "Create group",
+      "disabled": false
+    },
+    {
+      "label": "Edit",
+      "disabled": false
+    },
+    {
+      "label": "Delete",
+      "disabled": false
+    },
+    {
+      "label": "Join group",
+      "disabled": false
+    },
+    {
+      "label": "Edit",
+      "disabled": false
+    },
+    {
+      "label": "Delete",
+      "disabled": false
+    },
+    {
+      "label": "Join group",
+      "disabled": false
+    },
+    {
+      "label": "Edit",
+      "disabled": false
+    },
+    {
+      "label": "Delete",
+      "disabled": false
+    },
+    {
+      "label": "Review requirements",
+      "disabled": false
+    },
+    {
+      "label": "Edit",
+      "disabled": false
+    },
+    {
+      "label": "Delete",
+      "disabled": false
+    },
+    {
+      "label": "Review requirements",
+      "disabled": false
+    },
+    {
+      "label": "Edit",
+      "disabled": false
+    },
+    {
+      "label": "Delete",
+      "disabled": false
+    },
+    {
+      "label": "Review requirements",
+      "disabled": false
+    },
+    {
+      "label": "Edit",
+      "disabled": false
+    },
+    {
+      "label": "Delete",
+      "disabled": false
+    },
+    {
+      "label": "Join group",
+      "disabled": false
+    },
+    {
+      "label": "Edit",
+      "disabled": false
+    },
+    {
+      "label": "Delete",
+      "disabled": false
+    },
+    {
+      "label": "Join group",
+      "disabled": false
+    },
+    {
+      "label": "Edit",
+      "disabled": false
+    },
+    {
+      "label": "Delete",
+      "disabled": false
+    },
+    {
+      "label": "Review requirements",
+      "disabled": false
+    },
+    {
+      "label": "Edit",
+      "disabled": false
+    },
+    {
+      "label": "Delete",
+      "disabled": false
+    },
+    {
+      "label": "Review requirements",
+      "disabled": false
+    }
+  ],
+  "links": [
+    {
+      "label": "StudyLink STUDENT WORKSPACE",
+      "href": "/schools"
+    },
+    {
+      "label": "🏫 Schools",
+      "href": "/schools"
+    },
+    {
+      "label": "📘 Courses",
+      "href": "/courses"
+    },
+    {
+      "label": "📚 Learning Hub",
+      "href": "/learning?view=library"
+    },
+    {
+      "label": "✦ StudyLink AI",
+      "href": "/ask-ai"
+    },
+    {
+      "label": "👥 Study Groups",
+      "href": "/groups"
+    },
+    {
+      "label": "🗓 Sessions",
+      "href": "/sessions"
+    },
+    {
+      "label": "◫ Dashboard",
+      "href": "/dashboard"
+    },
+    {
+      "label": "👤 Profile",
+      "href": "/profile"
+    },
+    {
+      "label": "New group",
+      "href": "/groups/new"
+    },
+    {
+      "label": "View details",
+      "href": "/groups/1"
+    },
+    {
+      "label": "View details",
+      "href": "/groups/2"
+    },
+    {
+      "label": "View details",
+      "href": "/groups/3"
+    },
+    {
+      "label": "View details",
+      "href": "/groups/4"
+    },
+    {
+      "label": "View details",
+      "href": "/groups/5"
+    },
+    {
+      "label": "View details",
+      "href": "/groups/6"
+    },
+    {
+      "label": "View details",
+      "href": "/groups/7"
+    },
+    {
+      "label": "View details",
+      "href": "/groups/8"
+    },
+    {
+      "label": "View details",
+      "href": "/groups/9"
+    }
+  ],
+  "images": [
+    {
+      "src": "/src/assets/images/studylinklogo.png",
+      "alt": "StudyLink logo"
+    },
+    {
+      "src": "none",
+      "alt": "business management"
+    },
+    {
+      "src": "https://www.pexels.com/photo/scenic-view-of-lake-como-from-a-ferry-in-lombardy-37687576/",
+      "alt": "math class"
+    },
+    {
+      "src": "https://www.google.com/imgres?q=images&imgurl=https%3A%2F%2Fstatic.vecteezy.com%2Fvite%2Fassets%2Fphoto-masthead-375-BoK_p8LG.webp&imgrefurl=https%3A%2F%2Fwww.vecteezy.com%2Ffree-photos&docid=ibTdn4unYxO9nM&tbnid=7F8_kUgVrrg0YM&vet=12ahUKEwihrMzV7f6VAxVlOPsDHb9ZEcgQnPAOegQIPBAA..i&w=750&h=864&hcb=2&ved=2ahUKEwihrMzV7f6VAxVlOPsDHb9ZEcgQnPAOegQIPBAA",
+      "alt": "warriors"
+    }
+  ],
+  "cardHeights": []
+}

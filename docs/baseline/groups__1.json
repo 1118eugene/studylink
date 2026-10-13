@@ -1,0 +1,207 @@
+{
+  "route": "/groups/1",
+  "finalUrl": "http://127.0.0.1:5188/groups/1",
+  "status": 200,
+  "capturedAt": "2026-10-13T18:49:04.911Z",
+  "text": [
+    "StudyLink",
+    "STUDENT WORKSPACE",
+    "←",
+    "WORKSPACE",
+    "🏫",
+    "Schools",
+    "📘",
+    "Courses",
+    "📚",
+    "Learning Hub",
+    "✦",
+    "StudyLink AI",
+    "👥",
+    "Study Groups",
+    "🗓",
+    "Sessions",
+    "◫",
+    "Dashboard",
+    "👤",
+    "Profile",
+    "🔔",
+    "↗",
+    "Logout",
+    "STUDY GROUP",
+    "CS101 Beginners Group",
+    "Weekly study group for introductory CS",
+    "Hybrid",
+    "3 members",
+    "0 linked sessions",
+    "Join this group",
+    "Report group",
+    "How this group runs",
+    "Who can join: Students enrolled in the related course or approved by a moderator.",
+    "Communication: Dashboard announcements and a shared study chat.",
+    "Schedule notes: Specific meeting times and participation expectations are posted by the group owner.",
+    "New member checklist",
+    "Introduce yourself to the group.",
+    "Review the shared study plan.",
+    "Join the next live session.",
+    "Requirements and rules",
+    "Join requirements",
+    "Read the welcome notes and attend the intro session.",
+    "Group rules",
+    "Stay respectful and keep discussion academic.",
+    "Member benefits",
+    "Shared notes, peer support, and structured academic help.",
+    "Current members",
+    "3 saved",
+    "eugen juma",
+    "eugenonyango@gmail.com",
+    "7/13/2026, 10:12:32 PM",
+    "simeon",
+    "simeonodhiambo57@gmail.com",
+    "7/15/2026, 8:48:50 PM",
+    "violet eugene",
+    "eugeneonyango@gmail.com",
+    "7/29/2026, 9:37:49 PM",
+    "Related sessions",
+    "0 sessions",
+    "No related sessions found."
+  ],
+  "textStrings": [
+    "StudyLink",
+    "Student workspace",
+    "←",
+    "Workspace",
+    "🏫",
+    "Schools",
+    "📘",
+    "Courses",
+    "📚",
+    "Learning Hub",
+    "✦",
+    "StudyLink AI",
+    "👥",
+    "Study Groups",
+    "🗓",
+    "Sessions",
+    "◫",
+    "Dashboard",
+    "👤",
+    "Profile",
+    "🔔",
+    "↗",
+    "Logout",
+    "Study Group",
+    "CS101 Beginners Group",
+    "Weekly study group for introductory CS",
+    "Hybrid",
+    "3",
+    "members",
+    "0",
+    "linked sessions",
+    "Join this group",
+    "Report",
+    "group",
+    "How this group runs",
+    "Who can join:",
+    "Students enrolled in the related course or approved by a moderator.",
+    "Communication:",
+    "Dashboard announcements and a shared study chat.",
+    "Schedule notes:",
+    "Specific meeting times and participation expectations are posted by the group owner.",
+    "New member checklist",
+    "Introduce yourself to the group.",
+    "Review the shared study plan.",
+    "Join the next live session.",
+    "Requirements and rules",
+    "Join requirements",
+    "Read the welcome notes and attend the intro session.",
+    "Group rules",
+    "Stay respectful and keep discussion academic.",
+    "Member benefits",
+    "Shared notes, peer support, and structured academic help.",
+    "Current members",
+    "saved",
+    "eugen juma",
+    "eugenonyango@gmail.com",
+    "7/13/2026, 10:12:32 PM",
+    "simeon",
+    "simeonodhiambo57@gmail.com",
+    "7/15/2026, 8:48:50 PM",
+    "violet eugene",
+    "eugeneonyango@gmail.com",
+    "7/29/2026, 9:37:49 PM",
+    "Related sessions",
+    "sessions",
+    "No related sessions found."
+  ],
+  "buttons": [
+    {
+      "label": "←",
+      "disabled": false
+    },
+    {
+      "label": "🔔",
+      "disabled": false
+    },
+    {
+      "label": "↗ Logout",
+      "disabled": false
+    },
+    {
+      "label": "Join this group",
+      "disabled": false
+    },
+    {
+      "label": "Report group",
+      "disabled": false
+    }
+  ],
+  "links": [
+    {
+      "label": "StudyLink STUDENT WORKSPACE",
+      "href": "/schools"
+    },
+    {
+      "label": "🏫 Schools",
+      "href": "/schools"
+    },
+    {
+      "label": "📘 Courses",
+      "href": "/courses"
+    },
+    {
+      "label": "📚 Learning Hub",
+      "href": "/learning?view=library"
+    },
+    {
+      "label": "✦ StudyLink AI",
+      "href": "/ask-ai"
+    },
+    {
+      "label": "👥 Study Groups",
+      "href": "/groups"
+    },
+    {
+      "label": "🗓 Sessions",
+      "href": "/sessions"
+    },
+    {
+      "label": "◫ Dashboard",
+      "href": "/dashboard"
+    },
+    {
+      "label": "👤 Profile",
+      "href": "/profile"
+    }
+  ],
+  "images": [
+    {
+      "src": "/src/assets/images/studylinklogo.png",
+      "alt": "StudyLink logo"
+    },
+    {
+      "src": "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1200&q=80",
+      "alt": "CS101 Beginners Group"
+    }
+  ],
+  "cardHeights": []
+}

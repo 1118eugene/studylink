@@ -1,0 +1,166 @@
+{
+  "route": "/profile",
+  "finalUrl": "http://127.0.0.1:5188/profile",
+  "status": 200,
+  "capturedAt": "2026-10-13T18:49:11.661Z",
+  "text": [
+    "StudyLink",
+    "STUDENT WORKSPACE",
+    "←",
+    "WORKSPACE",
+    "🏫",
+    "Schools",
+    "📘",
+    "Courses",
+    "📚",
+    "Learning Hub",
+    "✦",
+    "StudyLink AI",
+    "👥",
+    "Study Groups",
+    "🗓",
+    "Sessions",
+    "◫",
+    "Dashboard",
+    "👤",
+    "Profile",
+    "🔔",
+    "↗",
+    "Logout",
+    "SB",
+    "MY ACADEMIC PROFILE",
+    "StudyLink Baseline",
+    "Complete your profile to help classmates understand how you study best.",
+    "StudyLink Test University",
+    "Major pending",
+    "Year pending",
+    "Courses",
+    "0",
+    "Groups",
+    "0",
+    "Sessions",
+    "0",
+    "Classmates",
+    "0",
+    "Personal details",
+    "Edit profile",
+    "EMAIL",
+    "studylink-baseline@test.studylink.local",
+    "UNIVERSITY",
+    "StudyLink Test University",
+    "MAJOR",
+    "Not set yet",
+    "YEAR",
+    "Not set yet",
+    "My learning footprint",
+    "Saved to database"
+  ],
+  "textStrings": [
+    "StudyLink",
+    "Student workspace",
+    "←",
+    "Workspace",
+    "🏫",
+    "Schools",
+    "📘",
+    "Courses",
+    "📚",
+    "Learning Hub",
+    "✦",
+    "StudyLink AI",
+    "👥",
+    "Study Groups",
+    "🗓",
+    "Sessions",
+    "◫",
+    "Dashboard",
+    "👤",
+    "Profile",
+    "🔔",
+    "↗",
+    "Logout",
+    "SB",
+    "My Academic Profile",
+    "StudyLink Baseline",
+    "Complete your profile to help classmates understand how you study best.",
+    "StudyLink Test University",
+    "Major pending",
+    "Year pending",
+    "0",
+    "Groups",
+    "Classmates",
+    "Personal details",
+    "Edit profile",
+    "Email",
+    "studylink-baseline@test.studylink.local",
+    "University",
+    "Major",
+    "Not set yet",
+    "Year",
+    "My learning footprint",
+    "Saved to database"
+  ],
+  "buttons": [
+    {
+      "label": "←",
+      "disabled": false
+    },
+    {
+      "label": "🔔",
+      "disabled": false
+    },
+    {
+      "label": "↗ Logout",
+      "disabled": false
+    },
+    {
+      "label": "Edit profile",
+      "disabled": false
+    }
+  ],
+  "links": [
+    {
+      "label": "StudyLink STUDENT WORKSPACE",
+      "href": "/schools"
+    },
+    {
+      "label": "🏫 Schools",
+      "href": "/schools"
+    },
+    {
+      "label": "📘 Courses",
+      "href": "/courses"
+    },
+    {
+      "label": "📚 Learning Hub",
+      "href": "/learning?view=library"
+    },
+    {
+      "label": "✦ StudyLink AI",
+      "href": "/ask-ai"
+    },
+    {
+      "label": "👥 Study Groups",
+      "href": "/groups"
+    },
+    {
+      "label": "🗓 Sessions",
+      "href": "/sessions"
+    },
+    {
+      "label": "◫ Dashboard",
+      "href": "/dashboard"
+    },
+    {
+      "label": "👤 Profile",
+      "href": "/profile"
+    }
+  ],
+  "images": [
+    {
+      "src": "/src/assets/images/studylinklogo.png",
+      "alt": "StudyLink logo"
+    }
+  ],
+  "cardHeights": []
+}

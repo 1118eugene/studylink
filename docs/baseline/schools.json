@@ -1,0 +1,180 @@
+{
+  "route": "/schools",
+  "finalUrl": "http://127.0.0.1:5188/schools",
+  "status": 200,
+  "capturedAt": "2026-10-13T18:48:55.540Z",
+  "text": [
+    "StudyLink",
+    "STUDENT WORKSPACE",
+    "←",
+    "WORKSPACE",
+    "🏫",
+    "Schools",
+    "📘",
+    "Courses",
+    "📚",
+    "Learning Hub",
+    "✦",
+    "StudyLink AI",
+    "👥",
+    "Study Groups",
+    "🗓",
+    "Sessions",
+    "◫",
+    "Dashboard",
+    "👤",
+    "Profile",
+    "🔔",
+    "↗",
+    "Logout",
+    "ACADEMIC PATHWAYS",
+    "Every school should lead learners to relevant courses, notes, PDFs, podcasts, and revision support.",
+    "StudyLink now organizes content beyond one department so students from science, business, pharmacy, humanities, nursing, law, and psychology can find support in one serious academic platform.",
+    "4",
+    "Schools represented",
+    "10",
+    "Supported courses",
+    "Browse by school",
+    "Open a school to focus the course directory around the learner's real academic context.",
+    "Open full course directory",
+    "School of Science and Technology",
+    "2 programs",
+    "3 courses with notes, PDFs, podcasts, MCQs, and past-paper support.",
+    "View courses",
+    "School of Business",
+    "2 programs",
+    "2 courses with notes, PDFs, podcasts, MCQs, and past-paper support.",
+    "View courses",
+    "School of Pharmacy",
+    "2 programs",
+    "2 courses with notes, PDFs, podcasts, MCQs, and past-paper support.",
+    "View courses",
+    "School of Humanities and Social Sciences",
+    "3 programs",
+    "3 courses with notes, PDFs, podcasts, MCQs, and past-paper support.",
+    "View courses"
+  ],
+  "textStrings": [
+    "StudyLink",
+    "Student workspace",
+    "←",
+    "Workspace",
+    "🏫",
+    "Schools",
+    "📘",
+    "Courses",
+    "📚",
+    "Learning Hub",
+    "✦",
+    "StudyLink AI",
+    "👥",
+    "Study Groups",
+    "🗓",
+    "Sessions",
+    "◫",
+    "Dashboard",
+    "👤",
+    "Profile",
+    "🔔",
+    "↗",
+    "Logout",
+    "Academic Pathways",
+    "Every school should lead learners to relevant courses, notes, PDFs, podcasts, and revision support.",
+    "StudyLink now organizes content beyond one department so students from science, business, pharmacy, humanities, nursing, law, and psychology can find support in one serious academic platform.",
+    "4",
+    "Schools represented",
+    "10",
+    "Supported courses",
+    "Browse by school",
+    "Open a school to focus the course directory around the learner's real academic context.",
+    "Open full course directory",
+    "School of Science and Technology",
+    "2",
+    "programs",
+    "3",
+    "courses with notes, PDFs, podcasts, MCQs, and past-paper support.",
+    "View courses",
+    "School of Business",
+    "School of Pharmacy",
+    "School of Humanities and Social Sciences"
+  ],
+  "buttons": [
+    {
+      "label": "←",
+      "disabled": false
+    },
+    {
+      "label": "🔔",
+      "disabled": false
+    },
+    {
+      "label": "↗ Logout",
+      "disabled": false
+    }
+  ],
+  "links": [
+    {
+      "label": "StudyLink STUDENT WORKSPACE",
+      "href": "/schools"
+    },
+    {
+      "label": "🏫 Schools",
+      "href": "/schools"
+    },
+    {
+      "label": "📘 Courses",
+      "href": "/courses"
+    },
+    {
+      "label": "📚 Learning Hub",
+      "href": "/learning?view=library"
+    },
+    {
+      "label": "✦ StudyLink AI",
+      "href": "/ask-ai"
+    },
+    {
+      "label": "👥 Study Groups",
+      "href": "/groups"
+    },
+    {
+      "label": "🗓 Sessions",
+      "href": "/sessions"
+    },
+    {
+      "label": "◫ Dashboard",
+      "href": "/dashboard"
+    },
+    {
+      "label": "👤 Profile",
+      "href": "/profile"
+    },
+    {
+      "label": "Open full course directory",
+      "href": "/courses"
+    },
+    {
+      "label": "View courses",
+      "href": "/courses?school=School%20of%20Science%20and%20Technology"
+    },
+    {
+      "label": "View courses",
+      "href": "/courses?school=School%20of%20Business"
+    },
+    {
+      "label": "View courses",
+      "href": "/courses?school=School%20of%20Pharmacy"
+    },
+    {
+      "label": "View courses",
+      "href": "/courses?school=School%20of%20Humanities%20and%20Social%20Sciences"
+    }
+  ],
+  "images": [
+    {
+      "src": "/src/assets/images/studylinklogo.png",
+      "alt": "StudyLink logo"
+    }
+  ],
+  "cardHeights": []
+}

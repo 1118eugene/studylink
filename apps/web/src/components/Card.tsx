@@ -1,4 +1,4 @@
-import { useState, type CSSProperties, type ComponentPropsWithoutRef, type ElementType, type ReactNode } from 'react';
+import { useEffect, useState, type CSSProperties, type ComponentPropsWithoutRef, type ElementType, type ReactNode } from 'react';
 
 export type CardVariant = 'elevated' | 'outlined' | 'filled' | 'feature';
 export type CardCategory = 'business' | 'technology' | 'arts' | 'health' | 'engineering' | 'default';
@@ -52,11 +52,13 @@ type MediaProps = {
 
 function Media({ src, alt = '', placeholder, className = '' }: MediaProps) {
   const [failed, setFailed] = useState(false);
+  useEffect(() => setFailed(false), [src]);
   return (
     <div className={`sl-card__media ${className}`.trim()}>
-      {src && !failed
-        ? <img src={src} alt={alt} loading="lazy" onError={() => setFailed(true)} />
-        : <div className="sl-card__media-fallback" aria-hidden={!placeholder}>{placeholder || <span aria-hidden="true">✦</span>}</div>}
+      {src ? <img src={src} alt={alt} loading="lazy" onError={() => setFailed(true)} style={failed ? { opacity: 0 } : undefined} /> : null}
+      {!src || failed
+        ? <div className="sl-card__media-fallback" aria-hidden={!placeholder}>{placeholder || <span aria-hidden="true">✦</span>}</div>
+        : null}
     </div>
   );
 }

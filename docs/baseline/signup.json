@@ -1,0 +1,82 @@
+{
+  "route": "/signup",
+  "finalUrl": "http://127.0.0.1:5188/signup",
+  "status": 200,
+  "capturedAt": "2026-10-13T18:48:49.200Z",
+  "text": [
+    "StudyLink",
+    "University collaboration for students.",
+    "Home",
+    "About",
+    "Contact",
+    "Sign inSign up",
+    "Join StudyLink",
+    "Create your free academic account",
+    "Full name",
+    "Email",
+    "University",
+    "Password",
+    "Use at least 8 characters for your password.",
+    "Confirm password",
+    "Create account",
+    "Already have an account? Sign in"
+  ],
+  "textStrings": [
+    "StudyLink",
+    "University collaboration for students.",
+    "Home",
+    "About",
+    "Contact",
+    "Sign in",
+    "Sign up",
+    "Join StudyLink",
+    "Create your free academic account",
+    "Full name",
+    "Email",
+    "University",
+    "Password",
+    "Use at least 8 characters for your password.",
+    "Confirm password",
+    "Create account",
+    "Already have an account?"
+  ],
+  "buttons": [
+    {
+      "label": "Create account",
+      "disabled": false
+    }
+  ],
+  "links": [
+    {
+      "label": "Home",
+      "href": "/"
+    },
+    {
+      "label": "About",
+      "href": "/about"
+    },
+    {
+      "label": "Contact",
+      "href": "/contact"
+    },
+    {
+      "label": "Sign in",
+      "href": "/login"
+    },
+    {
+      "label": "Sign up",
+      "href": "/signup"
+    },
+    {
+      "label": "Sign in",
+      "href": "/login"
+    }
+  ],
+  "images": [
+    {
+      "src": "/src/assets/images/studylinklogo.png",
+      "alt": "StudyLink logo"
+    }
+  ],
+  "cardHeights": []
+}

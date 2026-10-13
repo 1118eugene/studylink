@@ -1,0 +1,298 @@
+{
+  "route": "/dashboard",
+  "finalUrl": "http://127.0.0.1:5188/dashboard",
+  "status": 200,
+  "capturedAt": "2026-10-13T18:48:54.641Z",
+  "text": [
+    "StudyLink",
+    "STUDENT WORKSPACE",
+    "←",
+    "WORKSPACE",
+    "🏫",
+    "Schools",
+    "📘",
+    "Courses",
+    "📚",
+    "Learning Hub",
+    "✦",
+    "StudyLink AI",
+    "👥",
+    "Study Groups",
+    "🗓",
+    "Sessions",
+    "◫",
+    "Dashboard",
+    "👤",
+    "Profile",
+    "🔔",
+    "↗",
+    "Logout",
+    "WELCOME BACK",
+    "StudyLink keeps your academic ecosystem compact and productive.",
+    "A slimmer dashboard with quick stats, upcoming sessions, and direct access to courses, library, and groups.",
+    "Continue learning",
+    "Ask StudyLink AI",
+    "Open learning hub",
+    "Courses enrolled",
+    "0",
+    "Study groups",
+    "9",
+    "Upcoming sessions",
+    "3",
+    "Learning resources",
+    "5",
+    "Recent activity",
+    "Latest updates",
+    "violet eugene joined APT3065 Sprint Review",
+    "Study Session - eugeneonyango@gmail.com",
+    "8/1/2026, 11:33:05 AM",
+    "violet eugene joined Data Structures Study Circle",
+    "Study Group - eugeneonyango@gmail.com",
+    "7/29/2026, 9:38:00 PM",
+    "violet eugene joined CS101 Beginners Group",
+    "Study Group - eugeneonyango@gmail.com",
+    "7/29/2026, 9:37:49 PM",
+    "eugen juma joined Binary Trees & Heaps Deep Dive",
+    "Study Session - eugenonyango@gmail.com",
+    "7/29/2026, 12:34:42 AM",
+    "Upcoming sessions",
+    "View sessions",
+    "Intro to Recursion",
+    "CS101 Beginners Group",
+    "Time pending",
+    "Binary Trees & Heaps Deep Dive",
+    "Data Structures Study Circle",
+    "Time pending",
+    "APT3065 Sprint Review",
+    "APT3065 Project Team",
+    "Time pending",
+    "Announcements",
+    "Campus insights",
+    "New course outline templates are available.",
+    "Course outline PDFs and weekly plans will help you keep every module organized.",
+    "Create or join a study group for your current course.",
+    "Structured groups improve exam preparation and keep your study time focused.",
+    "Learning Hub now groups notes, videos, podcasts, and past papers together.",
+    "Open one merged study area and switch content views from the same workspace.",
+    "Quick shortcuts",
+    "Navigate faster",
+    "Courses",
+    "Open your enrolled and available course catalog.",
+    "->",
+    "Learning Hub",
+    "Find notes, PDFs, podcasts, quizzes, and curated resources in one place.",
+    "->",
+    "Ask StudyLink AI",
+    "Open a course and ask the AI tutor for explanations, quizzes, and summaries.",
+    "->",
+    "Study groups",
+    "Review active groups and join collaborative sessions.",
+    "->",
+    "Sessions",
+    "Check your upcoming sessions and join live review meetings.",
+    "->"
+  ],
+  "textStrings": [
+    "StudyLink",
+    "Student workspace",
+    "←",
+    "Workspace",
+    "🏫",
+    "Schools",
+    "📘",
+    "Courses",
+    "📚",
+    "Learning Hub",
+    "✦",
+    "StudyLink AI",
+    "👥",
+    "Study Groups",
+    "🗓",
+    "Sessions",
+    "◫",
+    "Dashboard",
+    "👤",
+    "Profile",
+    "🔔",
+    "↗",
+    "Logout",
+    "Welcome back",
+    "StudyLink keeps your academic ecosystem compact and productive.",
+    "A slimmer dashboard with quick stats, upcoming sessions, and direct access to courses, library, and groups.",
+    "Continue learning",
+    "Ask StudyLink AI",
+    "Open learning hub",
+    "Courses enrolled",
+    "0",
+    "Study groups",
+    "9",
+    "Upcoming sessions",
+    "3",
+    "Learning resources",
+    "5",
+    "Recent activity",
+    "Latest updates",
+    "violet eugene joined APT3065 Sprint Review",
+    "Study Session - eugeneonyango@gmail.com",
+    "8/1/2026, 11:33:05 AM",
+    "violet eugene joined Data Structures Study Circle",
+    "Study Group - eugeneonyango@gmail.com",
+    "7/29/2026, 9:38:00 PM",
+    "violet eugene joined CS101 Beginners Group",
+    "7/29/2026, 9:37:49 PM",
+    "eugen juma joined Binary Trees & Heaps Deep Dive",
+    "Study Session - eugenonyango@gmail.com",
+    "7/29/2026, 12:34:42 AM",
+    "View sessions",
+    "Intro to Recursion",
+    "CS101 Beginners Group",
+    "Time pending",
+    "Binary Trees & Heaps Deep Dive",
+    "Data Structures Study Circle",
+    "APT3065 Sprint Review",
+    "APT3065 Project Team",
+    "Announcements",
+    "Campus insights",
+    "New course outline templates are available.",
+    "Course outline PDFs and weekly plans will help you keep every module organized.",
+    "Create or join a study group for your current course.",
+    "Structured groups improve exam preparation and keep your study time focused.",
+    "Learning Hub now groups notes, videos, podcasts, and past papers together.",
+    "Open one merged study area and switch content views from the same workspace.",
+    "Quick shortcuts",
+    "Navigate faster",
+    "Open your enrolled and available course catalog.",
+    "->",
+    "Find notes, PDFs, podcasts, quizzes, and curated resources in one place.",
+    "Open a course and ask the AI tutor for explanations, quizzes, and summaries.",
+    "Review active groups and join collaborative sessions.",
+    "Check your upcoming sessions and join live review meetings."
+  ],
+  "buttons": [
+    {
+      "label": "←",
+      "disabled": false
+    },
+    {
+      "label": "🔔",
+      "disabled": false
+    },
+    {
+      "label": "↗ Logout",
+      "disabled": false
+    }
+  ],
+  "links": [
+    {
+      "label": "StudyLink STUDENT WORKSPACE",
+      "href": "/schools"
+    },
+    {
+      "label": "🏫 Schools",
+      "href": "/schools"
+    },
+    {
+      "label": "📘 Courses",
+      "href": "/courses"
+    },
+    {
+      "label": "📚 Learning Hub",
+      "href": "/learning?view=library"
+    },
+    {
+      "label": "✦ StudyLink AI",
+      "href": "/ask-ai"
+    },
+    {
+      "label": "👥 Study Groups",
+      "href": "/groups"
+    },
+    {
+      "label": "🗓 Sessions",
+      "href": "/sessions"
+    },
+    {
+      "label": "◫ Dashboard",
+      "href": "/dashboard"
+    },
+    {
+      "label": "👤 Profile",
+      "href": "/profile"
+    },
+    {
+      "label": "Continue learning",
+      "href": "/courses"
+    },
+    {
+      "label": "Ask StudyLink AI",
+      "href": "/courses/1#ask"
+    },
+    {
+      "label": "Open learning hub",
+      "href": "/learning?view=library"
+    },
+    {
+      "label": "Courses enrolled 0",
+      "href": "/courses"
+    },
+    {
+      "label": "Study groups 9",
+      "href": "/groups"
+    },
+    {
+      "label": "Upcoming sessions 3",
+      "href": "/sessions"
+    },
+    {
+      "label": "Learning resources 5",
+      "href": "/learning?view=library"
+    },
+    {
+      "label": "violet eugene joined APT3065 Sprint Review Study Session - eugeneonyango@gmail.com 8/1/2026, 11:33:05 AM",
+      "href": "/sessions"
+    },
+    {
+      "label": "violet eugene joined Data Structures Study Circle Study Group - eugeneonyango@gmail.com 7/29/2026, 9:38:00 PM",
+      "href": "/groups/2"
+    },
+    {
+      "label": "violet eugene joined CS101 Beginners Group Study Group - eugeneonyango@gmail.com 7/29/2026, 9:37:49 PM",
+      "href": "/groups/1"
+    },
+    {
+      "label": "eugen juma joined Binary Trees & Heaps Deep Dive Study Session - eugenonyango@gmail.com 7/29/2026, 12:34:42 AM",
+      "href": "/sessions"
+    },
+    {
+      "label": "View sessions",
+      "href": "/sessions"
+    },
+    {
+      "label": "Courses Open your enrolled and available course catalog. ->",
+      "href": "/courses"
+    },
+    {
+      "label": "Learning Hub Find notes, PDFs, podcasts, quizzes, and curated resources in one place. ->",
+      "href": "/learning?view=library"
+    },
+    {
+      "label": "Ask StudyLink AI Open a course and ask the AI tutor for explanations, quizzes, and summaries. ->",
+      "href": "/courses/1#ask"
+    },
+    {
+      "label": "Study groups Review active groups and join collaborative sessions. ->",
+      "href": "/groups"
+    },
+    {
+      "label": "Sessions Check your upcoming sessions and join live review meetings. ->",
+      "href": "/sessions"
+    }
+  ],
+  "images": [
+    {
+      "src": "/src/assets/images/studylinklogo.png",
+      "alt": "StudyLink logo"
+    }
+  ],
+  "cardHeights": []
+}

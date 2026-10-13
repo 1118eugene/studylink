@@ -1,0 +1,337 @@
+{
+  "route": "/courses/1",
+  "finalUrl": "http://127.0.0.1:5188/courses/1",
+  "status": 200,
+  "capturedAt": "2026-10-13T18:48:57.958Z",
+  "text": [
+    "StudyLink",
+    "STUDENT WORKSPACE",
+    "←",
+    "WORKSPACE",
+    "🏫",
+    "Schools",
+    "📘",
+    "Courses",
+    "📚",
+    "Learning Hub",
+    "✦",
+    "StudyLink AI",
+    "👥",
+    "Study Groups",
+    "🗓",
+    "Sessions",
+    "◫",
+    "Dashboard",
+    "👤",
+    "Profile",
+    "🔔",
+    "↗",
+    "Logout",
+    "SCHOOL OF SCIENCE AND TECHNOLOGY",
+    "APT3065: Mid-Term Project",
+    "Collaborative project planning, research methods, and presentation preparation.",
+    "Year 3",
+    "Project Studio",
+    "14 resources",
+    "Enroll in course",
+    "Ask StudyLink AI",
+    "Back to courses",
+    "Overview",
+    "Notes",
+    "PDFs",
+    "Podcasts",
+    "Videos",
+    "MCQs",
+    "Past papers",
+    "Study groups",
+    "Live sessions",
+    "Students enrolled",
+    "Ask StudyLink AI",
+    "AUDIENCE:",
+    "All",
+    "All enrolled students",
+    "Students revising beyond class hours",
+    "Visual learners",
+    "Students preparing for exams",
+    "14 total resources",
+    "Course support summary",
+    "Collaborative project planning, research methods, and presentation preparation.",
+    "School of Science and Technology",
+    "Applied Computer Technology",
+    "Year 3 · Project Studio",
+    "14 learning resources inside this hub",
+    "Helping students turn difficult mobile architecture concepts into practical revision steps.",
+    "Why this hub matters",
+    "Build stable mobile flows",
+    "Explain architecture patterns clearly",
+    "Prepare for implementation exams and demos",
+    "StudyLink AI — Quick research",
+    "Refresh",
+    "StudyLink AI recommends starting with android architecture basics in Mobile Programming. Begin by understanding the concept clearly, then link it to the course outcomes, practical examples, and likely exam questions. Use the steps below to build depth, retain the idea, and apply it to real study tasks.",
+    "Recommended next steps",
+    "Define android architecture basics in your own words and note how it appears in Mobile Programming.",
+    "Compare the concept with one related topic from the course so you can see the difference clearly.",
+    "Open one note or PDF and outline the main stages, formulas, or definitions it uses.",
+    "Watch a video or listen to a podcast to reinforce the idea through another learning mode.",
+    "Try one practice question or MCQ on the topic, then explain the answer aloud.",
+    "After each pass, write a short summary to lock the learning and identify any weak points to revisit.",
+    "Recommended resources",
+    "APT3060 Note 1: MVVM and state management",
+    "External",
+    "Structured study notes for MVVM and state management in Mobile Programming.",
+    "Open external",
+    "Open in-app",
+    "APT3060 Note 2: Retrofit networking flow",
+    "External",
+    "Structured study notes for Retrofit networking flow in Mobile Programming.",
+    "Open external",
+    "Open in-app",
+    "Research mode",
+    "Ask StudyLink AI to fetch curated external notes, PDFs, MCQs and past papers. Use the question box at the bottom of the hub to refine your request.",
+    "Fetch curated results",
+    "Quick searches",
+    "Search PDFs",
+    "Search YouTube",
+    "Search Scholar",
+    "Search MCQs"
+  ],
+  "textStrings": [
+    "StudyLink",
+    "Student workspace",
+    "←",
+    "Workspace",
+    "🏫",
+    "Schools",
+    "📘",
+    "Courses",
+    "📚",
+    "Learning Hub",
+    "✦",
+    "StudyLink AI",
+    "👥",
+    "Study Groups",
+    "🗓",
+    "Sessions",
+    "◫",
+    "Dashboard",
+    "👤",
+    "Profile",
+    "🔔",
+    "↗",
+    "Logout",
+    "School of Science and Technology",
+    "APT3065",
+    ":",
+    "Mid-Term Project",
+    "Collaborative project planning, research methods, and presentation preparation.",
+    "Year 3",
+    "Project Studio",
+    "14",
+    "resources",
+    "Enroll in course",
+    "Ask StudyLink AI",
+    "Back to courses",
+    "Overview",
+    "Notes",
+    "PDFs",
+    "Podcasts",
+    "Videos",
+    "MCQs",
+    "Past papers",
+    "Study groups",
+    "Live sessions",
+    "Students enrolled",
+    "Audience:",
+    "total resources",
+    "Course support summary",
+    "Applied Computer Technology",
+    "·",
+    "learning resources inside this hub",
+    "Helping students turn difficult mobile architecture concepts into practical revision steps.",
+    "Why this hub matters",
+    "Build stable mobile flows",
+    "Explain architecture patterns clearly",
+    "Prepare for implementation exams and demos",
+    "StudyLink AI — Quick research",
+    "Refresh",
+    "StudyLink AI recommends starting with android architecture basics in Mobile Programming. Begin by understanding the concept clearly, then link it to the course outcomes, practical examples, and likely exam questions. Use the steps below to build depth, retain the idea, and apply it to real study tasks.",
+    "Recommended next steps",
+    "Define android architecture basics in your own words and note how it appears in Mobile Programming.",
+    "Compare the concept with one related topic from the course so you can see the difference clearly.",
+    "Open one note or PDF and outline the main stages, formulas, or definitions it uses.",
+    "Watch a video or listen to a podcast to reinforce the idea through another learning mode.",
+    "Try one practice question or MCQ on the topic, then explain the answer aloud.",
+    "After each pass, write a short summary to lock the learning and identify any weak points to revisit.",
+    "Recommended resources",
+    "APT3060 Note 1: MVVM and state management",
+    "External",
+    "Structured study notes for MVVM and state management in Mobile Programming.",
+    "Open external",
+    "Open in-app",
+    "APT3060 Note 2: Retrofit networking flow",
+    "Structured study notes for Retrofit networking flow in Mobile Programming.",
+    "Research mode",
+    "Ask StudyLink AI to fetch curated external notes, PDFs, MCQs and past papers. Use the question box at the bottom of the hub to refine your request.",
+    "Fetch curated results",
+    "Quick searches",
+    "Search PDFs",
+    "Search YouTube",
+    "Search Scholar",
+    "Search MCQs"
+  ],
+  "buttons": [
+    {
+      "label": "←",
+      "disabled": false
+    },
+    {
+      "label": "🔔",
+      "disabled": false
+    },
+    {
+      "label": "↗ Logout",
+      "disabled": false
+    },
+    {
+      "label": "Enroll in course",
+      "disabled": false
+    },
+    {
+      "label": "Overview",
+      "disabled": false
+    },
+    {
+      "label": "Notes",
+      "disabled": false
+    },
+    {
+      "label": "PDFs",
+      "disabled": false
+    },
+    {
+      "label": "Podcasts",
+      "disabled": false
+    },
+    {
+      "label": "Videos",
+      "disabled": false
+    },
+    {
+      "label": "MCQs",
+      "disabled": false
+    },
+    {
+      "label": "Past papers",
+      "disabled": false
+    },
+    {
+      "label": "Study groups",
+      "disabled": false
+    },
+    {
+      "label": "Live sessions",
+      "disabled": false
+    },
+    {
+      "label": "Students enrolled",
+      "disabled": false
+    },
+    {
+      "label": "Ask StudyLink AI",
+      "disabled": false
+    },
+    {
+      "label": "Refresh",
+      "disabled": false
+    },
+    {
+      "label": "Open external",
+      "disabled": false
+    },
+    {
+      "label": "Open in-app",
+      "disabled": false
+    },
+    {
+      "label": "Open external",
+      "disabled": false
+    },
+    {
+      "label": "Open in-app",
+      "disabled": false
+    },
+    {
+      "label": "Fetch curated results",
+      "disabled": false
+    }
+  ],
+  "links": [
+    {
+      "label": "StudyLink STUDENT WORKSPACE",
+      "href": "/schools"
+    },
+    {
+      "label": "🏫 Schools",
+      "href": "/schools"
+    },
+    {
+      "label": "📘 Courses",
+      "href": "/courses"
+    },
+    {
+      "label": "📚 Learning Hub",
+      "href": "/learning?view=library"
+    },
+    {
+      "label": "✦ StudyLink AI",
+      "href": "/ask-ai"
+    },
+    {
+      "label": "👥 Study Groups",
+      "href": "/groups"
+    },
+    {
+      "label": "🗓 Sessions",
+      "href": "/sessions"
+    },
+    {
+      "label": "◫ Dashboard",
+      "href": "/dashboard"
+    },
+    {
+      "label": "👤 Profile",
+      "href": "/profile"
+    },
+    {
+      "label": "Ask StudyLink AI",
+      "href": "/ask-ai?course=APT3065"
+    },
+    {
+      "label": "Back to courses",
+      "href": "/courses"
+    },
+    {
+      "label": "Search PDFs",
+      "href": "https://www.google.com/search?q=Mobile%20Programming%20Android%20architecture%20basics%20filetype%3Apdf"
+    },
+    {
+      "label": "Search YouTube",
+      "href": "https://www.youtube.com/results?search_query=Mobile%20Programming%20Android%20architecture%20basics"
+    },
+    {
+      "label": "Search Scholar",
+      "href": "https://scholar.google.com/scholar?q=Mobile%20Programming%20Android%20architecture%20basics"
+    },
+    {
+      "label": "Search MCQs",
+      "href": "https://www.google.com/search?q=Mobile%20Programming%20Android%20architecture%20basics%20MCQ%20questions"
+    }
+  ],
+  "images": [
+    {
+      "src": "/src/assets/images/studylinklogo.png",
+      "alt": "StudyLink logo"
+    }
+  ],
+  "cardHeights": []
+}

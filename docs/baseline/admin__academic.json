@@ -1,0 +1,162 @@
+{
+  "route": "/admin/academic",
+  "finalUrl": "http://127.0.0.1:5188/admin/academic",
+  "status": 200,
+  "capturedAt": "2026-10-13T18:48:59.671Z",
+  "text": [
+    "StudyLink",
+    "STUDENT WORKSPACE",
+    "←",
+    "WORKSPACE",
+    "🏫",
+    "Schools",
+    "📘",
+    "Courses",
+    "📚",
+    "Learning Hub",
+    "✦",
+    "StudyLink AI",
+    "👥",
+    "Study Groups",
+    "🗓",
+    "Sessions",
+    "◫",
+    "Dashboard",
+    "👤",
+    "Profile",
+    "🔔",
+    "↗",
+    "Logout",
+    "Academic Admin (seed)",
+    "Create schools, programs and courses for testing.",
+    "Add School",
+    "Add school",
+    "Add Program",
+    "Choose school",
+    "Add program",
+    "Add Course",
+    "Choose program",
+    "Add course",
+    "Add Resource to Course",
+    "Choose course",
+    "Add resource",
+    "Current data",
+    "Schools",
+    "Programs",
+    "Courses",
+    "Course resources"
+  ],
+  "textStrings": [
+    "StudyLink",
+    "Student workspace",
+    "←",
+    "Workspace",
+    "🏫",
+    "Schools",
+    "📘",
+    "Courses",
+    "📚",
+    "Learning Hub",
+    "✦",
+    "StudyLink AI",
+    "👥",
+    "Study Groups",
+    "🗓",
+    "Sessions",
+    "◫",
+    "Dashboard",
+    "👤",
+    "Profile",
+    "🔔",
+    "↗",
+    "Logout",
+    "Academic Admin (seed)",
+    "Create schools, programs and courses for testing.",
+    "Add School",
+    "Add school",
+    "Add Program",
+    "Add program",
+    "Add Course",
+    "Add course",
+    "Add Resource to Course",
+    "Add resource",
+    "Current data",
+    "Programs",
+    "Course resources"
+  ],
+  "buttons": [
+    {
+      "label": "←",
+      "disabled": false
+    },
+    {
+      "label": "🔔",
+      "disabled": false
+    },
+    {
+      "label": "↗ Logout",
+      "disabled": false
+    },
+    {
+      "label": "Add school",
+      "disabled": false
+    },
+    {
+      "label": "Add program",
+      "disabled": false
+    },
+    {
+      "label": "Add course",
+      "disabled": false
+    },
+    {
+      "label": "Add resource",
+      "disabled": false
+    }
+  ],
+  "links": [
+    {
+      "label": "StudyLink STUDENT WORKSPACE",
+      "href": "/schools"
+    },
+    {
+      "label": "🏫 Schools",
+      "href": "/schools"
+    },
+    {
+      "label": "📘 Courses",
+      "href": "/courses"
+    },
+    {
+      "label": "📚 Learning Hub",
+      "href": "/learning?view=library"
+    },
+    {
+      "label": "✦ StudyLink AI",
+      "href": "/ask-ai"
+    },
+    {
+      "label": "👥 Study Groups",
+      "href": "/groups"
+    },
+    {
+      "label": "🗓 Sessions",
+      "href": "/sessions"
+    },
+    {
+      "label": "◫ Dashboard",
+      "href": "/dashboard"
+    },
+    {
+      "label": "👤 Profile",
+      "href": "/profile"
+    }
+  ],
+  "images": [
+    {
+      "src": "/src/assets/images/studylinklogo.png",
+      "alt": "StudyLink logo"
+    }
+  ],
+  "cardHeights": []
+}

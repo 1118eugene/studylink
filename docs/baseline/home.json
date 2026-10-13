@@ -1,0 +1,113 @@
+{
+  "route": "/",
+  "finalUrl": "http://127.0.0.1:5188/",
+  "status": 200,
+  "capturedAt": "2026-10-13T18:48:47.525Z",
+  "text": [
+    "StudyLink",
+    "University collaboration for students.",
+    "Home",
+    "About",
+    "Contact",
+    "Sign inSign up",
+    "Academic ecosystem for university success",
+    "One place for courses, study groups, library resources, and AI academic support.",
+    "StudyLink is built to keep your university learning organized, help you track deadlines, and turn every course into a structured learning hub.",
+    "Get started",
+    "Sign in",
+    "50+",
+    "Courses catalog",
+    "1200+",
+    "Academic resources",
+    "30+",
+    "Study groups",
+    "24/7",
+    "Ask StudyLink AI",
+    "Learn faster with structure",
+    "From schools and programs to course hubs and weekly topics, StudyLink keeps your academic journey organized and easy to follow.",
+    "Find resources instantly",
+    "Search PDFs, lecture notes, MCQs, past papers, videos, and podcasts from one curated academic library.",
+    "Collaborate with purpose",
+    "Join study groups, attend live sessions, and connect with classmates in each course's enrolled student hub.",
+    "START YOUR ACADEMIC ECOSYSTEM",
+    "Compact dashboard, direct access, and AI support for every course.",
+    "Create account",
+    "Sign in"
+  ],
+  "textStrings": [
+    "StudyLink",
+    "University collaboration for students.",
+    "Home",
+    "About",
+    "Contact",
+    "Sign in",
+    "Sign up",
+    "Academic ecosystem for university success",
+    "One place for courses, study groups, library resources, and AI academic support.",
+    "StudyLink is built to keep your university learning organized, help you track deadlines, and turn every course into a structured learning hub.",
+    "Get started",
+    "50+",
+    "Courses catalog",
+    "1200+",
+    "Academic resources",
+    "30+",
+    "Study groups",
+    "24/7",
+    "Ask StudyLink AI",
+    "Learn faster with structure",
+    "From schools and programs to course hubs and weekly topics, StudyLink keeps your academic journey organized and easy to follow.",
+    "Find resources instantly",
+    "Search PDFs, lecture notes, MCQs, past papers, videos, and podcasts from one curated academic library.",
+    "Collaborate with purpose",
+    "Join study groups, attend live sessions, and connect with classmates in each course's enrolled student hub.",
+    "Start your academic ecosystem",
+    "Compact dashboard, direct access, and AI support for every course.",
+    "Create account"
+  ],
+  "buttons": [],
+  "links": [
+    {
+      "label": "Home",
+      "href": "/"
+    },
+    {
+      "label": "About",
+      "href": "/about"
+    },
+    {
+      "label": "Contact",
+      "href": "/contact"
+    },
+    {
+      "label": "Sign in",
+      "href": "/login"
+    },
+    {
+      "label": "Sign up",
+      "href": "/signup"
+    },
+    {
+      "label": "Get started",
+      "href": "/signup"
+    },
+    {
+      "label": "Sign in",
+      "href": "/login"
+    },
+    {
+      "label": "Create account",
+      "href": "/signup"
+    },
+    {
+      "label": "Sign in",
+      "href": "/login"
+    }
+  ],
+  "images": [
+    {
+      "src": "/src/assets/images/studylinklogo.png",
+      "alt": "StudyLink logo"
+    }
+  ],
+  "cardHeights": []
+}

@@ -23,12 +23,14 @@
     "build:mobile": "npm run build:web --workspace @studylink/mobile",
     "typecheck": "npm run typecheck --workspace @studylink/mobile && npm run typecheck --workspace @studylink/web",
     "smoke": "npm run smoke --workspace @studylink/api",
+    "snapshot:content": "node scripts/content-snapshot.mjs",
     "test:api": "npm run test:api --workspace @studylink/api",
     "test": "npm run test:api && npm run build:web && npm run typecheck",
     "migrate": "npm run migrate --workspace @studylink/api",
     "preview:web": "npm run preview --workspace @studylink/web"
   },
   "devDependencies": {
-    "concurrently": "^9.0.1"
+    "concurrently": "^9.0.1",
+    "playwright": "^1.64.0"
   }
 }

@@ -1,0 +1,76 @@
+{
+  "route": "/login",
+  "finalUrl": "http://127.0.0.1:5188/login",
+  "status": 200,
+  "capturedAt": "2026-10-13T18:48:48.447Z",
+  "text": [
+    "StudyLink",
+    "University collaboration for students.",
+    "Home",
+    "About",
+    "Contact",
+    "Sign inSign up",
+    "Welcome back",
+    "Sign in to continue to StudyLink",
+    "Email",
+    "Password",
+    "Use the password you created when you signed up.",
+    "Sign in",
+    "New to StudyLink? Create an account"
+  ],
+  "textStrings": [
+    "StudyLink",
+    "University collaboration for students.",
+    "Home",
+    "About",
+    "Contact",
+    "Sign in",
+    "Sign up",
+    "Welcome back",
+    "Sign in to continue to StudyLink",
+    "Email",
+    "Password",
+    "Use the password you created when you signed up.",
+    "New to StudyLink?",
+    "Create an account"
+  ],
+  "buttons": [
+    {
+      "label": "Sign in",
+      "disabled": false
+    }
+  ],
+  "links": [
+    {
+      "label": "Home",
+      "href": "/"
+    },
+    {
+      "label": "About",
+      "href": "/about"
+    },
+    {
+      "label": "Contact",
+      "href": "/contact"
+    },
+    {
+      "label": "Sign in",
+      "href": "/login"
+    },
+    {
+      "label": "Sign up",
+      "href": "/signup"
+    },
+    {
+      "label": "Create an account",
+      "href": "/signup"
+    }
+  ],
+  "images": [
+    {
+      "src": "/src/assets/images/studylinklogo.png",
+      "alt": "StudyLink logo"
+    }
+  ],
+  "cardHeights": []
+}

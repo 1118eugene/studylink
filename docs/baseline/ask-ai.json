@@ -1,0 +1,210 @@
+{
+  "route": "/ask-ai",
+  "finalUrl": "http://127.0.0.1:5188/ask-ai",
+  "status": 200,
+  "capturedAt": "2026-10-13T18:48:58.766Z",
+  "text": [
+    "StudyLink",
+    "STUDENT WORKSPACE",
+    "←",
+    "WORKSPACE",
+    "🏫",
+    "Schools",
+    "📘",
+    "Courses",
+    "📚",
+    "Learning Hub",
+    "✦",
+    "StudyLink AI",
+    "👥",
+    "Study Groups",
+    "🗓",
+    "Sessions",
+    "◫",
+    "Dashboard",
+    "👤",
+    "Profile",
+    "🔔",
+    "↗",
+    "Logout",
+    "STUDYLINK AI",
+    "Quick course guidance, notes, and revision steps without leaving the app.",
+    "Ask for summaries, study direction, and resource recommendations in one place.",
+    "10",
+    "Courses in AI support catalog",
+    "14",
+    "Linked study resources",
+    "Ask for what you need",
+    "APT3060",
+    "Course",
+    "APT3060 - Mobile Programming",
+    "APT3025 - Machine Learning",
+    "CS201 - Data Structures and Algorithms",
+    "BUS101 - Introduction to Business",
+    "ACC210 - Financial Accounting",
+    "PHR220 - Pharmacology Fundamentals",
+    "NUR230 - Medical-Surgical Nursing",
+    "ENG201 - Academic Writing",
+    "PSY210 - Developmental Psychology",
+    "LAW110 - Introduction to Constitutional Law",
+    "Prompt idea",
+    "Explain MVVM in simple terms",
+    "Give me notes on Retrofit and Room",
+    "Create a quiz on lifecycle management",
+    "Your question",
+    "Guidance updates live as you type.",
+    "AI guidance",
+    "AI resources",
+    "APT3060: Android architecture basics",
+    "AI study response",
+    "StudyLink AI recommends starting with android architecture basics in Mobile Programming. Begin by understanding the concept clearly, then link it to the course outcomes, practical examples, and likely exam questions. Use the steps below to build depth, retain the idea, and apply it to real study tasks.",
+    "Focus areas",
+    "Core definition and why android architecture basics matters in Mobile Programming.",
+    "Common mistakes or misconceptions students make with this topic.",
+    "How the topic is used in assignments, exams, or practical tasks.",
+    "A short example or scenario that makes the idea concrete.",
+    "Study tips",
+    "Break the topic into small parts and study one part at a time.",
+    "Write a simple explanation as if you were teaching a friend.",
+    "Use notes, video, and practice together to build deeper understanding.",
+    "Review the same idea again after a short break to strengthen recall.",
+    "Action steps",
+    "Define android architecture basics in your own words and note how it appears in Mobile Programming.",
+    "Compare the concept with one related topic from the course so you can see the difference clearly.",
+    "Open one note or PDF and outline the main stages, formulas, or definitions it uses.",
+    "Watch a video or listen to a podcast to reinforce the idea through another learning mode.",
+    "Try one practice question or MCQ on the topic, then explain the answer aloud.",
+    "After each pass, write a short summary to lock the learning and identify any weak points to revisit.",
+    "Peer advice",
+    "If this course feels difficult, do not study it alone. Use the notes first, then take the same topic into your StudyLink group discussion for faster understanding."
+  ],
+  "textStrings": [
+    "StudyLink",
+    "Student workspace",
+    "←",
+    "Workspace",
+    "🏫",
+    "Schools",
+    "📘",
+    "Courses",
+    "📚",
+    "Learning Hub",
+    "✦",
+    "StudyLink AI",
+    "👥",
+    "Study Groups",
+    "🗓",
+    "Sessions",
+    "◫",
+    "Dashboard",
+    "👤",
+    "Profile",
+    "🔔",
+    "↗",
+    "Logout",
+    "Quick course guidance, notes, and revision steps without leaving the app.",
+    "Ask for summaries, study direction, and resource recommendations in one place.",
+    "10",
+    "Courses in AI support catalog",
+    "14",
+    "Linked study resources",
+    "Ask for what you need",
+    "APT3060",
+    "Course",
+    "Prompt idea",
+    "Your question",
+    "Give me notes and revision guidance for this course.",
+    "Guidance updates live as you type.",
+    "AI guidance",
+    "AI resources",
+    "APT3060: Android architecture basics",
+    "AI study response",
+    "StudyLink AI recommends starting with android architecture basics in Mobile Programming. Begin by understanding the concept clearly, then link it to the course outcomes, practical examples, and likely exam questions. Use the steps below to build depth, retain the idea, and apply it to real study tasks.",
+    "Focus areas",
+    "Core definition and why android architecture basics matters in Mobile Programming.",
+    "Common mistakes or misconceptions students make with this topic.",
+    "How the topic is used in assignments, exams, or practical tasks.",
+    "A short example or scenario that makes the idea concrete.",
+    "Study tips",
+    "Break the topic into small parts and study one part at a time.",
+    "Write a simple explanation as if you were teaching a friend.",
+    "Use notes, video, and practice together to build deeper understanding.",
+    "Review the same idea again after a short break to strengthen recall.",
+    "Action steps",
+    "Define android architecture basics in your own words and note how it appears in Mobile Programming.",
+    "Compare the concept with one related topic from the course so you can see the difference clearly.",
+    "Open one note or PDF and outline the main stages, formulas, or definitions it uses.",
+    "Watch a video or listen to a podcast to reinforce the idea through another learning mode.",
+    "Try one practice question or MCQ on the topic, then explain the answer aloud.",
+    "After each pass, write a short summary to lock the learning and identify any weak points to revisit.",
+    "Peer advice",
+    "If this course feels difficult, do not study it alone. Use the notes first, then take the same topic into your StudyLink group discussion for faster understanding."
+  ],
+  "buttons": [
+    {
+      "label": "←",
+      "disabled": false
+    },
+    {
+      "label": "🔔",
+      "disabled": false
+    },
+    {
+      "label": "↗ Logout",
+      "disabled": false
+    },
+    {
+      "label": "AI guidance",
+      "disabled": false
+    },
+    {
+      "label": "AI resources",
+      "disabled": false
+    }
+  ],
+  "links": [
+    {
+      "label": "StudyLink STUDENT WORKSPACE",
+      "href": "/schools"
+    },
+    {
+      "label": "🏫 Schools",
+      "href": "/schools"
+    },
+    {
+      "label": "📘 Courses",
+      "href": "/courses"
+    },
+    {
+      "label": "📚 Learning Hub",
+      "href": "/learning?view=library"
+    },
+    {
+      "label": "✦ StudyLink AI",
+      "href": "/ask-ai"
+    },
+    {
+      "label": "👥 Study Groups",
+      "href": "/groups"
+    },
+    {
+      "label": "🗓 Sessions",
+      "href": "/sessions"
+    },
+    {
+      "label": "◫ Dashboard",
+      "href": "/dashboard"
+    },
+    {
+      "label": "👤 Profile",
+      "href": "/profile"
+    }
+  ],
+  "images": [
+    {
+      "src": "/src/assets/images/studylinklogo.png",
+      "alt": "StudyLink logo"
+    }
+  ],
+  "cardHeights": []
+}

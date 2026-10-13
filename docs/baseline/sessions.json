@@ -1,0 +1,246 @@
+{
+  "route": "/sessions",
+  "finalUrl": "http://127.0.0.1:5188/sessions",
+  "status": 200,
+  "capturedAt": "2026-10-13T18:49:05.737Z",
+  "text": [
+    "StudyLink",
+    "STUDENT WORKSPACE",
+    "←",
+    "WORKSPACE",
+    "🏫",
+    "Schools",
+    "📘",
+    "Courses",
+    "📚",
+    "Learning Hub",
+    "✦",
+    "StudyLink AI",
+    "👥",
+    "Study Groups",
+    "🗓",
+    "Sessions",
+    "◫",
+    "Dashboard",
+    "👤",
+    "Profile",
+    "🔔",
+    "↗",
+    "Logout",
+    "STUDY SESSIONS",
+    "Schedule sharper sessions with real attendance counts and better study context.",
+    "3",
+    "Total sessions",
+    "3",
+    "Upcoming and open",
+    "5",
+    "Saved enrollments",
+    "Schedule sessions",
+    "Only open the session form when you're ready to create or edit a schedule.",
+    "New session",
+    "Oct",
+    "13",
+    "STUDY SESSION",
+    "Intro to Recursion",
+    "Upcoming",
+    "Science Block LT2",
+    "CS101 Beginners Group",
+    "ENROLLED",
+    "2",
+    "PREP NOTES",
+    "0",
+    "AGENDA ITEMS",
+    "0",
+    "Enroll",
+    "Edit",
+    "Delete",
+    "Oct",
+    "13",
+    "STUDY SESSION",
+    "Binary Trees & Heaps Deep Dive",
+    "Upcoming",
+    "Library Room 3A",
+    "Data Structures Study Circle",
+    "ENROLLED",
+    "1",
+    "PREP NOTES",
+    "0",
+    "AGENDA ITEMS",
+    "0",
+    "Enroll",
+    "Edit",
+    "Delete",
+    "Oct",
+    "13",
+    "STUDY SESSION",
+    "APT3065 Sprint Review",
+    "Upcoming",
+    "Lab A",
+    "APT3065 Project Team",
+    "ENROLLED",
+    "2",
+    "PREP NOTES",
+    "0",
+    "AGENDA ITEMS",
+    "0",
+    "Enroll",
+    "Edit",
+    "Delete"
+  ],
+  "textStrings": [
+    "StudyLink",
+    "Student workspace",
+    "←",
+    "Workspace",
+    "🏫",
+    "Schools",
+    "📘",
+    "Courses",
+    "📚",
+    "Learning Hub",
+    "✦",
+    "StudyLink AI",
+    "👥",
+    "Study Groups",
+    "🗓",
+    "Sessions",
+    "◫",
+    "Dashboard",
+    "👤",
+    "Profile",
+    "🔔",
+    "↗",
+    "Logout",
+    "Study Sessions",
+    "Schedule sharper sessions with real attendance counts and better study context.",
+    "3",
+    "Total sessions",
+    "Upcoming and open",
+    "5",
+    "Saved enrollments",
+    "Schedule sessions",
+    "Only open the session form when you're ready to create or edit a schedule.",
+    "New session",
+    "Oct",
+    "13",
+    "Study Session",
+    "Intro to Recursion",
+    "Upcoming",
+    "Science Block LT2",
+    "CS101 Beginners Group",
+    "Enrolled",
+    "2",
+    "Prep notes",
+    "0",
+    "Agenda items",
+    "Enroll",
+    "Edit",
+    "Delete",
+    "Binary Trees & Heaps Deep Dive",
+    "Library Room 3A",
+    "Data Structures Study Circle",
+    "1",
+    "APT3065 Sprint Review",
+    "Lab A",
+    "APT3065 Project Team"
+  ],
+  "buttons": [
+    {
+      "label": "←",
+      "disabled": false
+    },
+    {
+      "label": "🔔",
+      "disabled": false
+    },
+    {
+      "label": "↗ Logout",
+      "disabled": false
+    },
+    {
+      "label": "New session",
+      "disabled": false
+    },
+    {
+      "label": "Enroll",
+      "disabled": false
+    },
+    {
+      "label": "Edit",
+      "disabled": false
+    },
+    {
+      "label": "Delete",
+      "disabled": false
+    },
+    {
+      "label": "Enroll",
+      "disabled": false
+    },
+    {
+      "label": "Edit",
+      "disabled": false
+    },
+    {
+      "label": "Delete",
+      "disabled": false
+    },
+    {
+      "label": "Enroll",
+      "disabled": false
+    },
+    {
+      "label": "Edit",
+      "disabled": false
+    },
+    {
+      "label": "Delete",
+      "disabled": false
+    }
+  ],
+  "links": [
+    {
+      "label": "StudyLink STUDENT WORKSPACE",
+      "href": "/schools"
+    },
+    {
+      "label": "🏫 Schools",
+      "href": "/schools"
+    },
+    {
+      "label": "📘 Courses",
+      "href": "/courses"
+    },
+    {
+      "label": "📚 Learning Hub",
+      "href": "/learning?view=library"
+    },
+    {
+      "label": "✦ StudyLink AI",
+      "href": "/ask-ai"
+    },
+    {
+      "label": "👥 Study Groups",
+      "href": "/groups"
+    },
+    {
+      "label": "🗓 Sessions",
+      "href": "/sessions"
+    },
+    {
+      "label": "◫ Dashboard",
+      "href": "/dashboard"
+    },
+    {
+      "label": "👤 Profile",
+      "href": "/profile"
+    }
+  ],
+  "images": [
+    {
+      "src": "/src/assets/images/studylinklogo.png",
+      "alt": "StudyLink logo"
+    }
+  ],
+  "cardHeights": []
+}

@@ -1,5 +1,5 @@
 import { Routes, Route, Navigate, useLocation, Link } from 'react-router-dom';
-import { useState, useEffect, type ReactNode } from 'react';
+import { lazy, Suspense, useState, useEffect, type ReactNode } from 'react';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import Login from './pages/Login';
@@ -23,10 +23,13 @@ import ResourceDetail from './pages/ResourceDetail';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import StudyLinkAI from './pages/StudyLinkAI';
-import CardGallery from './pages/CardGallery';
 import './App.css';
 import './workspace.css';
 import { getStoredUser } from './lib/session';
+
+const CardGallery = import.meta.env.DEV
+  ? lazy(() => import('./pages/CardGallery'))
+  : null;
 
 type ProtectedRouteProps = {
   children: ReactNode;
@@ -150,7 +153,12 @@ function App() {
 
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/dev/cards" element={import.meta.env.DEV ? <CardGallery /> : <Navigate to="/" replace />} />
+          <Route
+            path="/dev/cards"
+            element={CardGallery
+              ? <Suspense fallback={null}><CardGallery /></Suspense>
+              : <Navigate to="/" replace />}
+          />
 
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/schools" element={<ProtectedRoute><Schools /></ProtectedRoute>} />
