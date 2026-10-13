@@ -1,3 +1,5 @@
+import { Card } from './Card';
+
 interface ListingCardProps {
   title: string;
   description: string;
@@ -7,14 +9,13 @@ interface ListingCardProps {
 
 function ListingCard({ title, description, area, price }: ListingCardProps) {
   return (
-    <article className="card listing-card">
-      <header>
-        <h3>{title}</h3>
-        <p className="listing-price">Session: {price}</p>
-      </header>
-      <p>{description}</p>
-      <div className="listing-meta">Group size: {area}</div>
-    </article>
+    <Card className="listing-card" variant="outlined">
+      <Card.Header title={title} titleAs="h3" subtitle={`Session: ${price}`} />
+      <Card.Body>
+        <Card.Section label="Description">{description}</Card.Section>
+        <Card.Meta>Group size: {area}</Card.Meta>
+      </Card.Body>
+    </Card>
   );
 }
 

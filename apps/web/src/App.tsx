@@ -23,6 +23,7 @@ import ResourceDetail from './pages/ResourceDetail';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import StudyLinkAI from './pages/StudyLinkAI';
+import CardGallery from './pages/CardGallery';
 import './App.css';
 import './workspace.css';
 import { getStoredUser } from './lib/session';
@@ -149,6 +150,7 @@ function App() {
 
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/dev/cards" element={import.meta.env.DEV ? <CardGallery /> : <Navigate to="/" replace />} />
 
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/schools" element={<ProtectedRoute><Schools /></ProtectedRoute>} />

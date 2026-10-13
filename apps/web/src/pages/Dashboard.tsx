@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { Card } from '../components/Card';
 import { apiFetch } from '../lib/apiClient';
 
 type ActivityItem = {
@@ -247,11 +248,11 @@ function Dashboard() {
             ) : (
               <div className="detail-card-grid">
                 {upcomingSessions.map((session) => (
-                  <article key={session.id} className="detail-summary-card">
+                  <Card key={session.id} variant="outlined" className="detail-summary-card">
                     <strong>{session.title}</strong>
                     <p>{session.group || 'Study session'}</p>
                     <span>{session.startsAt ? new Date(session.startsAt).toLocaleString() : session.time || 'Time pending'}</span>
-                  </article>
+                  </Card>
                 ))}
               </div>
             )}
@@ -266,10 +267,10 @@ function Dashboard() {
             </div>
             <div className="announcement-list">
               {announcementList.map((announcement) => (
-                <article key={announcement.id} className="detail-summary-card">
+                <Card key={announcement.id} variant="outlined" className="detail-summary-card">
                   <strong>{announcement.title}</strong>
                   <p>{announcement.detail}</p>
-                </article>
+                </Card>
               ))}
             </div>
           </section>

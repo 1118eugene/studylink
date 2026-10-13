@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { buildStudyLinkAiResponse, getAllCatalogCourses } from '../lib/studylinkContent';
+import { Card } from '../components/Card';
 
 function StudyLinkAI() {
   const navigate = useNavigate();
@@ -106,34 +107,28 @@ function StudyLinkAI() {
               <span className="panel-pill">AI study response</span>
             </div>
             <p>{response.explanation}</p>
-            <div className="detail-panel" style={{ marginTop: '1rem' }}>
-              <h3>Focus areas</h3>
+            <Card.Section label="Focus areas">
               <ul className="detail-list compact-list">
                 {response.focusAreas?.map((area) => (
                   <li key={area}>{area}</li>
                 ))}
               </ul>
-            </div>
-            <div className="detail-panel" style={{ marginTop: '1rem' }}>
-              <h3>Study tips</h3>
+            </Card.Section>
+            <Card.Section label="Study tips">
               <ul className="detail-list compact-list">
                 {response.studyTips?.map((tip) => (
                   <li key={tip}>{tip}</li>
                 ))}
               </ul>
-            </div>
-            <div className="detail-panel" style={{ marginTop: '1rem' }}>
-              <h3>Action steps</h3>
+            </Card.Section>
+            <Card.Section label="Action steps">
               <ul className="detail-list compact-list">
                 {response.nextSteps.map((step) => (
                   <li key={step}>{step}</li>
                 ))}
               </ul>
-            </div>
-            <div className="modal-note">
-              <strong>Peer advice</strong>
-              <p style={{ margin: '0.5rem 0 0' }}>{response.peerAdvice}</p>
-            </div>
+            </Card.Section>
+            <Card.Section label="Peer advice">{response.peerAdvice}</Card.Section>
           </section>
         ) : (
           <section className="detail-panel">
@@ -145,7 +140,7 @@ function StudyLinkAI() {
               {response.recommendedResources.map((resource) => {
                 const resourceUrl = resource.url || resource.fallbackUrl;
                 return (
-                  <article key={resource.id} className="detail-summary-card">
+                  <Card key={resource.id} variant="outlined" className="detail-summary-card">
                     <strong>{resource.title}</strong>
                     <p>{resource.description}</p>
                     <span>{resource.type} · {resource.audience}</span>
@@ -173,7 +168,7 @@ function StudyLinkAI() {
                       )}
                       {/* in-app fallback button removed */}
                     </div>
-                  </article>
+                  </Card>
                 );
               })}
             </div>

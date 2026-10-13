@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { apiFetch } from '../lib/apiClient';
 import { buildMergedCourses, getAllCatalogResources, getCatalogCourseByCode, getResourcesForCourse } from '../lib/studylinkContent';
+import { Card } from '../components/Card';
 
 type ResourceItem = {
   id: string | number;
@@ -507,7 +508,7 @@ function LearningHub() {
         ) : (
           <div className="resource-library-grid">
             {filteredResources.map((resource) => (
-              <article key={`${resource.id}`} className="resource-library-card">
+              <Card key={`${resource.id}`} variant="elevated" className="resource-library-card">
                 <div className="resource-card-topline">
                   <span className="detail-chip">{resource.category || resource.type}</span>
                   <span className="mini-label">{resource.courseCode || resource.courseTitle || resource.school}</span>
@@ -540,7 +541,7 @@ function LearningHub() {
                     </button>
                   ) : null}
                 </div>
-              </article>
+              </Card>
             ))}
           </div>
         )}

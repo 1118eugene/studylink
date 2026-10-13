@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import HeroSection from '../components/HeroSection';
+import { Card } from '../components/Card';
 
 export default function Home() {
   return (
@@ -8,18 +9,18 @@ export default function Home() {
 
       <section className="home-overview container">
         <div className="home-overview-grid">
-          <article className="feature-card">
-            <h3>Learn faster with structure</h3>
-            <p>From schools and programs to course hubs and weekly topics, StudyLink keeps your academic journey organized and easy to follow.</p>
-          </article>
-          <article className="feature-card">
-            <h3>Find resources instantly</h3>
-            <p>Search PDFs, lecture notes, MCQs, past papers, videos, and podcasts from one curated academic library.</p>
-          </article>
-          <article className="feature-card">
-            <h3>Collaborate with purpose</h3>
-            <p>Join study groups, attend live sessions, and connect with classmates in each course's enrolled student hub.</p>
-          </article>
+          <Card className="feature-card" variant="outlined">
+            <Card.Header title="Learn faster with structure" titleAs="h3" />
+            <Card.Body>From schools and programs to course hubs and weekly topics, StudyLink keeps your academic journey organized and easy to follow.</Card.Body>
+          </Card>
+          <Card className="feature-card" variant="outlined">
+            <Card.Header title="Find resources instantly" titleAs="h3" />
+            <Card.Body>Search PDFs, lecture notes, MCQs, past papers, videos, and podcasts from one curated academic library.</Card.Body>
+          </Card>
+          <Card className="feature-card" variant="outlined">
+            <Card.Header title="Collaborate with purpose" titleAs="h3" />
+            <Card.Body>Join study groups, attend live sessions, and connect with classmates in each course's enrolled student hub.</Card.Body>
+          </Card>
         </div>
       </section>
 

@@ -1,6 +1,17 @@
 import { useState, type CSSProperties, type ComponentPropsWithoutRef, type ElementType, type ReactNode } from 'react';
 
 export type CardVariant = 'elevated' | 'outlined' | 'filled' | 'feature';
+export type CardCategory = 'business' | 'technology' | 'arts' | 'health' | 'engineering' | 'default';
+
+export function getCardCategory(value?: string): CardCategory {
+  const category = value?.toLowerCase() || '';
+  if (category.includes('business')) return 'business';
+  if (category.includes('health')) return 'health';
+  if (category.includes('engineer')) return 'engineering';
+  if (category.includes('art') || category.includes('humanit')) return 'arts';
+  if (category.includes('science') || category.includes('technology') || category.includes('computer')) return 'technology';
+  return 'default';
+}
 type CardProps = {
   as?: ElementType;
   variant?: CardVariant;

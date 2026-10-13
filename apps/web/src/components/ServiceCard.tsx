@@ -1,3 +1,5 @@
+import { Card } from './Card';
+
 interface ServiceCardProps {
   title: string;
   description: string;
@@ -5,10 +7,10 @@ interface ServiceCardProps {
 
 function ServiceCard({ title, description }: ServiceCardProps) {
   return (
-    <article className="card service-card">
-      <h3>{title}</h3>
-      <p>{description}</p>
-    </article>
+    <Card className="service-card" variant="outlined">
+      <Card.Header title={title} titleAs="h3" />
+      <Card.Body>{description}</Card.Body>
+    </Card>
   );
 }
 

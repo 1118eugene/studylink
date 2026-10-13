@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { apiFetch } from '../lib/apiClient';
 import { getStoredUser } from '../lib/session';
+import { Card } from '../components/Card';
 
 type AdminUser = {
   id: number;
@@ -72,7 +73,7 @@ function AdminUsers() {
           <div className="detail-panel" role="region" aria-label="User accounts">
             <div className="admin-user-list">
               {users.map((user) => (
-                <article className="admin-user-row" key={user.id}>
+                <Card variant="outlined" className="admin-user-row" key={user.id}>
                   <div>
                     <h2>{user.full_name}</h2>
                     <p>{user.email}</p>
@@ -90,7 +91,7 @@ function AdminUsers() {
                         : user.is_suspended ? 'Restore access' : 'Suspend account'}
                     </button>
                   )}
-                </article>
+                </Card>
               ))}
             </div>
           </div>

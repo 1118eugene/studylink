@@ -16,6 +16,11 @@ export const designTokens = {
     warningSoft: '#FFF3D6',
     danger: '#B42318',
     dangerSoft: '#FDECEA',
+    categoryBusiness: '#8A5000',
+    categoryTechnology: '#3448A5',
+    categoryArts: '#A12D52',
+    categoryHealth: '#08736E',
+    categoryEngineering: '#34505F',
   },
   spacing: {
     xxs: 2,

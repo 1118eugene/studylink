@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { apiFetch } from '../lib/apiClient';
+import { Card } from '../components/Card';
 
 type Classmate = {
   id: number;
@@ -94,7 +95,7 @@ function DiscoverClassmates() {
         ) : (
           <div className="students-grid classmates-grid">
             {filteredStudents.map((student) => (
-              <article key={student.id} className="student-card network-card">
+              <Card key={student.id} variant="outlined" className="student-card network-card">
                 <div className="student-header">
                   <div className="student-avatar">{student.initials}</div>
                   <div className="student-info">
@@ -125,7 +126,7 @@ function DiscoverClassmates() {
                   <span>{student.email}</span>
                   <strong>{student.sharedCourses.length} shared courses</strong>
                 </div>
-              </article>
+              </Card>
             ))}
           </div>
         )}

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { apiFetch } from '../lib/apiClient';
 import { getStoredUser } from '../lib/session';
+import { Card } from '../components/Card';
 
 type ContentReport = {
   id: number;
@@ -110,7 +111,7 @@ export default function ReportQueue() {
           {!loading && visibleReports.length === 0 ? <p>No {showReviewed ? '' : 'pending '}reports to show.</p> : null}
           <div className="report-list">
             {visibleReports.map((report) => (
-              <article className="report-card" key={report.id}>
+              <Card variant="outlined" className="report-card" key={report.id}>
                 <div className="section-header">
                   <div>
                     <p className="workspace-eyebrow">{report.content_type} · Report #{report.id}</p>
@@ -145,7 +146,7 @@ export default function ReportQueue() {
                 ) : (
                   <p className="report-meta">Decision: {report.decision}</p>
                 )}
-              </article>
+              </Card>
             ))}
           </div>
         </section>

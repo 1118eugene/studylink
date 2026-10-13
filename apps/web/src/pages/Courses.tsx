@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { apiFetch } from '../lib/apiClient';
 import { buildMergedCourses, saveSupplementalEnrollmentCode } from '../lib/studylinkContent';
+import { Card, getCardCategory } from '../components/Card';
 
 function Courses() {
   const [courses, setCourses] = useState<any[]>([]);
@@ -126,8 +127,8 @@ function Courses() {
         ) : (
           <div className="course-showcase-grid">
             {filteredCourses.map((course) => (
-              <article key={`${course.code}-${course.id}`} className="course-showcase-card">
-                <img className="course-image" src={course.image} alt={course.title} loading="lazy" />
+              <Card key={`${course.code}-${course.id}`} variant="elevated" className="course-showcase-card" data-school-category={getCardCategory(course.school || course.category)}>
+                <Card.Media src={course.image} alt={course.title} className="course-image" placeholder={<span>{course.code}</span>} />
                 <div className="course-card-body">
                   <div className="course-card-topline">
                     <div>
@@ -177,7 +178,7 @@ function Courses() {
                     </button>
                   </div>
                 </div>
-              </article>
+              </Card>
             ))}
           </div>
         )}

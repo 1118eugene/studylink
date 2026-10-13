@@ -31,6 +31,11 @@ export declare const designTokens: {
     readonly warningSoft: '#FFF3D6';
     readonly danger: '#B42318';
     readonly dangerSoft: '#FDECEA';
+    readonly categoryBusiness: '#8A5000';
+    readonly categoryTechnology: '#3448A5';
+    readonly categoryArts: '#A12D52';
+    readonly categoryHealth: '#08736E';
+    readonly categoryEngineering: '#34505F';
   };
   readonly spacing: Readonly<Record<'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'xxxl' | 'section' | 'page', number>>;
   readonly radius: Readonly<Record<'xs' | 'sm' | 'md' | 'lg' | 'full', number>>;

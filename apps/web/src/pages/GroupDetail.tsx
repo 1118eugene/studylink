@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import Modal from '../components/Modal';
 import ReportContent from '../components/ReportContent';
+import { Card } from '../components/Card';
 import { apiFetch } from '../lib/apiClient';
 import { addNotification } from '../lib/notifications';
 
@@ -191,27 +192,27 @@ function GroupDetail() {
           <section className="detail-panel">
             <h2>Requirements and rules</h2>
             <div className="detail-card-grid">
-              <article className="detail-summary-card">
+              <Card variant="outlined" className="detail-summary-card">
                 <strong>Join requirements</strong>
                 <ul className="detail-list compact-list">
                   {(group.joinRequirements && group.joinRequirements.length > 0 ? group.joinRequirements : ['Read the welcome notes and attend the intro session.'])
                     .map((item: string) => <li key={item}>{item}</li>)}
                 </ul>
-              </article>
-              <article className="detail-summary-card">
+              </Card>
+              <Card variant="outlined" className="detail-summary-card">
                 <strong>Group rules</strong>
                 <ul className="detail-list compact-list">
                   {(group.groupRules && group.groupRules.length > 0 ? group.groupRules : ['Stay respectful and keep discussion academic.'])
                     .map((item: string) => <li key={item}>{item}</li>)}
                 </ul>
-              </article>
-              <article className="detail-summary-card">
+              </Card>
+              <Card variant="outlined" className="detail-summary-card">
                 <strong>Member benefits</strong>
                 <ul className="detail-list compact-list">
                   {(group.memberBenefits && group.memberBenefits.length > 0 ? group.memberBenefits : ['Shared notes, peer support, and structured academic help.'])
                     .map((item: string) => <li key={item}>{item}</li>)}
                 </ul>
-              </article>
+              </Card>
             </div>
           </section>
 
@@ -223,7 +224,7 @@ function GroupDetail() {
             {group.membersList && group.membersList.length > 0 ? (
               <div className="member-list">
                 {group.membersList.map((member: any) => (
-                  <article key={member.email} className="member-list-card">
+                  <Card key={member.email} variant="outlined" className="member-list-card">
                     <div>
                       <strong>{member.name}</strong>
                       <p>{member.email}</p>
@@ -231,7 +232,7 @@ function GroupDetail() {
                     <div className="member-list-meta">
                       <span>{new Date(member.enrolledAt).toLocaleString()}</span>
                     </div>
-                  </article>
+                  </Card>
                 ))}
               </div>
             ) : (
@@ -248,11 +249,11 @@ function GroupDetail() {
           <div className="detail-card-grid">
             {(group.sessions || []).length > 0 ? (
               group.sessions.map((session: any) => (
-                <article key={session.id} className="detail-summary-card">
+                <Card key={session.id} variant="outlined" className="detail-summary-card">
                   <strong>{session.title}</strong>
                   <p>{session.startsAt ? new Date(session.startsAt).toLocaleString() : session.time || 'Time to be confirmed'}</p>
                   <span>{session.enrolledCount || 0} enrolled</span>
-                </article>
+                </Card>
               ))
             ) : (
               <p>No related sessions found.</p>

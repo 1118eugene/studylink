@@ -4,6 +4,7 @@ import Modal from '../components/Modal';
 import { apiFetch } from '../lib/apiClient';
 import { addNotification } from '../lib/notifications';
 import { getStoredUser } from '../lib/session';
+import { Card, getCardCategory } from '../components/Card';
 
 interface StudyGroup {
   id: number;
@@ -483,12 +484,12 @@ function StudyGroups({ initialShowForm = false }: StudyGroupsProps) {
         ) : (
           <div className="groups-grid elevated-groups-grid">
             {filteredGroups.map((group) => (
-              <article key={group.id} className="group-card polished-group-card" style={{ position: 'relative' }}>
+              <Card key={group.id} variant="elevated" className="group-card polished-group-card" data-school-category={getCardCategory(group.course || group.courseCode)}>
                 
                 {group.image ? (
-                  <img className="group-image" src={group.image} alt={group.name} loading="lazy" />
+                  <Card.Media src={group.image} alt={group.name} className="group-image" />
                 ) : (
-                  <div className="group-image-placeholder">No image yet</div>
+                  <Card.Media alt="" placeholder="No image yet" className="group-image" />
                 )}
                 <div className="group-header-content">
                   <div className="group-title">
@@ -545,7 +546,7 @@ function StudyGroups({ initialShowForm = false }: StudyGroupsProps) {
                               : 'Join group'}
                   </button>
                 </div>
-              </article>
+              </Card>
             ))}
           </div>
         )}

@@ -1,19 +1,14 @@
-import { ActivityIndicator, Pressable, Text, View } from 'react-native';
-import { colors, styles } from '../theme';
+import { View } from 'react-native';
+import { Card } from './Card';
 
 export function LoadingState() {
-  return <View style={{ alignItems: 'center', padding: 36 }}><ActivityIndicator size="large" color={colors.navy} /></View>;
+  return <View accessibilityLabel="Loading content"><Card.Skeleton lines={2} /><Card.Skeleton lines={3} /></View>;
 }
 
 export function EmptyState({ message }: { message: string }) {
-  return <View style={[styles.card, { alignItems: 'center', paddingVertical: 28 }]}><Text style={styles.subtitle}>{message}</Text></View>;
+  return <Card.Empty message={message} />;
 }
 
 export function ErrorState({ message, onRetry }: { message: string; onRetry: () => void }) {
-  return (
-    <View style={[styles.card, { alignItems: 'center' }]}>
-      <Text style={{ color: colors.danger, textAlign: 'center', marginBottom: 14 }}>{message}</Text>
-      <Pressable style={styles.secondaryButton} onPress={onRetry}><Text style={styles.secondaryButtonText}>Try again</Text></Pressable>
-    </View>
-  );
+  return <Card.Error message={message} onRetry={onRetry} />;
 }

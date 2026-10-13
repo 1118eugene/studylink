@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { apiFetch } from '../lib/apiClient';
 import { addNotification } from '../lib/notifications';
+import { Card } from '../components/Card';
 
 interface Session {
   id: number;
@@ -287,7 +288,7 @@ function Sessions() {
         ) : (
           <div className="sessions-list session-board">
             {sessions.map((session) => (
-              <article key={session.id} className="session-card polished-session-card">
+              <Card key={session.id} variant="outlined" className="session-card polished-session-card">
                 <div className="session-date-block">
                   <p className="session-month">{session.month || new Date(session.startsAt || Date.now()).toLocaleDateString(undefined, { month: 'short' })}</p>
                   <p className="session-day">{session.date || new Date(session.startsAt || Date.now()).getDate()}</p>
@@ -349,7 +350,7 @@ function Sessions() {
                   <button type="button" className="button button-secondary" onClick={() => loadSessionIntoForm(session)}>Edit</button>
                   <button type="button" className="button button-secondary action-danger" onClick={() => deleteSession(session.id)}>Delete</button>
                 </div>
-              </article>
+              </Card>
             ))}
           </div>
         )}
