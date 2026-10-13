@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { apiFetch } from '../lib/apiClient';
 import { buildCourseContent, buildStudyLinkAiResponse } from '../lib/studylinkContent';
 import { addNotification } from '../lib/notifications';
+import PageHeader from '../components/PageHeader';
 
 const hubTabs = [
   { key: 'overview', label: 'Overview' },
@@ -478,33 +479,36 @@ function CourseDetail() {
   return (
     <section className="workspace-page">
       <div className="container workspace-stack">
-        <section className="hub-hero-card">
-          <div>
-            <p className="workspace-eyebrow">{course.school}</p>
-            <h1>{course.code}: {course.title}</h1>
-            <p className="workspace-lead">{course.description}</p>
+        <PageHeader
+          className="page-header--course-detail"
+          eyebrow={course.school}
+          title={<>{course.code}: {course.title}</>}
+          description={course.description}
+          actions={(
+            <div className="course-hub-page-actions">
             <div className="detail-chip-row">
               <span className="detail-chip">{course.level}</span>
               <span className="detail-chip">{course.deliveryMode}</span>
               <span className="detail-chip">{course.resources.length} resources</span>
             </div>
-          </div>
-          <div className="detail-action-row">
-            <button
-              type="button"
-              className={course.isEnrolled ? 'button button-secondary' : 'button button-primary'}
-              onClick={() => updateEnrollment(!course.isEnrolled)}
-              disabled={enrollmentSaving}
-            >
-              {enrollmentSaving ? 'Saving…' : course.isEnrolled ? 'Withdraw from course' : 'Enroll in course'}
-            </button>
-            <Link to={`/ask-ai?course=${encodeURIComponent(course.code)}`} className="button button-secondary">
-              Ask StudyLink AI
-            </Link>
-            <Link to="/courses" className="button button-secondary">Back to courses</Link>
-          </div>
-          {enrollmentError ? <p className="form-error" role="alert">{enrollmentError}</p> : null}
-        </section>
+              <div className="detail-action-row">
+                <button
+                  type="button"
+                  className={course.isEnrolled ? 'button button-secondary' : 'button button-primary'}
+                  onClick={() => updateEnrollment(!course.isEnrolled)}
+                  disabled={enrollmentSaving}
+                >
+                  {enrollmentSaving ? 'Saving…' : course.isEnrolled ? 'Withdraw from course' : 'Enroll in course'}
+                </button>
+                <Link to={`/ask-ai?course=${encodeURIComponent(course.code)}`} className="button button-secondary">
+                  Ask StudyLink AI
+                </Link>
+                <Link to="/courses" className="button button-secondary">Back to courses</Link>
+              </div>
+              {enrollmentError ? <p className="form-error" role="alert">{enrollmentError}</p> : null}
+            </div>
+          )}
+        />
 
         <div className="hub-tab-bar">
           {hubTabs.map((tab) => (

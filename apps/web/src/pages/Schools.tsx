@@ -1,5 +1,6 @@
 import { Link, useSearchParams } from 'react-router-dom';
 import { getCatalogSchools, getProgramsForSchool } from '../lib/studylinkContent';
+import PageHeader from '../components/PageHeader';
 
 function Schools() {
   const [searchParams] = useSearchParams();
@@ -10,26 +11,16 @@ function Schools() {
   return (
     <section className="schools-page workspace-page">
       <div className="container workspace-stack">
-        <section className="workspace-hero workspace-hero-compact">
-          <div>
-            <p className="workspace-eyebrow">Academic Pathways</p>
-            <h1>Every school should lead learners to relevant courses, notes, PDFs, podcasts, and revision support.</h1>
-            <p className="workspace-lead">
-              StudyLink now organizes content beyond one department so students from science, business, pharmacy, humanities,
-              nursing, law, and psychology can find support in one serious academic platform.
-            </p>
-          </div>
-          <div className="hero-stat-grid">
-            <article className="hero-stat-card">
-              <span className="hero-stat-value">{schools.length}</span>
-              <span className="hero-stat-label">Schools represented</span>
-            </article>
-            <article className="hero-stat-card">
-              <span className="hero-stat-value">{schools.reduce((sum, school) => sum + school.courseCount, 0)}</span>
-              <span className="hero-stat-label">Supported courses</span>
-            </article>
-          </div>
-        </section>
+        <PageHeader
+          className="page-header--schools"
+          eyebrow="Academic Pathways"
+          title="Every school should lead learners to relevant courses, notes, PDFs, podcasts, and revision support."
+          description="StudyLink now organizes content beyond one department so students from science, business, pharmacy, humanities, nursing, law, and psychology can find support in one serious academic platform."
+          stats={[
+            { value: schools.length, label: 'Schools represented' },
+            { value: schools.reduce((sum, school) => sum + school.courseCount, 0), label: 'Supported courses' },
+          ]}
+        />
 
         <section className="workspace-toolbar">
           <div>

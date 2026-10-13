@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Card } from '../components/Card';
 import { apiFetch } from '../lib/apiClient';
+import PageHeader from '../components/PageHeader';
 
 type ActivityItem = {
   id: string;
@@ -183,18 +184,17 @@ function Dashboard() {
   return (
     <section className="dashboard-page workspace-page">
       <div className="container workspace-stack">
-        <section className="dashboard-summary-card">
-          <div>
-            <p className="workspace-eyebrow">Welcome back</p>
-            <h1>StudyLink keeps your academic ecosystem compact and productive.</h1>
-            <p className="workspace-lead">A slimmer dashboard with quick stats, upcoming sessions, and direct access to courses, library, and groups.</p>
-          </div>
-          <div className="dashboard-summary-actions">
+        <PageHeader
+          className="page-header--dashboard"
+          eyebrow="Welcome back"
+          title="StudyLink keeps your academic ecosystem compact and productive."
+          description="A slimmer dashboard with quick stats, upcoming sessions, and direct access to courses, library, and groups."
+          actions={<div className="dashboard-summary-actions">
             <Link to="/courses" className="button button-primary">Continue learning</Link>
             <Link to="/courses/1#ask" className="button button-secondary">Ask StudyLink AI</Link>
             <Link to="/learning?view=library" className="button button-secondary">Open learning hub</Link>
-          </div>
-        </section>
+          </div>}
+        />
 
         <div className="dashboard-stats-grid">
           {stats.map((stat) => (

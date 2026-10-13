@@ -35,12 +35,16 @@ vary with complete content.
 | `c87bdcf` (current before redesign phases) | Learning Hub, My Library | 145 | 350–512 px | 470.4 px |
 | `16ff4bd` (original merge-base) | Course Directory | 15 | 843–911 px | 875.0 px |
 | `16ff4bd` (original merge-base) | Learning Hub, My Library | 145 | 403–596 px | 541.8 px |
+| Current redesign | Course Directory | 15 | 792–836 px | 813.1 px |
+| Current redesign | Learning Hub, My Library | 145 | 397–518 px | 485.1 px |
 
 The baseline course/resource measurements are saved with the route snapshots in
 [`baseline/courses.json`](./baseline/courses.json) and
 [`baseline/learning_view_library.json`](./baseline/learning_view_library.json).
-The current revision's measurements were retained in session artifacts for
-the subsequent before/after comparison.
+Current measurements were captured at 1280 × 900 from the final local build
+with the same seeded catalogue cardinalities (15 courses and 145 resources).
+The final capture used a new local test account, so these are local
+representative measurements, not production-data guarantees.
 
 ## Legacy card markup still present
 
@@ -93,3 +97,32 @@ used for the final comparison.
 - `npm install --save-dev playwright` reported 39 dependency audit findings
   (14 moderate, 22 high, 3 critical). No audit auto-fix was run; the existing
   dependency tree needs a separately scoped review before changing versions.
+
+## Global redesign verification
+
+The completed redesign applies the shared visual language across the web and
+mobile app: semantic light/dark themes, reusable web page headers, responsive
+navigation, toast feedback, and card tokens/primitives across the existing
+workspace screens. The Learning Hub upload form now has its own responsive
+panel rather than sharing the search/filter toolbar.
+
+Verification performed after the final layout and navigation changes:
+
+- `npm test` passed: API integration tests, production web build, and web/mobile
+  TypeScript checks.
+- `npm run build:mobile` passed and exported the Expo web bundle.
+- `scripts/content-snapshot.mjs` compared the full route set and refreshed the
+  16 Course Directory/Learning Hub screenshots at 360, 768, 1280, and 1920 px
+  in light and dark themes. The only baseline difference was the profile
+  email, because final verification used a newly-created local test account;
+  no baseline text, buttons, links, or images were missing. The mobile source
+  comparison reported no missing strings.
+- Browser checks at all four widths found no horizontal document overflow.
+  At 360 px, the mobile navigation closed through Escape, the backdrop, and
+  the Close button; focus returned to the opener after dismissal.
+
+The local verification account was created against the local development
+backend. Its credentials and authentication state are not part of the
+repository or screenshot artifacts. Render deployment configuration was not
+available in this checkout, so the deployment service's configured branch
+still needs confirmation before promoting the branch to it.

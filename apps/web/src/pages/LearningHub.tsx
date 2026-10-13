@@ -3,6 +3,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { apiFetch } from '../lib/apiClient';
 import { buildMergedCourses, getAllCatalogResources, getCatalogCourseByCode, getResourcesForCourse } from '../lib/studylinkContent';
 import { Card } from '../components/Card';
+import PageHeader from '../components/PageHeader';
 
 type ResourceItem = {
   id: string | number;
@@ -401,25 +402,16 @@ function LearningHub() {
   return (
     <section className="workspace-page">
       <div className="container workspace-stack">
-        <section className="workspace-hero workspace-hero-resources">
-          <div>
-            <p className="workspace-eyebrow">Learning Hub</p>
-            <h1>Central library for notes, PDFs, quizzes, and shared study resources.</h1>
-            <p className="workspace-lead">
-              Open what you need quickly and keep study materials in one place.
-            </p>
-          </div>
-          <div className="hero-stat-grid">
-            <article className="hero-stat-card">
-              <span className="hero-stat-value">{libraryResources.length}</span>
-              <span className="hero-stat-label">Library-ready resources</span>
-            </article>
-            <article className="hero-stat-card">
-              <span className="hero-stat-value">{allResources.length}</span>
-              <span className="hero-stat-label">All learning resources</span>
-            </article>
-          </div>
-        </section>
+        <PageHeader
+          className="page-header--learning-hub"
+          eyebrow="Learning Hub"
+          title="Central library for notes, PDFs, quizzes, and shared study resources."
+          description="Open what you need quickly and keep study materials in one place."
+          stats={[
+            { value: libraryResources.length, label: 'Library-ready resources' },
+            { value: allResources.length, label: 'All learning resources' },
+          ]}
+        />
 
         <section className="workspace-toolbar">
           <div>
@@ -427,7 +419,7 @@ function LearningHub() {
             <p>Choose the learning area you want without leaving the same workspace.</p>
           </div>
           <div className="toolbar-actions">
-            <select value={selectedView} onChange={(event) => updateView(event.target.value)} className="filter-select">
+            <select value={selectedView} onChange={(event) => updateView(event.target.value)} className="filter-select" aria-label="Choose learning hub view">
               <option value="library">My Library</option>
               <option value="resources">All Resources</option>
               <option value="notes">Notes and PDFs</option>
@@ -438,35 +430,34 @@ function LearningHub() {
           </div>
         </section>
 
-        <section className="workspace-toolbar library-toolbar">
-          <div className="resource-upload-panel">
-            <h3>Add or upload a resource</h3>
+        <section className="resource-upload-panel">
+          <h3>Add or upload a resource</h3>
+          <div className="resource-upload-fields">
             <input
               placeholder="Title"
               value={newResourceTitle}
               onChange={(event) => setNewResourceTitle(event.target.value)}
-              className="search-input"
-              style={{ marginBottom: 8 }}
+              aria-label="Resource title"
             />
             <input
               placeholder="URL (optional if uploading)"
               value={newResourceUrl}
               onChange={(event) => setNewResourceUrl(event.target.value)}
-              className="search-input"
-              style={{ marginBottom: 8 }}
+              aria-label="Resource URL"
             />
             <input
               placeholder="Source / attribution note (optional)"
               value={newResourceSourceNote}
               onChange={(event) => setNewResourceSourceNote(event.target.value)}
-              className="search-input"
-              style={{ marginBottom: 8 }}
+              aria-label="Resource source or attribution note"
             />
             <input
               type="file"
               onChange={(event) => setNewResourceFile(event.target.files && event.target.files[0] ? event.target.files[0] : null)}
-              style={{ marginBottom: 8 }}
+              aria-label="Choose a resource file"
             />
+          </div>
+          <div className="resource-upload-actions">
             <button
               type="button"
               className="button button-primary"
@@ -475,21 +466,25 @@ function LearningHub() {
             >
               {resourceUploading ? 'Uploading…' : 'Add / Upload resource'}
             </button>
-            {resourceUploadStatus ? <p className="resource-upload-status">{resourceUploadStatus}</p> : null}
+            {resourceUploadStatus ? <p className="resource-upload-status" role="status" aria-live="polite">{resourceUploadStatus}</p> : null}
           </div>
+        </section>
+
+        <section className="workspace-toolbar library-toolbar">
           <input
             type="text"
             value={searchTerm}
             onChange={(event) => setSearchTerm(event.target.value)}
             placeholder="Search resources by title, course, school, or type"
             className="search-input"
+            aria-label="Search resources by title, course, school, or type"
           />
-          <select value={selectedSchool} onChange={(event) => setSelectedSchool(event.target.value)} className="filter-select">
+          <select value={selectedSchool} onChange={(event) => setSelectedSchool(event.target.value)} className="filter-select" aria-label="Filter resources by school">
             {schoolOptions.map((school) => (
               <option key={school} value={school}>{school}</option>
             ))}
           </select>
-          <select value={selectedType} onChange={(event) => setSelectedType(event.target.value)} className="filter-select">
+          <select value={selectedType} onChange={(event) => setSelectedType(event.target.value)} className="filter-select" aria-label="Filter resources by type">
             {typeOptions.map((type) => (
               <option key={type} value={type}>{type}</option>
             ))}
@@ -501,37 +496,38 @@ function LearningHub() {
             <p>Loading your learning hub...</p>
           </div>
         ) : filteredResources.length === 0 ? (
-          <div className="empty-state">
-            <p className="empty-text">No matching learning materials found.</p>
-            <p className="empty-help">Try another hub view or change your filters.</p>
-          </div>
+          <Card.Empty
+            message="No matching learning materials found. Try another hub view or change your filters."
+          />
         ) : (
           <div className="resource-library-grid">
             {filteredResources.map((resource) => (
               <Card key={`${resource.id}`} variant="elevated" className="resource-library-card">
-                <div className="resource-card-topline">
-                  <span className="detail-chip">{resource.category || resource.type}</span>
-                  <span className="mini-label">{resource.courseCode || resource.courseTitle || resource.school}</span>
-                </div>
-                <h3>{resource.title}</h3>
-                <p>{resource.description}</p>
-                <div className="resource-card-meta">
-                  <div>
-                    <span className="mini-label">School / Program</span>
-                    <strong>{resource.school ? `${resource.school} - ${resource.program}` : resource.audience}</strong>
-                  </div>
-                  <div>
-                    <span className="mini-label">Usage</span>
-                    <strong>{resource.usageNotes}</strong>
-                  </div>
-                  {resource.sourceNote ? (
+                <Card.Header
+                  overline={resource.category || resource.type}
+                  title={resource.title}
+                  subtitle={resource.courseCode || resource.courseTitle || resource.school}
+                />
+                <Card.Body>
+                  <p>{resource.description}</p>
+                  <Card.Meta className="resource-card-meta">
+                    <div>
+                      <span className="mini-label">School / Program</span>
+                      <strong>{resource.school ? `${resource.school} - ${resource.program}` : resource.audience}</strong>
+                    </div>
+                    <div>
+                      <span className="mini-label">Usage</span>
+                      <strong>{resource.usageNotes}</strong>
+                    </div>
+                    {resource.sourceNote ? (
                     <div>
                       <span className="mini-label">Source and attribution</span>
                       <strong>{resource.sourceNote}</strong>
                     </div>
-                  ) : null}
-                </div>
-                <div className="detail-action-row">
+                    ) : null}
+                  </Card.Meta>
+                </Card.Body>
+                <Card.Footer className="detail-action-row">
                   <button type="button" className="button button-primary" onClick={() => handleAccess(resource)}>
                     Open
                   </button>
@@ -540,7 +536,7 @@ function LearningHub() {
                       Hide
                     </button>
                   ) : null}
-                </div>
+                </Card.Footer>
               </Card>
             ))}
           </div>

@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { buildStudyLinkAiResponse, getAllCatalogCourses } from '../lib/studylinkContent';
 import { Card } from '../components/Card';
+import PageHeader from '../components/PageHeader';
 
 function StudyLinkAI() {
   const navigate = useNavigate();
@@ -22,25 +23,16 @@ function StudyLinkAI() {
   return (
     <section className="workspace-page">
       <div className="container workspace-stack">
-        <section className="workspace-hero workspace-hero-dashboard">
-          <div>
-            <p className="workspace-eyebrow">StudyLink AI</p>
-            <h1>Quick course guidance, notes, and revision steps without leaving the app.</h1>
-            <p className="workspace-lead">
-              Ask for summaries, study direction, and resource recommendations in one place.
-            </p>
-          </div>
-          <div className="hero-stat-grid">
-            <article className="hero-stat-card">
-              <span className="hero-stat-value">{courses.length}</span>
-              <span className="hero-stat-label">Courses in AI support catalog</span>
-            </article>
-            <article className="hero-stat-card">
-              <span className="hero-stat-value">{activeCourse.resources.length}</span>
-              <span className="hero-stat-label">Linked study resources</span>
-            </article>
-          </div>
-        </section>
+        <PageHeader
+          className="page-header--ai"
+          eyebrow="StudyLink AI"
+          title="Quick course guidance, notes, and revision steps without leaving the app."
+          description="Ask for summaries, study direction, and resource recommendations in one place."
+          stats={[
+            { value: courses.length, label: 'Courses in AI support catalog' },
+            { value: activeCourse.resources.length, label: 'Linked study resources' },
+          ]}
+        />
 
         <section className="detail-panel">
           <div className="section-header">

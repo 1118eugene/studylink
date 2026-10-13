@@ -1,5 +1,6 @@
 import { Link, NavLink } from 'react-router-dom';
 import logo from '../assets/images/studylinklogo.png';
+import ThemeToggle from './ThemeToggle';
 
 const links = [
   { label: 'Home', path: '/' },
@@ -32,6 +33,7 @@ function Header() {
         </nav>
 
         <div className="public-actions">
+          <ThemeToggle />
           <Link to="/login" className="button button-secondary button-sm">Sign in</Link>
           <Link to="/signup" className="button button-primary button-sm">Sign up</Link>
         </div>

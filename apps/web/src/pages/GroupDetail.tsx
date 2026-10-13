@@ -128,7 +128,7 @@ function GroupDetail() {
   return (
     <section className="workspace-page">
       <div className="container workspace-stack">
-        <section className="detail-hero-card">
+        <Card as="section" variant="feature" className="detail-hero-card">
           <img src={group.image || 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1200&q=80'} alt={group.name} className="detail-hero-image" />
           <div className="detail-hero-copy">
             <p className="workspace-eyebrow">{group.courseCode || 'Study Group'}</p>
@@ -159,7 +159,7 @@ function GroupDetail() {
               <ReportContent contentType="group" contentId={group.id} contentTitle={group.name} />
             </div>
           </div>
-        </section>
+        </Card>
 
         <div className="detail-layout">
           <section className="detail-panel">

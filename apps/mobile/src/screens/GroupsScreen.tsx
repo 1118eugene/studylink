@@ -5,7 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import { api } from '../services/api';
 import type { Group } from '../types/api';
 import type { MainNavigation } from '../navigation/types';
-import { colors, styles } from '../theme';
+import { useMobileTheme } from '../theme';
 import { EmptyState, ErrorState, LoadingState } from '../components/ScreenState';
 import { ReportContentButton } from '../components/ReportContentButton';
 import { Card } from '../components/Card';
@@ -13,11 +13,13 @@ import { lengthError, required } from '../utils/validation';
 import { confirmAction, platformAlert as Alert } from '../utils/dialogs';
 
 function ListSection({ title, items }: { title: string; items?: string[] }) {
+  const { styles } = useMobileTheme();
   if (!items?.length) return null;
   return <Card><Text style={styles.cardTitle}>{title}</Text>{items.map((item) => <Text key={item} style={[styles.subtitle, { marginTop: 6 }]}>• {item}</Text>)}</Card>;
 }
 
 export function GroupsScreen() {
+  const { colors, styles } = useMobileTheme();
   const navigation = useNavigation<MainNavigation>();
   const { user } = useAuth();
   const [groups, setGroups] = useState<Group[]>([]);
@@ -89,6 +91,7 @@ export function GroupsScreen() {
 }
 
 export function GroupDetailScreen({ route }: { route: { params: { id: number } } }) {
+  const { colors, styles } = useMobileTheme();
   const navigation = useNavigation<MainNavigation>();
   const { user } = useAuth();
   const [group, setGroup] = useState<Group>();

@@ -30,6 +30,11 @@ screens at 360 px and tablet/desktop widths at 768, 1280, and 1920 px.
 The web token stylesheet supports automatic system color preference and explicit
 `data-theme="light"` / `data-theme="dark"` overrides. The development-only
 gallery at `/dev/cards` previews variants and states in both themes.
+The app-wide theme controls expose the same light/dark preference on web and
+mobile. The web shell also uses shared page headers, notification feedback, and
+a responsive navigation dialog with Escape, backdrop, and Close-button support.
+On the Learning Hub, upload controls are kept separate from search and filters
+so each remains usable on narrow screens.
 
 ## Migration and verification notes
 

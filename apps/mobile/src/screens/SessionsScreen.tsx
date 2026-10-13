@@ -6,16 +6,18 @@ import { api } from '../services/api';
 import type { Session } from '../types/api';
 import type { MainNavigation } from '../navigation/types';
 import { EmptyState, ErrorState, LoadingState } from '../components/ScreenState';
-import { colors, styles } from '../theme';
+import { useMobileTheme } from '../theme';
 import { dateError, lengthError, required } from '../utils/validation';
 import { platformAlert as Alert } from '../utils/dialogs';
 
 function DetailList({ title, values }: { title: string; values: string[] }) {
+  const { styles } = useMobileTheme();
   if (!values.length) return null;
   return <View style={styles.card}><Text style={styles.cardTitle}>{title}</Text>{values.map((item) => <Text key={item} style={[styles.subtitle, { marginTop: 6 }]}>• {item}</Text>)}</View>;
 }
 
 export function SessionsScreen() {
+  const { colors, styles } = useMobileTheme();
   const navigation = useNavigation<MainNavigation>();
   const { user } = useAuth();
   const [sessions, setSessions] = useState<Session[]>([]);
@@ -47,6 +49,7 @@ export function SessionsScreen() {
 }
 
 export function SessionDetailScreen({ route }: { route: { params: { id: number } } }) {
+  const { colors, styles } = useMobileTheme();
   const navigation = useNavigation<MainNavigation>();
   const { user } = useAuth();
   const [session, setSession] = useState<Session>();

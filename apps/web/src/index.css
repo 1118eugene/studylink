@@ -3,6 +3,7 @@
   background-color: var(--sl-surface-sunken);
   color: var(--sl-text-primary);
   line-height: 1.6;
+  font-size: 15px;
 }
 
 * {
@@ -18,6 +19,16 @@ body {
   padding: 0;
   background-color: var(--sl-surface-sunken);
   color: var(--sl-text-primary);
+  font-weight: 400;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--sl-text-primary);
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
 }
 
 a {
@@ -25,6 +36,6 @@ a {
   text-decoration: none;
 }
 
-button, input, textarea {
+button, input, select, textarea {
   font: inherit;
 }

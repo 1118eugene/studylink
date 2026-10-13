@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Modal, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 import { api } from '../services/api';
-import { colors, styles } from '../theme';
+import { useMobileTheme } from '../theme';
 import { reportReasons, type ReportReason } from '@studylink/shared';
 
 export function ReportContentButton({
@@ -11,6 +11,7 @@ export function ReportContentButton({
   contentType: 'group' | 'resource';
   contentId: number;
 }) {
+  const { colors, styles } = useMobileTheme();
   const [visible, setVisible] = useState(false);
   const [reason, setReason] = useState<ReportReason>(reportReasons[0]);
   const [details, setDetails] = useState('');

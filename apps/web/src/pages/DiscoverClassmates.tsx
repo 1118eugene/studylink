@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { apiFetch } from '../lib/apiClient';
 import { Card } from '../components/Card';
+import PageHeader from '../components/PageHeader';
 
 type Classmate = {
   id: number;
@@ -46,22 +47,15 @@ function DiscoverClassmates() {
   return (
     <section className="discover-page workspace-page">
       <div className="container workspace-stack">
-        <section className="workspace-hero workspace-hero-discover">
-          <div>
-            <p className="workspace-eyebrow">Classmate Network</p>
-            <h1>Discover real classmates connected by actual course enrollments.</h1>
-          </div>
-          <div className="hero-stat-grid">
-            <article className="hero-stat-card">
-              <span className="hero-stat-value">{classmates.length}</span>
-              <span className="hero-stat-label">Classmates available</span>
-            </article>
-            <article className="hero-stat-card">
-              <span className="hero-stat-value">{classmates.filter((student) => student.sharedCourses.length > 0).length}</span>
-              <span className="hero-stat-label">Shared-course matches</span>
-            </article>
-          </div>
-        </section>
+        <PageHeader
+          className="page-header--discover"
+          eyebrow="Classmate Network"
+          title="Discover real classmates connected by actual course enrollments."
+          stats={[
+            { value: classmates.length, label: 'Classmates available' },
+            { value: classmates.filter((student) => student.sharedCourses.length > 0).length, label: 'Shared-course matches' },
+          ]}
+        />
 
         <section className="workspace-toolbar">
           <div>
@@ -75,11 +69,13 @@ function DiscoverClassmates() {
               value={searchTerm}
               onChange={(event) => setSearchTerm(event.target.value)}
               className="search-input"
+              aria-label="Search classmates by name, university, or major"
             />
             <select
               value={selectedCourse}
               onChange={(event) => setSelectedCourse(event.target.value)}
               className="filter-select"
+              aria-label="Filter classmates by course"
             >
               {courseOptions.map((course) => (
                 <option key={course}>{course}</option>

@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { apiFetch } from '../lib/apiClient';
 import { addNotification } from '../lib/notifications';
 import { Card } from '../components/Card';
+import PageHeader from '../components/PageHeader';
 
 interface Session {
   id: number;
@@ -180,26 +181,16 @@ function Sessions() {
   return (
     <section className="sessions-page workspace-page">
       <div className="container workspace-stack">
-        <section className="workspace-hero workspace-hero-sessions">
-          <div>
-            <p className="workspace-eyebrow">Study Sessions</p>
-            <h1>Schedule sharper sessions with real attendance counts and better study context.</h1>
-          </div>
-          <div className="hero-stat-grid">
-            <article className="hero-stat-card">
-              <span className="hero-stat-value">{sessions.length}</span>
-              <span className="hero-stat-label">Total sessions</span>
-            </article>
-            <article className="hero-stat-card">
-              <span className="hero-stat-value">{upcomingCount}</span>
-              <span className="hero-stat-label">Upcoming and open</span>
-            </article>
-            <article className="hero-stat-card">
-              <span className="hero-stat-value">{sessions.reduce((sum, session) => sum + (session.enrolledCount || 0), 0)}</span>
-              <span className="hero-stat-label">Saved enrollments</span>
-            </article>
-          </div>
-        </section>
+        <PageHeader
+          className="page-header--sessions"
+          eyebrow="Study Sessions"
+          title="Schedule sharper sessions with real attendance counts and better study context."
+          stats={[
+            { value: sessions.length, label: 'Total sessions' },
+            { value: upcomingCount, label: 'Upcoming and open' },
+            { value: sessions.reduce((sum, session) => sum + (session.enrolledCount || 0), 0), label: 'Saved enrollments' },
+          ]}
+        />
 
         <div className="groups-header">
           <div className="page-header">

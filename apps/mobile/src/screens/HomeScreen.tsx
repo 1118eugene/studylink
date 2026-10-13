@@ -3,7 +3,7 @@ import { Pressable, RefreshControl, ScrollView, Text, View } from 'react-native'
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { api } from '../services/api';
 import type { Course, Group, Resource, Session } from '../types/api';
-import { colors, styles } from '../theme';
+import { useMobileTheme } from '../theme';
 import { EmptyState, ErrorState, LoadingState } from '../components/ScreenState';
 import type { MainNavigation } from '../navigation/types';
 import { useAuth } from '../context/AuthContext';
@@ -17,6 +17,7 @@ function loadSection<T>(promise: Promise<T>): Promise<LoadResult<T>> {
 }
 
 export function HomeScreen() {
+  const { colors, styles } = useMobileTheme();
   const { user } = useAuth();
   const navigation = useNavigation<MainNavigation>();
   const [data, setData] = useState<DashboardData>({ courses: [], groups: [], sessions: [], resources: [] });

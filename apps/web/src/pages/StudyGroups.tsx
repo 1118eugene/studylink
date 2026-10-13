@@ -5,6 +5,7 @@ import { apiFetch } from '../lib/apiClient';
 import { addNotification } from '../lib/notifications';
 import { getStoredUser } from '../lib/session';
 import { Card, getCardCategory } from '../components/Card';
+import PageHeader from '../components/PageHeader';
 
 interface StudyGroup {
   id: number;
@@ -318,23 +319,15 @@ function StudyGroups({ initialShowForm = false }: StudyGroupsProps) {
   return (
     <section className="groups-page workspace-page">
       <div className="container workspace-stack">
-        <section className="workspace-hero workspace-hero-groups">
-          <div>
-            <p className="workspace-eyebrow">Study Groups</p>
-            <h1>Build structured learning circles with saved members, rules, and session plans.</h1>
-            {/* hero lead removed per request */}
-          </div>
-          <div className="hero-stat-grid">
-            <article className="hero-stat-card">
-              <span className="hero-stat-value">{groups.length}</span>
-              <span className="hero-stat-label">Active groups</span>
-            </article>
-            <article className="hero-stat-card">
-              <span className="hero-stat-value">{groups.reduce((sum, group) => sum + group.members, 0)}</span>
-              <span className="hero-stat-label">Saved memberships</span>
-            </article>
-          </div>
-        </section>
+        <PageHeader
+          className="page-header--groups"
+          eyebrow="Study Groups"
+          title="Build structured learning circles with saved members, rules, and session plans."
+          stats={[
+            { value: groups.length, label: 'Active groups' },
+            { value: groups.reduce((sum, group) => sum + group.members, 0), label: 'Saved memberships' },
+          ]}
+        />
 
         <div className="groups-header">
           <div className="page-header">

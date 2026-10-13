@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { apiFetch } from '../lib/apiClient';
 import { getStoredUser } from '../lib/session';
 import { Card } from '../components/Card';
+import PageHeader from '../components/PageHeader';
 
 type ContentReport = {
   id: number;
@@ -84,19 +85,15 @@ export default function ReportQueue() {
   return (
     <section className="workspace-page">
       <div className="container workspace-stack">
-        <section className="workspace-hero workspace-hero-dashboard">
-          <div>
-            <p className="workspace-eyebrow">Trust &amp; safety</p>
-            <h1>Report review queue</h1>
-            <p className="workspace-lead">Review student reports, document decisions, and keep shared study content useful and safe.</p>
-          </div>
-          <div className="hero-stat-grid">
-            <article className="hero-stat-card">
-              <span className="hero-stat-value">{reports.filter((report) => report.status === 'pending').length}</span>
-              <span className="hero-stat-label">Reports awaiting review</span>
-            </article>
-          </div>
-        </section>
+        <PageHeader
+          className="page-header--reports"
+          eyebrow="Trust & safety"
+          title="Report review queue"
+          description="Review student reports, document decisions, and keep shared study content useful and safe."
+          stats={[
+            { value: reports.filter((report) => report.status === 'pending').length, label: 'Reports awaiting review' },
+          ]}
+        />
 
         <section className="detail-panel">
           <div className="section-header">

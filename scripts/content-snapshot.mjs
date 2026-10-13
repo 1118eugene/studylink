@@ -151,10 +151,31 @@ async function main() {
     await fs.writeFile(path.join(outputRoot, filename), `${JSON.stringify(output, null, 2)}\n`);
     if (screenshotsRoot && (route === '/courses' || route === '/learning?view=library')) {
       const pageName = route === '/courses' ? 'courses' : 'learning-hub';
-      await page.screenshot({
-        path: path.join(screenshotsRoot, `${snapshotLabel}-${pageName}-1280.png`),
-        fullPage: true,
-      });
+      const themeToggle = page.locator('button.theme-toggle').first();
+      const originalTheme = await themeToggle.count()
+        ? (await themeToggle.getAttribute('aria-pressed')) === 'true' ? 'dark' : 'light'
+        : null;
+      for (const width of [360, 768, 1280, 1920]) {
+        await page.setViewportSize({ width, height: 900 });
+        await page.waitForTimeout(150);
+        for (const theme of ['light', 'dark']) {
+          if (originalTheme) {
+            const currentIsDark = (await themeToggle.getAttribute('aria-pressed')) === 'true';
+            if (currentIsDark !== (theme === 'dark')) {
+              await themeToggle.click();
+              await page.waitForTimeout(100);
+            }
+          }
+          await page.screenshot({
+            path: path.join(screenshotsRoot, `${snapshotLabel}-${pageName}-${theme}-${width}.png`),
+          });
+        }
+      }
+      await page.setViewportSize({ width: 1280, height: 900 });
+      if (originalTheme) {
+        const currentIsDark = (await themeToggle.getAttribute('aria-pressed')) === 'true';
+        if (currentIsDark !== (originalTheme === 'dark')) await themeToggle.click();
+      }
     }
 
     if (comparisonRoot) {

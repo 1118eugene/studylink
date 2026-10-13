@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { apiFetch } from '../lib/apiClient';
 import { getCourseById } from '../lib/academic';
+import PageHeader from '../components/PageHeader';
 
 type CourseHubCourse = {
   id: number | string;
@@ -140,13 +141,12 @@ function CourseHub() {
   return (
     <section className="workspace-page">
       <div className="container workspace-stack">
-        <section className="workspace-hero workspace-hero-compact">
-          <div>
-            <p className="workspace-eyebrow">{course.code}</p>
-                        <h1>{course.title}</h1>
-            <p className="workspace-lead">{course.overview}</p>
-          </div>
-        </section>
+        <PageHeader
+          className="page-header--course-hub"
+          eyebrow={course.code}
+          title={course.title}
+          description={course.overview}
+        />
 
         <div className="detail-layout">
           <div className="detail-panel">

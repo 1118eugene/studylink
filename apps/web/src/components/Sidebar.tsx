@@ -3,6 +3,7 @@ import { useState } from 'react';
 import logo from '../assets/images/studylinklogo.png';
 import NotificationBell from './NotificationBell';
 import { clearStoredAuth, getStoredUser } from '../lib/session';
+import ThemeToggle from './ThemeToggle';
 
 const mainNavItems = [
   { label: 'Schools', path: '/schools', icon: '\u{1F3EB}' },
@@ -16,11 +17,14 @@ const mainNavItems = [
 
 type SidebarProps = {
   onNavigate?: () => void;
+  collapsed?: boolean;
+  onCollapseChange?: (collapsed: boolean) => void;
 };
 
-function Sidebar({ onNavigate }: SidebarProps) {
+function Sidebar({ onNavigate, collapsed: controlledCollapsed, onCollapseChange }: SidebarProps) {
   const navigate = useNavigate();
-  const [collapsed, setCollapsed] = useState(false);
+  const [localCollapsed, setLocalCollapsed] = useState(false);
+  const collapsed = controlledCollapsed ?? localCollapsed;
   const currentUser = getStoredUser();
 
   const handleLogout = () => {
@@ -29,7 +33,7 @@ function Sidebar({ onNavigate }: SidebarProps) {
   };
 
   return (
-    <aside className={collapsed ? 'sidebar sidebar-collapsed' : 'sidebar'}>
+    <aside id="app-navigation" className={collapsed ? 'sidebar sidebar-collapsed' : 'sidebar'}>
       <div className="sidebar-top">
         <div className="sidebar-brand">
           <Link to="/schools" className="logo-brand sidebar-logo-link">
@@ -43,7 +47,11 @@ function Sidebar({ onNavigate }: SidebarProps) {
         <button
           type="button"
           className="sidebar-toggle"
-          onClick={() => setCollapsed((value) => !value)}
+          onClick={() => {
+            const nextCollapsed = !collapsed;
+            if (onCollapseChange) onCollapseChange(nextCollapsed);
+            else setLocalCollapsed(nextCollapsed);
+          }}
           aria-label={collapsed ? 'Expand navigation' : 'Collapse navigation'}
           title={collapsed ? 'Expand navigation' : 'Collapse navigation'}
         >
@@ -108,6 +116,7 @@ function Sidebar({ onNavigate }: SidebarProps) {
           <span className="nav-label">Profile</span>
         </NavLink>
         <NotificationBell />
+        <ThemeToggle />
         <button type="button" className="logout-btn sidebar-logout" onClick={handleLogout} title="Logout">
           <span className="sidebar-link-icon" aria-hidden="true">{'\u2197'}</span>
           <span className="nav-label">Logout</span>

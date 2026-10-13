@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { apiFetch } from '../lib/apiClient';
 import { getInitials, setStoredAuth } from '../lib/session';
+import { Card } from '../components/Card';
 
 type ProfileResponse = {
   user: {
@@ -100,7 +101,7 @@ function Profile() {
   return (
     <section className="profile-page workspace-page">
       <div className="container workspace-stack">
-        <section className="detail-hero-card profile-hero-card">
+        <Card as="section" variant="feature" className="detail-hero-card profile-hero-card">
           <div className="profile-avatar profile-avatar-large">{getInitials(profile.user.name)}</div>
           <div className="detail-hero-copy">
             <p className="workspace-eyebrow">My Academic Profile</p>
@@ -114,7 +115,7 @@ function Profile() {
               <span className="detail-chip">{profile.user.yearOfStudy || 'Year pending'}</span>
             </div>
           </div>
-        </section>
+        </Card>
 
         <div className="stats-grid profile-stats-grid">
           <article className="stat-card"><div className="stat-content"><p className="stat-label">Courses</p><p className="stat-value">{profile.summary.courseCount}</p></div></article>

@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { KeyboardAvoidingView, Platform, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 import { useAuth } from '../context/AuthContext';
-import { colors, styles } from '../theme';
+import { useMobileTheme } from '../theme';
 import { emailError, lengthError, required } from '../utils/validation';
 import { platformAlert as Alert } from '../utils/dialogs';
 
 export function AuthScreen() {
+  const { colors, styles } = useMobileTheme();
   const { authMessage, signIn, signUp } = useAuth();
   const [registering, setRegistering] = useState(false);
   const [fullName, setFullName] = useState('');

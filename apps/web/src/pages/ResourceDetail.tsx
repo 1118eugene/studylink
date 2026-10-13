@@ -4,6 +4,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { apiFetch } from '../lib/apiClient';
 import { getAllCatalogResources } from '../lib/studylinkContent';
 import ReportContent from '../components/ReportContent';
+import { Card } from '../components/Card';
 
 interface ResourceItem {
   id: string;
@@ -147,7 +148,7 @@ function ResourceDetail() {
   return (
     <section className="workspace-page">
       <div className="container workspace-stack">
-        <section className="detail-hero-card">
+        <Card as="section" variant="feature" className="detail-hero-card">
           <div className="detail-hero-copy">
             <p className="workspace-eyebrow">{resource.category || resource.type}</p>
             <h1>{resource.title}</h1>
@@ -204,7 +205,7 @@ function ResourceDetail() {
               ) : null}
             </div>
           </div>
-        </section>
+        </Card>
 
         {isPreviewable ? (
           <section className="detail-panel">

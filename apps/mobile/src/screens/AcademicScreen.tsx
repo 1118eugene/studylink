@@ -5,11 +5,12 @@ import { api } from '../services/api';
 import type { AcademicCourse, AcademicProgram, AcademicSchool, Course, CourseResource } from '../types/api';
 import type { MainNavigation } from '../navigation/types';
 import { EmptyState, ErrorState, LoadingState } from '../components/ScreenState';
-import { colors, styles } from '../theme';
+import { useMobileTheme } from '../theme';
 import { openSecureResource } from '../utils/externalLinks';
 import { confirmAction, platformAlert as Alert } from '../utils/dialogs';
 
 export function AcademicScreen() {
+  const { colors, styles } = useMobileTheme();
   const navigation = useNavigation<MainNavigation>();
   const [schools, setSchools] = useState<AcademicSchool[]>([]);
   const [programs, setPrograms] = useState<AcademicProgram[]>([]);
@@ -50,6 +51,7 @@ export function AcademicScreen() {
 }
 
 export function AcademicCourseDetailScreen({ route }: { route: { params: { id: number } } }) {
+  const { colors, styles } = useMobileTheme();
   const [course, setCourse] = useState<AcademicCourse>();
   const [resources, setResources] = useState<CourseResource[]>([]);
   const [error, setError] = useState('');

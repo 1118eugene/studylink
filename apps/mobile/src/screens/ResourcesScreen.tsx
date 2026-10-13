@@ -5,12 +5,13 @@ import { api } from '../services/api';
 import type { Resource } from '../types/api';
 import type { MainNavigation } from '../navigation/types';
 import { EmptyState, ErrorState, LoadingState } from '../components/ScreenState';
-import { colors, styles } from '../theme';
+import { useMobileTheme } from '../theme';
 import { platformAlert as Alert } from '../utils/dialogs';
 import { openSecureResource } from '../utils/externalLinks';
 import { ReportContentButton } from '../components/ReportContentButton';
 
 export function ResourcesScreen() {
+  const { colors, styles } = useMobileTheme();
   const navigation = useNavigation<MainNavigation>();
   const [resources, setResources] = useState<Resource[]>([]);
   const [query, setQuery] = useState('');
@@ -27,6 +28,7 @@ export function ResourcesScreen() {
 }
 
 export function ResourceDetailScreen({ route }: { route: { params: { id: number } } }) {
+  const { colors, styles } = useMobileTheme();
   const [resource, setResource] = useState<Resource>();
   const [error, setError] = useState('');
   const [saved, setSaved] = useState(false);
