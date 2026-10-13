@@ -1,24 +1,25 @@
 import { StyleSheet } from 'react-native';
+import { designTokens } from '@studylink/shared';
 
 export const colors = {
-  navy: '#123C69',
+  navy: designTokens.color.brand,
   blue: '#2167A8',
   teal: '#1B8A8F',
-  ink: '#17202A',
-  muted: '#657383',
-  surface: '#FFFFFF',
-  background: '#F4F7FA',
-  border: '#DCE4EC',
-  danger: '#B42318',
-  success: '#16794C',
+  ink: designTokens.color.textPrimary,
+  muted: designTokens.color.textMuted,
+  surface: designTokens.color.surface,
+  background: designTokens.color.surfaceSunken,
+  border: designTokens.color.borderSubtle,
+  danger: designTokens.color.danger,
+  success: designTokens.color.success,
 };
 
 export const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.background },
-  content: { padding: 20, paddingBottom: 36, width: '100%', maxWidth: 760, alignSelf: 'center' },
+  content: { padding: designTokens.spacing.lg, paddingBottom: designTokens.spacing.xxxl, width: '100%', maxWidth: 760, alignSelf: 'center' },
   title: { color: colors.ink, fontSize: 28, fontWeight: '800' },
   subtitle: { color: colors.muted, fontSize: 15, lineHeight: 22 },
-  card: { backgroundColor: colors.surface, borderRadius: 16, borderWidth: 1, borderColor: colors.border, padding: 16, marginBottom: 14 },
+  card: { backgroundColor: colors.surface, borderRadius: designTokens.radius.md, borderWidth: 1, borderColor: colors.border, padding: designTokens.spacing.lg, marginBottom: designTokens.spacing.md },
   cardTitle: { color: colors.ink, fontSize: 17, fontWeight: '700', marginBottom: 6 },
   label: { color: colors.muted, fontSize: 13, fontWeight: '700', marginBottom: 6 },
   input: { backgroundColor: colors.surface, borderColor: colors.border, borderWidth: 1, borderRadius: 12, paddingHorizontal: 14, paddingVertical: 12, color: colors.ink, fontSize: 16, marginBottom: 14 },

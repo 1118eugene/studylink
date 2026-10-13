@@ -1,8 +1,7 @@
 :root {
-  color-scheme: light;
   font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background-color: #f7f8fc;
-  color: #101828;
+  background-color: var(--sl-surface-sunken);
+  color: var(--sl-text-primary);
   line-height: 1.6;
 }
 
@@ -17,6 +16,8 @@ html, body, #root {
 body {
   margin: 0;
   padding: 0;
+  background-color: var(--sl-surface-sunken);
+  color: var(--sl-text-primary);
 }
 
 a {

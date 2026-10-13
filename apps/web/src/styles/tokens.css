@@ -1,0 +1,117 @@
+:root {
+  color-scheme: light;
+  --sl-space-xxs: 2px;
+  --sl-space-xs: 4px;
+  --sl-space-sm: 8px;
+  --sl-space-md: 12px;
+  --sl-space-lg: 16px;
+  --sl-space-xl: 20px;
+  --sl-space-xxl: 24px;
+  --sl-space-xxxl: 32px;
+  --sl-space-section: 40px;
+  --sl-space-page: 56px;
+
+  --sl-radius-xs: 6px;
+  --sl-radius-sm: 10px;
+  --sl-radius-md: 14px;
+  --sl-radius-lg: 20px;
+  --sl-radius-full: 999px;
+
+  --sl-surface: #ffffff;
+  --sl-surface-raised: #ffffff;
+  --sl-surface-sunken: #f4f7fa;
+  --sl-border-subtle: #767676;
+  --sl-border-strong: #5e6672;
+  --sl-text-primary: #17202a;
+  --sl-text-secondary: #46515e;
+  --sl-text-muted: #5d6672;
+  --sl-brand: #123c69;
+  --sl-brand-soft: #e7f0f8;
+  --sl-success: #17643a;
+  --sl-success-soft: #e7f4ec;
+  --sl-warning: #7a4b00;
+  --sl-warning-soft: #fff3d6;
+  --sl-danger: #b42318;
+  --sl-danger-soft: #fdecea;
+
+  --sl-elevation-0: none;
+  --sl-elevation-1: 0 1px 2px rgb(16 24 40 / 6%), 0 1px 3px rgb(16 24 40 / 8%);
+  --sl-elevation-2: 0 3px 8px rgb(16 24 40 / 8%), 0 1px 3px rgb(16 24 40 / 6%);
+  --sl-elevation-3: 0 8px 20px rgb(16 24 40 / 10%), 0 2px 5px rgb(16 24 40 / 6%);
+  --sl-motion-fast: 150ms ease-out;
+  --sl-motion-standard: 180ms ease-out;
+  --sl-card-title-size: 18px;
+  --sl-body-size: 14px;
+  --sl-meta-size: 12px;
+  --sl-overline-size: 11px;
+
+  --sl-category-business: #8a5000;
+  --sl-category-technology: #3448a5;
+  --sl-category-arts: #a12d52;
+  --sl-category-health: #08736e;
+  --sl-category-engineering: #34505f;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --sl-surface: #111827;
+  --sl-surface-raised: #1f2937;
+  --sl-surface-sunken: #0b1220;
+  --sl-border-subtle: #8a93a0;
+  --sl-border-strong: #b3bac4;
+  --sl-text-primary: #f9fafb;
+  --sl-text-secondary: #d1d5db;
+  --sl-text-muted: #b0b8c3;
+  --sl-brand: #91b9e8;
+  --sl-brand-soft: #243b55;
+  --sl-success: #81d4a2;
+  --sl-success-soft: #173b2a;
+  --sl-warning: #ffd27c;
+  --sl-warning-soft: #4b3713;
+  --sl-danger: #ff9b90;
+  --sl-danger-soft: #4d2424;
+  --sl-elevation-1: none;
+  --sl-elevation-2: none;
+  --sl-elevation-3: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+    --sl-surface: #111827;
+    --sl-surface-raised: #1f2937;
+    --sl-surface-sunken: #0b1220;
+    --sl-border-subtle: #8a93a0;
+    --sl-border-strong: #b3bac4;
+    --sl-text-primary: #f9fafb;
+    --sl-text-secondary: #d1d5db;
+    --sl-text-muted: #b0b8c3;
+    --sl-brand: #91b9e8;
+    --sl-brand-soft: #243b55;
+    --sl-success: #81d4a2;
+    --sl-success-soft: #173b2a;
+    --sl-warning: #ffd27c;
+    --sl-warning-soft: #4b3713;
+    --sl-danger: #ff9b90;
+    --sl-danger-soft: #4d2424;
+    --sl-elevation-1: none;
+    --sl-elevation-2: none;
+    --sl-elevation-3: none;
+  }
+}
+
+:where(button, a, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--sl-brand);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
