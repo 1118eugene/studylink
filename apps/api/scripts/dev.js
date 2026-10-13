@@ -43,9 +43,7 @@ function testPort(port, host) {
   });
 }
 
-async function getAvailablePort(startPort) {
-  const hosts = ['127.0.0.1', '::'];
-
+async function getAvailablePort(startPort, hosts) {
   for (let port = startPort; port < startPort + 1000; port += 1) {
     let available = true;
     for (const host of hosts) {
@@ -59,6 +57,9 @@ async function getAvailablePort(startPort) {
         if (err && err.code === 'EADDRINUSE') {
           available = false;
           break;
+        }
+        if (err && ['EADDRNOTAVAIL', 'EAFNOSUPPORT'].includes(err.code)) {
+          continue;
         }
         available = false;
         break;
@@ -113,14 +114,25 @@ function openBrowser(url) {
 
 async function main() {
   const preferredPort = Number(process.env.PORT || 4000);
-  const backendPort = await getAvailablePort(preferredPort);
+  const backendPort = await getAvailablePort(preferredPort, ['::']);
   const proxyTarget = `http://localhost:${backendPort}`;
-  const frontendPort = await getAvailablePort(Number(process.env.FRONTEND_PORT || 5173));
+  const frontendPort = await getAvailablePort(Number(process.env.FRONTEND_PORT || 5173), ['localhost']);
   const frontendUrl = `http://localhost:${frontendPort}`;
 
   console.log(`Starting backend on ${proxyTarget}`);
 
-  const frontend = start(npmCommand, ['run', 'dev:web', '--', '--host', 'localhost', '--port', String(frontendPort), '--strictPort'], 'frontend', {
+  const frontend = start(npmCommand, [
+    'run',
+    'dev',
+    '--workspace',
+    '@studylink/web',
+    '--',
+    '--host',
+    'localhost',
+    '--port',
+    String(frontendPort),
+    '--strictPort',
+  ], 'frontend', {
     VITE_API_URL: proxyTarget,
   });
   const backend = start(npmCommand, ['run', 'dev:api'], 'backend', {
