@@ -99,6 +99,11 @@ export const api = {
   library: () => request<{ resources: Resource[] }>('/api/my/resources'),
   saveResource: (id: number) =>
     request<{ resource: Resource }>(`/api/resources/${id}/enroll`, { method: 'POST' }),
+  reportContent: (contentType: 'group' | 'resource', contentId: number, reason: string, details = '') =>
+    request<{ report: { id: number; status: string } }>('/api/reports', {
+      method: 'POST',
+      body: JSON.stringify({ contentType, contentId, reason, details }),
+    }),
   academicSchools: () => request<{ schools: AcademicSchool[] }>('/api/academic/schools'),
   academicPrograms: (schoolId?: number) =>
     request<{ programs: AcademicProgram[] }>(`/api/academic/programs${schoolId ? `?schoolId=${schoolId}` : ''}`),

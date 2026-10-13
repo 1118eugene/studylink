@@ -805,6 +805,119 @@ app.post('/api/ai/flag', requireAuth, async (req, res) => {
   return res.json({ ok: true });
 });
 
+app.post('/api/reports', requireAuth, async (req, res) => {
+  const { contentType, contentId, reason, details = '' } = req.body || {};
+  const parsedContentId = Number(contentId);
+  const allowedReasons = new Set([
+    'Incorrect or misleading',
+    'Inappropriate content',
+    'Copyright or attribution concern',
+    'Spam or duplicate',
+    'Other',
+  ]);
+
+  if (!['group', 'resource'].includes(contentType) || !Number.isSafeInteger(parsedContentId) || parsedContentId < 1) {
+    return res.status(400).json({ message: 'A valid group or resource must be selected.' });
+  }
+  if (!allowedReasons.has(reason)) {
+    return res.status(400).json({ message: 'Choose a valid reason for the report.' });
+  }
+  if (typeof details !== 'string' || details.length > 1000) {
+    return res.status(400).json({ message: 'Additional details must be 1,000 characters or fewer.' });
+  }
+
+  const content = contentType === 'group'
+    ? await loadGroupById(parsedContentId)
+    : await loadResourceById(parsedContentId);
+  if (!content) {
+    return res.status(404).json({ message: 'The item you are reporting could not be found.' });
+  }
+
+  const result = await query(
+    `INSERT INTO content_reports (content_type, content_id, reason, details, reporter_id)
+     VALUES ($1, $2, $3, $4, $5)
+     RETURNING id, content_type, content_id, reason, details, status, created_at;`,
+    [contentType, String(parsedContentId), reason, details.trim(), req.user.id],
+  );
+  await query(
+    `INSERT INTO audit_logs (actor_user_id, entity_type, entity_id, action, payload)
+     VALUES ($1, $2, $3, $4, $5);`,
+    [req.user.id, 'content_report', String(result.rows[0].id), 'report_created', JSON.stringify({ contentType, contentId: parsedContentId })],
+  );
+
+  return res.status(201).json({ report: result.rows[0] });
+});
+
+app.get('/api/admin/reports', requireAuth, async (req, res) => {
+  if (!['admin', 'moderator'].includes(req.user.role)) {
+    return res.status(403).json({ message: 'Moderator permission required.' });
+  }
+
+  const result = await query(
+    `SELECT cr.id, cr.content_type, cr.content_id, cr.reason, cr.details, cr.status,
+            cr.decision, cr.created_at, cr.reviewed_at,
+            u.full_name AS reporter_name, u.email AS reporter_email,
+            CASE WHEN cr.content_type = 'group' THEN g.name ELSE r.title END AS content_title
+     FROM content_reports cr
+     JOIN users u ON u.id = cr.reporter_id
+     LEFT JOIN study_groups g ON cr.content_type = 'group' AND g.id::text = cr.content_id
+     LEFT JOIN resources r ON cr.content_type = 'resource' AND r.id::text = cr.content_id
+     ORDER BY cr.created_at DESC;`,
+  );
+  return res.json({ reports: result.rows });
+});
+
+app.patch('/api/admin/reports/:id', requireAuth, async (req, res) => {
+  if (!['admin', 'moderator'].includes(req.user.role)) {
+    return res.status(403).json({ message: 'Moderator permission required.' });
+  }
+
+  const reportId = Number(req.params.id);
+  const action = req.body?.action;
+  if (!Number.isSafeInteger(reportId) || reportId < 1 || !['dismiss', 'remove'].includes(action)) {
+    return res.status(400).json({ message: 'Choose whether to dismiss or remove the reported content.' });
+  }
+
+  const reportsResult = await query(
+    `SELECT id, content_type, content_id, status
+     FROM content_reports
+     WHERE id = $1
+     LIMIT 1;`,
+    [reportId],
+  );
+  const report = reportsResult.rows[0];
+  if (!report) {
+    return res.status(404).json({ message: 'Report not found.' });
+  }
+  if (report.status !== 'pending') {
+    return res.status(409).json({ message: 'This report has already been reviewed.' });
+  }
+
+  if (action === 'remove') {
+    const table = report.content_type === 'group' ? 'study_groups' : 'resources';
+    const removed = await query(`DELETE FROM ${table} WHERE id = $1 RETURNING id;`, [Number(report.content_id)]);
+    if (removed.rows.length === 0) {
+      return res.status(404).json({ message: 'The reported item no longer exists.' });
+    }
+  }
+
+  const status = action === 'remove' ? 'removed' : 'dismissed';
+  const decision = action === 'remove' ? 'Content removed after review.' : 'Report reviewed and dismissed.';
+  await query(
+    `UPDATE content_reports
+     SET status = $1, decision = $2, reviewed_by = $3, reviewed_at = NOW()
+     WHERE id = $4;`,
+    [status, decision, req.user.id, reportId],
+  );
+  await query(
+    `INSERT INTO audit_logs (actor_user_id, entity_type, entity_id, action, payload)
+     VALUES ($1, $2, $3, $4, $5);`,
+    [req.user.id, 'content_report', String(reportId), `report_${action}`, JSON.stringify({ contentType: report.content_type, contentId: report.content_id })],
+  );
+
+  return res.json({ ok: true, status, decision });
+});
+
 app.get('/api/sessions', requireAuth, async (_req, res) => {
   const result = await query(
     `SELECT

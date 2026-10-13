@@ -136,6 +136,8 @@ const defaultLocalState = {
     { course_id: 8, user_id: 4, enrolled_at: '2026-06-15T12:00:00.000Z' },
   ],
   contact_messages: [],
+  content_reports: [],
+  audit_logs: [],
 };
 
 function normalizeLocalState(raw) {
@@ -201,6 +203,8 @@ function normalizeLocalState(raw) {
   state.session_enrollments = state.session_enrollments || [];
   state.resource_enrollments = state.resource_enrollments || [];
   state.course_enrollments = state.course_enrollments || [];
+  state.content_reports = state.content_reports || [];
+  state.audit_logs = state.audit_logs || [];
 
   return state;
 }
@@ -465,6 +469,71 @@ async function localQuery(text, params = []) {
     return localRows([]);
   }
 
+  if (sql.startsWith('insert into content_reports')) {
+    const report = {
+      id: nextId(localState.content_reports),
+      content_type: params[0],
+      content_id: String(params[1]),
+      reason: params[2],
+      details: params[3] || '',
+      reporter_id: Number(params[4]),
+      status: 'pending',
+      created_at: new Date().toISOString(),
+    };
+    localState.content_reports.push(report);
+    saveEnrollments();
+    return localRows([{ ...report }]);
+  }
+
+  if (sql.includes('from content_reports cr')) {
+    const reports = localState.content_reports
+      .map((report) => {
+        const reporter = findUser(report.reporter_id);
+        const content = report.content_type === 'group'
+          ? findGroup(report.content_id)
+          : findResource(report.content_id);
+        return {
+          ...report,
+          content_title: content?.name || content?.title || 'Content no longer available',
+          reporter_name: reporter?.full_name || 'Unknown student',
+          reporter_email: reporter?.email || '',
+        };
+      })
+      .sort((left, right) => new Date(right.created_at).getTime() - new Date(left.created_at).getTime());
+    return localRows(reports);
+  }
+
+  if (sql.includes('from content_reports where id = $1 limit 1')) {
+    const report = localState.content_reports.find((item) => Number(item.id) === Number(params[0]));
+    return localRows(report ? [{ ...report }] : []);
+  }
+
+  if (sql.startsWith('update content_reports')) {
+    const report = localState.content_reports.find((item) => Number(item.id) === Number(params[3]));
+    if (!report) return localRows([]);
+    report.status = params[0];
+    report.decision = params[1];
+    report.reviewed_by = Number(params[2]);
+    report.reviewed_at = new Date().toISOString();
+    saveEnrollments();
+    return localRows([{ ...report }]);
+  }
+
+  if (sql.startsWith('insert into audit_logs')) {
+    const entry = {
+      id: nextId(localState.audit_logs),
+      actor_user_id: Number(params[0]),
+      entity_type: params[1],
+      entity_id: String(params[2]),
+      action: params[3],
+      payload: params[4],
+      created_at: new Date().toISOString(),
+    };
+    localState.audit_logs.push(entry);
+    saveEnrollments();
+    return localRows([{ ...entry }]);
+  }
+
   if (sql.includes('from study_groups g order by g.created_at desc, g.id desc')) {
     return localRows(localState.groups.map((group) => ({
       ...group,
@@ -566,10 +635,11 @@ async function localQuery(text, params = []) {
   }
 
   if (sql.startsWith('delete from study_groups')) {
+    const removed = findGroup(params[0]);
     localState.groups = localState.groups.filter((group) => Number(group.id) !== Number(params[0]));
     localState.sessions = localState.sessions.filter((session) => Number(session.group_id) !== Number(params[0]));
     saveEnrollments();
-    return localRows([]);
+    return localRows(removed ? [{ id: removed.id }] : []);
   }
 
   if (sql.startsWith('insert into group_enrollments')) {
@@ -669,9 +739,10 @@ async function localQuery(text, params = []) {
   }
 
   if (sql.startsWith('delete from resources')) {
+    const removed = findResource(params[0]);
     localState.resources = localState.resources.filter((resource) => Number(resource.id) !== Number(params[0]));
     saveEnrollments();
-    return localRows([]);
+    return localRows(removed ? [{ id: removed.id }] : []);
   }
 
   if (sql.startsWith('insert into resource_enrollments')) {

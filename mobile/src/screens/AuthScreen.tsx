@@ -5,7 +5,7 @@ import { colors, styles } from '../theme';
 import { emailError, lengthError, required } from '../utils/validation';
 
 export function AuthScreen() {
-  const { signIn, signUp } = useAuth();
+  const { authMessage, signIn, signUp } = useAuth();
   const [registering, setRegistering] = useState(false);
   const [fullName, setFullName] = useState('');
   const [university, setUniversity] = useState('');
@@ -36,6 +36,7 @@ export function AuthScreen() {
         <Text style={{ color: colors.teal, fontWeight: '800', letterSpacing: 1, marginBottom: 10 }}>STUDYLINK MOBILE</Text>
         <Text style={styles.title}>{registering ? 'Create your account' : 'Welcome back'}</Text>
         <Text style={[styles.subtitle, { marginTop: 8, marginBottom: 28 }]}>Coordinate study groups, sessions, courses, and resources from anywhere.</Text>
+        {authMessage ? <Text accessibilityRole="alert" style={[styles.subtitle, { color: colors.danger, marginBottom: 16 }]}>{authMessage}</Text> : null}
         {registering && <><Text style={styles.label}>Full name</Text><TextInput style={styles.input} value={fullName} onChangeText={setFullName} autoCapitalize="words" /></>}
         {registering && <><Text style={styles.label}>University</Text><TextInput style={styles.input} value={university} onChangeText={setUniversity} /></>}
         <Text style={styles.label}>Email</Text>

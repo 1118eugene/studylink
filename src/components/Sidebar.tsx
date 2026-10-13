@@ -65,16 +65,29 @@ function Sidebar({ onNavigate }: SidebarProps) {
             <span className="nav-label">{item.label}</span>
           </NavLink>
         ))}
-        {currentUser?.role === 'admin' ? (
-          <NavLink
-            to="/admin/academic"
-            className={({ isActive }) => (isActive ? 'sidebar-link active' : 'sidebar-link')}
-            title={collapsed ? 'Academic Admin' : undefined}
-            onClick={onNavigate}
-          >
-            <span className="sidebar-link-icon" aria-hidden="true">{'\u2699'}</span>
-            <span className="nav-label">Academic Admin</span>
-          </NavLink>
+        {currentUser?.role === 'admin' || currentUser?.role === 'moderator' ? (
+          <>
+            {currentUser.role === 'admin' ? (
+              <NavLink
+                to="/admin/academic"
+                className={({ isActive }) => (isActive ? 'sidebar-link active' : 'sidebar-link')}
+                title={collapsed ? 'Academic Admin' : undefined}
+                onClick={onNavigate}
+              >
+                <span className="sidebar-link-icon" aria-hidden="true">{'\u2699'}</span>
+                <span className="nav-label">Academic Admin</span>
+              </NavLink>
+            ) : null}
+            <NavLink
+              to="/admin/reports"
+              className={({ isActive }) => (isActive ? 'sidebar-link active' : 'sidebar-link')}
+              title={collapsed ? 'Report Queue' : undefined}
+              onClick={onNavigate}
+            >
+              <span className="sidebar-link-icon" aria-hidden="true">{'\u2691'}</span>
+              <span className="nav-label">Report Queue</span>
+            </NavLink>
+          </>
         ) : null}
       </nav>
 

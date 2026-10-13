@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import Modal from '../components/Modal';
+import ReportContent from '../components/ReportContent';
 import { apiFetch } from '../lib/apiClient';
 import { addNotification } from '../lib/notifications';
 
@@ -154,6 +155,7 @@ function GroupDetail() {
                 </a>
               ) : null}
               {group.courseCode ? <Link to="/courses" className="button button-secondary">Open courses</Link> : null}
+              <ReportContent contentType="group" contentId={group.id} contentTitle={group.name} />
             </div>
           </div>
         </section>

@@ -9,6 +9,7 @@ import Dashboard from './pages/Dashboard';
 import Courses from './pages/Courses';
 import CourseDetail from './pages/CourseDetail';
 import AdminAcademic from './pages/AdminAcademic';
+import ReportQueue from './pages/ReportQueue';
 import StudyGroups from './pages/StudyGroups';
 import Schools from './pages/Schools';
 import Sessions from './pages/Sessions';
@@ -45,6 +46,7 @@ function getMobilePageTitle(pathname: string) {
   if (pathname.startsWith('/library')) return 'Learning Hub';
   if (pathname.startsWith('/profile')) return 'Profile';
   if (pathname.startsWith('/ask-ai')) return 'StudyLink AI';
+  if (pathname.startsWith('/admin/reports')) return 'Report Queue';
   return 'StudyLink';
 }
 
@@ -74,6 +76,7 @@ function App() {
     }
   }, [isMobile]);
 
+  const currentUser = getStoredUser();
   const mobileNavLinks = [
     { label: 'Schools', path: '/schools', icon: '\u{1F3EB}' },
     { label: 'Courses', path: '/courses', icon: '\u{1F4D8}' },
@@ -81,8 +84,10 @@ function App() {
     { label: 'AI', path: '/ask-ai', icon: '\u{1F916}' },
     { label: 'Profile', path: '/profile', icon: '\u{1F464}' },
   ];
+  if (currentUser?.role === 'admin' || currentUser?.role === 'moderator') {
+    mobileNavLinks.push({ label: 'Reports', path: '/admin/reports', icon: '\u2691' });
+  }
   const showDesktopSidebar = isAuthenticated && !isMobile && isDesktopSidebarVisible;
-  const currentUser = getStoredUser();
 
   return (
     <div className={`app-shell ${isAuthenticated ? 'authenticated-shell' : 'public-shell'}`}>
@@ -146,6 +151,7 @@ function App() {
           <Route path="/courses/:id" element={<ProtectedRoute><CourseDetail /></ProtectedRoute>} />
           <Route path="/ask-ai" element={<ProtectedRoute><StudyLinkAI /></ProtectedRoute>} />
           <Route path="/admin/academic" element={<ProtectedRoute><AdminAcademic /></ProtectedRoute>} />
+          <Route path="/admin/reports" element={<ProtectedRoute><ReportQueue /></ProtectedRoute>} />
           <Route path="/groups" element={<ProtectedRoute><StudyGroups /></ProtectedRoute>} />
           <Route path="/groups/new" element={<ProtectedRoute><StudyGroups initialShowForm /></ProtectedRoute>} />
           <Route path="/groups/:id" element={<ProtectedRoute><GroupDetail /></ProtectedRoute>} />

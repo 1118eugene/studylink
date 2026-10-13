@@ -4,7 +4,7 @@ StudyLink is a private student study-group coordination and academic networking 
 
 ## What It Does
 
-The app supports authenticated dashboards, study groups, sessions, resources, live enrollment activity, and protected internal pages. The layout now uses a left sidebar so the app feels like a workspace instead of a public landing page.
+The app supports authenticated dashboards, courses, student-created study groups, scheduled sessions, shared resources, and a native mobile client. Students can report groups and resources for review; moderators and administrators can dismiss reports or remove reported content from the review queue. Report decisions are written to the audit log.
 
 ## Development
 
@@ -56,6 +56,8 @@ Production requires both `DATABASE_URL` and `AUTH_SECRET`; the server refuses to
 ```bash
 npm run db:migrate
 ```
+
+Migration `007_content_reports.sql` adds persistent moderation reports and their review status. For development without PostgreSQL, report submissions and decisions are stored in `backend/data.json`.
 
 Optionally load the sample academic content with `npm run db:seed`. The local JSON fallback must not be used for production data.
 

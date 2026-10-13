@@ -3,6 +3,7 @@ import { addNotification } from '../lib/notifications';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { apiFetch } from '../lib/apiClient';
 import { getAllCatalogResources } from '../lib/studylinkContent';
+import ReportContent from '../components/ReportContent';
 
 interface ResourceItem {
   id: string;
@@ -196,6 +197,9 @@ function ResourceDetail() {
             <Link to="/learning?view=library" className="button button-secondary">
               Back to learning hub
             </Link>
+              {resource.isApiResource ? (
+                <ReportContent contentType="resource" contentId={resource.id} contentTitle={resource.title} />
+              ) : null}
             </div>
           </div>
         </section>
