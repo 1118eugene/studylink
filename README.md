@@ -43,17 +43,27 @@ For a mobile device, set `EXPO_PUBLIC_API_URL` to an API address reachable from 
 
 ## Deployment
 
-The currently supplied live services are the Render frontend at `https://studylink-frontend-dwby.onrender.com` and the Render API at `https://studylinkbackend-4a7r.onrender.com`. The API health endpoint is `/api/health`.
+The currently supplied live services are the Vercel frontend at `https://studylink-kappa.vercel.app` and the Render API at `https://studylinkbackend-4a7r.onrender.com`. The API health endpoint is `/api/health`.
+
+### Automatic GitHub and Render deployments
+
+The GitHub Actions workflow runs the API tests, web production build, and client typechecks whenever a branch is pushed or a pull request is opened. Render is configured to automatically deploy the API from `main` after GitHub checks pass; feature branches are checked by GitHub Actions and deploy after they are merged into `main`.
+
+The Blueprint in `render.yaml` manages the API service. For it, connect the existing Render service to this GitHub repository, select `main` as its deploy branch, and sync the Blueprint. Keep `DATABASE_URL`, `AUTH_SECRET`, and `CORS_ORIGIN` configured in Render. The separately hosted frontend is not declared in this Blueprint; its Render static-site service must also be connected to this repository and set to deploy from `main` with Auto-Deploy enabled. These are one-time Render settings; no Render API token or GitHub deployment secret is needed for commit-triggered deploys.
+
+Local changes still need to be committed and pushed (or merged through a pull request) to reach GitHub. After that, GitHub Actions validates the change and Render deploys passing commits pushed to `main` without requiring the manual Deploy button.
 
 ### Vercel frontend
 
-The frontend URL above is currently hosted on Render. If deploying the web workspace to Vercel, use these Vercel project settings:
+The frontend URL above is hosted on Vercel. Use these Vercel project settings:
 
 - Root directory: repository root (`.`)
 - Framework preset: Vite
 - Build command: `npm run build`
 - Output directory: `dist`
 - Environment variable: `VITE_API_URL=https://studylinkbackend-4a7r.onrender.com`
+
+Connect the Vercel project to `1118eugene/studylink` with `main` as its production branch and enable automatic deployments. Vercel then builds and publishes the frontend when changes are pushed or merged to `main`.
 
 Set `VITE_API_URL` for each Vercel environment that needs it (Production, Preview, and Development). The app's API client uses same-origin/local fallbacks during development, so configure the deployed Render URL in Vercel.
 
@@ -70,7 +80,7 @@ Configure these Render environment variables:
 
 - `DATABASE_URL`: the PostgreSQL connection URL for the production database.
 - `AUTH_SECRET`: a strong, private random secret.
-- `CORS_ORIGIN`: `https://studylink-frontend-dwby.onrender.com` plus any deployed Vercel origin(s), comma-separated.
+- `CORS_ORIGIN`: `https://studylink-kappa.vercel.app` plus any other deployed frontend origin(s), comma-separated.
 
 Render provides `PORT`; the container defaults to `4000` for local Docker use and listens on the supplied port. The service health check uses `/api/health`.
 

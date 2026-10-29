@@ -10,6 +10,7 @@ import Dashboard from './pages/Dashboard';
 import Courses from './pages/Courses';
 import CourseDetail from './pages/CourseDetail';
 import AdminAcademic from './pages/AdminAcademic';
+import AdminAiProvider from './pages/AdminAiProvider';
 import ReportQueue from './pages/ReportQueue';
 import AdminUsers from './pages/AdminUsers';
 import StudyGroups from './pages/StudyGroups';
@@ -53,6 +54,7 @@ function getMobilePageTitle(pathname: string) {
   if (pathname.startsWith('/profile')) return 'Profile';
   if (pathname.startsWith('/ask-ai')) return 'StudyLink AI';
   if (pathname.startsWith('/admin/reports')) return 'Report Queue';
+  if (pathname.startsWith('/admin/ai-provider')) return 'AI Service';
   if (pathname.startsWith('/admin/users')) return 'User Administration';
   return 'StudyLink';
 }
@@ -110,6 +112,7 @@ function App() {
   }
   if (currentUser?.role === 'admin') {
     mobileNavLinks.push({ label: 'Users', path: '/admin/users', icon: '\u{1F465}' });
+    mobileNavLinks.push({ label: 'AI service', path: '/admin/ai-provider', icon: '\u2726' });
   }
   const showDesktopSidebar = isAuthenticated && !isMobile && isDesktopSidebarVisible;
   const showDesktopTopbar = isAuthenticated && !isMobile && (!isDesktopSidebarVisible || isDesktopSidebarCollapsed);
@@ -221,10 +224,10 @@ function App() {
       ) : null}
       <main className={isAuthenticated ? `app-content ${showDesktopSidebar ? '' : 'app-content-wide'} ${showDesktopTopbar ? 'app-content-toolbar' : ''}`.trim() : 'app-content public-content'}>
         <Routes>
-          <Route path="/" element={isAuthenticated ? <Navigate to="/schools" replace /> : <Home />} />
+          <Route path="/" element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <Home />} />
 
-          <Route path="/login" element={isAuthenticated ? <Navigate to="/schools" replace /> : <Login onAuthSuccess={() => setIsAuthenticated(true)} />} />
-          <Route path="/signup" element={isAuthenticated ? <Navigate to="/schools" replace /> : <SignUp onAuthSuccess={() => setIsAuthenticated(true)} />} />
+          <Route path="/login" element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <Login onAuthSuccess={() => setIsAuthenticated(true)} />} />
+          <Route path="/signup" element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <SignUp onAuthSuccess={() => setIsAuthenticated(true)} />} />
 
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
@@ -241,6 +244,7 @@ function App() {
           <Route path="/courses/:id" element={<ProtectedRoute><CourseDetail /></ProtectedRoute>} />
           <Route path="/ask-ai" element={<ProtectedRoute><StudyLinkAI /></ProtectedRoute>} />
           <Route path="/admin/academic" element={<ProtectedRoute><AdminAcademic /></ProtectedRoute>} />
+          <Route path="/admin/ai-provider" element={<ProtectedRoute><AdminAiProvider /></ProtectedRoute>} />
           <Route path="/admin/users" element={<ProtectedRoute><AdminUsers /></ProtectedRoute>} />
           <Route path="/admin/reports" element={<ProtectedRoute><ReportQueue /></ProtectedRoute>} />
           <Route path="/groups" element={<ProtectedRoute><StudyGroups /></ProtectedRoute>} />
@@ -252,7 +256,7 @@ function App() {
           <Route path="/library" element={<ProtectedRoute><Library /></ProtectedRoute>} />
           <Route path="/resources/:id" element={<ProtectedRoute><ResourceDetail /></ProtectedRoute>} />
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-          <Route path="*" element={<Navigate to={isAuthenticated ? '/schools' : '/'} replace />} />
+          <Route path="*" element={<Navigate to={isAuthenticated ? '/dashboard' : '/'} replace />} />
         </Routes>
       </main>
     </div>

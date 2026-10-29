@@ -36,7 +36,7 @@ function Sidebar({ onNavigate, collapsed: controlledCollapsed, onCollapseChange 
     <aside id="app-navigation" className={collapsed ? 'sidebar sidebar-collapsed' : 'sidebar'}>
       <div className="sidebar-top">
         <div className="sidebar-brand">
-          <Link to="/schools" className="logo-brand sidebar-logo-link">
+          <Link to="/dashboard" className="logo-brand sidebar-logo-link">
             <img src={logo} alt="StudyLink logo" className="brand-image sidebar-brand-image" />
             <div className="sidebar-brand-copy">
               <span className="brand-text">StudyLink</span>
@@ -77,6 +77,15 @@ function Sidebar({ onNavigate, collapsed: controlledCollapsed, onCollapseChange 
           <>
             {currentUser.role === 'admin' ? (
               <>
+                <NavLink
+                  to="/admin/ai-provider"
+                  className={({ isActive }) => (isActive ? 'sidebar-link active' : 'sidebar-link')}
+                  title={collapsed ? 'AI Service' : undefined}
+                  onClick={onNavigate}
+                >
+                  <span className="sidebar-link-icon" aria-hidden="true">{'\u2726'}</span>
+                  <span className="nav-label">AI Service</span>
+                </NavLink>
                 <NavLink
                   to="/admin/academic"
                   className={({ isActive }) => (isActive ? 'sidebar-link active' : 'sidebar-link')}

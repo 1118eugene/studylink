@@ -2,6 +2,12 @@
 
 This matrix groups the report's functional and non-functional requirements by their topics. “Implemented” means a working prototype path exists, not that the feature has been independently certified for production.
 
+## Actor dashboards
+
+The authenticated dashboard opens after sign-in and presents role-specific, API-backed information. Students see their course enrolments, group memberships, joined future sessions, saved resources, and account notifications. Administrators see account and content totals, upcoming sessions, reports awaiting review, recent audit events, API/database health, and the AI integration console. Moderators see their report-review workload alongside their own study information.
+
+The report's AI Provider is an external service behind the application gateway, not a user account. Its status is represented honestly: the current build has no connected external provider, does not send student prompts to one, and does not claim provider uptime or request analytics. The administrator AI service console shows persisted curated-link and curation-flag counts and records.
+
 ## Functional requirements
 
 | ID | Requirement area from the report | Evidence in the prototype | Status / remaining work |
@@ -18,8 +24,8 @@ This matrix groups the report's functional and non-functional requirements by th
 | FR10 | Report inappropriate group/resource content and moderate reports | Report queue, moderator/admin decisions, remove/dismiss actions | Implemented; moderation workflow has local integration coverage. |
 | FR11 | Suspend user accounts | Admin-only suspension endpoint and audit event | Implemented at API level; administration interface and operational appeal/reinstatement policy need review. |
 | FR12 | Notify users about relevant activity and moderation outcomes | User-scoped notifications and preference checks; web/mobile notification surfaces | Implemented for current group/session/moderation events; push delivery is not included. |
-| FR13 | Optional AI-assisted resource discovery with privacy awareness | Curated/example-link prototype; no third-party AI provider | Prototype only; external AI, consent, retention, and privacy review are not implemented. |
-| FR14 | Audit sensitive actions | API writes audit events for authentication and report/user moderation actions | Partially implemented; define retention, access, and coverage for all sensitive operations. |
+| FR13 | Optional AI-assisted resource discovery with privacy awareness | Local course-guidance prototype, visible privacy/verification notice, response-report submission, and admin provider-status console | Prototype only; external AI is not connected. Prompt/report data retention and privacy review remain. |
+| FR14 | Audit sensitive actions | API audit events include authentication, moderation, suspension, and AI-response reports; administrators can review recent events in the dashboard | Partially implemented; define retention and complete coverage for all sensitive operations. |
 
 ## Non-functional requirements
 

@@ -533,6 +533,91 @@ app.get('/api/admin/users', requireAuth, async (req, res) => {
   return res.json({ users: result.rows });
 });
 
+app.get('/api/admin/audit', requireAuth, async (req, res) => {
+  if (req.user.role !== 'admin') return res.status(403).json({ message: 'Admin permission required.' });
+  const result = await query(
+    `SELECT a.id, a.actor_user_id, u.full_name AS actor_name, a.entity_type, a.entity_id,
+            a.action, a.payload, a.created_at
+     FROM audit_logs a
+     LEFT JOIN users u ON u.id = a.actor_user_id
+     ORDER BY a.created_at DESC, a.id DESC
+     LIMIT 25;`,
+  );
+  return res.json({ events: result.rows });
+});
+
+app.get('/api/admin/ai-provider', requireAuth, async (req, res) => {
+  if (req.user.role !== 'admin') return res.status(403).json({ message: 'Admin permission required.' });
+
+  const databaseCounts = await withPgClient(async (client) => {
+    const [linksResult, flagsResult, recentLinksResult, recentFlagsResult] = await Promise.all([
+      client.query('SELECT COUNT(*)::int AS count FROM curated_links;'),
+      client.query('SELECT COUNT(*)::int AS count FROM curation_flags;'),
+      client.query(
+        'SELECT course_code, label, url, type, source, added_at, added_by FROM curated_links ORDER BY added_at DESC NULLS LAST LIMIT 20;',
+      ),
+      client.query(
+        'SELECT course_code, url, reason, flagged_by, flagged_at FROM curation_flags ORDER BY flagged_at DESC LIMIT 20;',
+      ),
+    ]);
+    return {
+      curatedLinks: Number(linksResult.rows[0]?.count || 0),
+      flaggedLinks: Number(flagsResult.rows[0]?.count || 0),
+      recentLinks: recentLinksResult.rows.map((row) => ({
+        courseCode: row.course_code,
+        label: row.label || '',
+        url: row.url || '',
+        type: row.type || '',
+        source: row.source || '',
+        addedAt: row.added_at,
+        addedBy: row.added_by || '',
+      })),
+      recentFlags: recentFlagsResult.rows.map((row) => ({
+        courseCode: row.course_code || '',
+        url: row.url || '',
+        reason: row.reason || '',
+        flaggedAt: row.flagged_at,
+        flaggedBy: row.flagged_by || '',
+      })),
+    };
+  });
+
+  let counts = databaseCounts;
+  if (!counts) {
+    const linksPath = path.join(process.cwd(), 'backend', 'curated_links.json');
+    const flagsPath = path.join(process.cwd(), 'backend', 'curation_flags.json');
+    const savedLinks = fs.existsSync(linksPath) ? JSON.parse(fs.readFileSync(linksPath, 'utf8')) : {};
+    const savedFlags = fs.existsSync(flagsPath) ? JSON.parse(fs.readFileSync(flagsPath, 'utf8')) : [];
+    const recentLinks = Object.entries(savedLinks || {})
+      .flatMap(([courseCode, entries]) => (Array.isArray(entries) ? entries.map((entry) => ({ ...entry, courseCode })) : []))
+      .sort((left, right) => new Date(right.addedAt || 0).getTime() - new Date(left.addedAt || 0).getTime())
+      .slice(0, 20);
+    const recentFlags = (Array.isArray(savedFlags) ? savedFlags : [])
+      .slice()
+      .sort((left, right) => new Date(right.flaggedAt || 0).getTime() - new Date(left.flaggedAt || 0).getTime())
+      .slice(0, 20);
+    counts = {
+      curatedLinks: Object.values(savedLinks || {}).reduce(
+        (total, entries) => total + (Array.isArray(entries) ? entries.length : 0),
+        0,
+      ),
+      flaggedLinks: Array.isArray(savedFlags) ? savedFlags.length : 0,
+      recentLinks,
+      recentFlags,
+    };
+  }
+
+  return res.json({
+    provider: {
+      mode: 'curated-prototype',
+      connected: false,
+      responseSource: 'Local course guidance and curated resources',
+      externalRequestsTracked: false,
+      ...counts,
+    },
+  });
+});
+
 app.patch('/api/admin/users/:id/suspension', requireAuth, async (req, res) => {
   if (req.user.role !== 'admin') return res.status(403).json({ message: 'Admin permission required.' });
   const userId = Number(req.params.id);
@@ -886,6 +971,31 @@ app.post('/api/ai/fetch', requireAuth, async (req, res) => {
 
   aiFetchCache.set(cacheKey, { ts: Date.now(), results });
   return res.json({ results });
+});
+
+app.post('/api/ai/report', requireAuth, reportRateLimiter, async (req, res) => {
+  const { courseCode, responseHeadline, reason, details = '' } = req.body || {};
+  const validReasons = ['inaccurate', 'unsafe', 'privacy', 'other'];
+  if (typeof courseCode !== 'string' || !courseCode.trim() || courseCode.length > 20
+    || typeof responseHeadline !== 'string' || !responseHeadline.trim() || responseHeadline.length > 160
+    || !validReasons.includes(reason)
+    || typeof details !== 'string' || details.length > 500) {
+    return res.status(400).json({ message: 'Provide a course, response heading, report reason, and no more than 500 characters of details.' });
+  }
+
+  const result = await query(
+    `INSERT INTO audit_logs (actor_user_id, entity_type, entity_id, action, payload)
+     VALUES ($1, $2, $3, $4, $5)
+     RETURNING id, created_at;`,
+    [
+      req.user.id,
+      'ai_response',
+      courseCode.trim().toUpperCase(),
+      'ai_response_reported',
+      JSON.stringify({ responseHeadline: responseHeadline.trim(), reason, details: details.trim() }),
+    ],
+  );
+  return res.status(201).json({ report: result.rows[0] });
 });
 
 // Accept curated link and persist to backend/curated_links.json - simple prototype persistence

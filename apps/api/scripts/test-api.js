@@ -127,6 +127,13 @@ async function main() {
     const adminToken = adminLogin.token;
     const adminUsers = (await expectStatus(baseUrl, '/api/admin/users', 200, { token: adminToken })).users;
     assert.equal(adminUsers.length, 1);
+    const auditEvents = (await expectStatus(baseUrl, '/api/admin/audit', 200, { token: adminToken })).events;
+    assert.ok(Array.isArray(auditEvents));
+    const providerStatus = (await expectStatus(baseUrl, '/api/admin/ai-provider', 200, { token: adminToken })).provider;
+    assert.equal(providerStatus.connected, false);
+    assert.equal(providerStatus.mode, 'curated-prototype');
+    assert.ok(Number.isInteger(providerStatus.curatedLinks));
+    assert.ok(Array.isArray(providerStatus.recentLinks));
 
     const student1Signup = await expectStatus(baseUrl, '/api/auth/signup', 201, {
       method: 'POST',
@@ -139,6 +146,30 @@ async function main() {
       },
     });
     const student1Token = student1Signup.token;
+    await expectStatus(baseUrl, '/api/admin/audit', 403, { token: student1Token });
+    await expectStatus(baseUrl, '/api/admin/ai-provider', 403, { token: student1Token });
+    const aiResponseReport = await expectStatus(baseUrl, '/api/ai/report', 201, {
+      token: student1Token,
+      method: 'POST',
+      body: {
+        courseCode: 'APT3060',
+        responseHeadline: 'Revision guidance',
+        reason: 'inaccurate',
+        details: 'One item needs a correction.',
+      },
+    });
+    assert.ok(aiResponseReport.report.id);
+    const auditAfterAiReport = (await expectStatus(baseUrl, '/api/admin/audit', 200, { token: adminToken })).events;
+    assert.ok(auditAfterAiReport.some((event) => event.action === 'ai_response_reported'));
+    await expectStatus(baseUrl, '/api/ai/report', 400, {
+      token: student1Token,
+      method: 'POST',
+      body: {
+        courseCode: 'APT3060',
+        responseHeadline: 'Revision guidance',
+        reason: 'invalid',
+      },
+    });
     const student2Signup = await expectStatus(baseUrl, '/api/auth/signup', 201, {
       method: 'POST',
       body: {

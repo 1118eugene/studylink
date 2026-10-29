@@ -3,6 +3,7 @@ export type StoredUser = {
   email: string;
   name: string;
   university?: string;
+  program?: string;
   role?: string;
   major?: string;
   yearOfStudy?: string;

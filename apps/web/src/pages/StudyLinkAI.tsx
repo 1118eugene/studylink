@@ -1,8 +1,9 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, type FormEvent } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { buildStudyLinkAiResponse, getAllCatalogCourses } from '../lib/studylinkContent';
 import { Card } from '../components/Card';
 import PageHeader from '../components/PageHeader';
+import { apiFetch } from '../lib/apiClient';
 
 function StudyLinkAI() {
   const navigate = useNavigate();
@@ -11,6 +12,11 @@ function StudyLinkAI() {
   const [question, setQuestion] = useState('Give me notes and revision guidance for this course.');
   const [selectedResourceId, setSelectedResourceId] = useState('');
   const [selectedTab, setSelectedTab] = useState<'guidance' | 'resources'>('guidance');
+  const [reportReason, setReportReason] = useState('inaccurate');
+  const [reportDetails, setReportDetails] = useState('');
+  const [reportMessage, setReportMessage] = useState('');
+  const [reportError, setReportError] = useState('');
+  const [reporting, setReporting] = useState(false);
   const courses = getAllCatalogCourses();
 
   const response = useMemo(
@@ -19,6 +25,32 @@ function StudyLinkAI() {
   );
 
   const activeCourse = courses.find((course) => course.code === selectedCourseCode) || courses[0];
+
+  async function reportResponse(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setReporting(true);
+    setReportError('');
+    setReportMessage('');
+    try {
+      const reportResponseResult = await apiFetch('/api/ai/report', {
+        method: 'POST',
+        body: JSON.stringify({
+          courseCode: selectedCourseCode,
+          responseHeadline: response.headline,
+          reason: reportReason,
+          details: reportDetails.trim(),
+        }),
+      });
+      const payload = await reportResponseResult.json();
+      if (!reportResponseResult.ok) throw new Error(payload.message || 'The AI response report could not be submitted.');
+      setReportMessage('Your report was sent to StudyLink administrators. Your prompt and the full response were not included.');
+      setReportDetails('');
+    } catch (error) {
+      setReportError(error instanceof Error ? error.message : 'The AI response report could not be submitted.');
+    } finally {
+      setReporting(false);
+    }
+  }
 
   return (
     <section className="workspace-page">
@@ -34,6 +66,16 @@ function StudyLinkAI() {
           ]}
         />
 
+        <aside className="dashboard-notice" aria-label="AI privacy and verification notice">
+          <strong>Prototype, privacy, and verification notice</strong>
+          <p>
+            This study assistant uses local course guidance and curated resources; it is not connected to an external AI provider.
+            Your typed prompt is processed in this app and is not sent to an AI provider. Check study guidance against official
+            course materials and your lecturer’s instructions. If you report a response, StudyLink stores only its course,
+            heading, your reason, and optional note—not your prompt or the full response.
+          </p>
+        </aside>
+
         <section className="detail-panel">
           <div className="section-header">
             <h2>Ask for what you need</h2>
@@ -42,7 +84,7 @@ function StudyLinkAI() {
           <div className="form-grid form-grid-two">
             <label>
               Course
-              <select value={selectedCourseCode} onChange={(event) => setSelectedCourseCode(event.target.value)}>
+              <select value={selectedCourseCode} onChange={(event) => { setSelectedCourseCode(event.target.value); setReportMessage(''); }}>
                 {courses.map((course) => (
                   <option key={course.code} value={course.code}>
                     {course.code} - {course.title}
@@ -52,7 +94,7 @@ function StudyLinkAI() {
             </label>
             <label>
               Prompt idea
-              <select value={question} onChange={(event) => setQuestion(event.target.value)}>
+              <select value={question} onChange={(event) => { setQuestion(event.target.value); setReportMessage(''); }}>
                 {activeCourse.aiPrompts.map((prompt) => (
                   <option key={prompt} value={prompt}>{prompt}</option>
                 ))}
@@ -65,7 +107,7 @@ function StudyLinkAI() {
             <textarea
               className="studylink-input"
               value={question}
-              onChange={(event) => setQuestion(event.target.value)}
+              onChange={(event) => { setQuestion(event.target.value); setReportMessage(''); }}
               placeholder="Ask for notes, summaries, MCQs, explanations, or revision steps."
             />
           </label>
@@ -121,6 +163,38 @@ function StudyLinkAI() {
               </ul>
             </Card.Section>
             <Card.Section label="Peer advice">{response.peerAdvice}</Card.Section>
+            <form className="ai-response-report" onSubmit={reportResponse}>
+              <div>
+                <h3>Report this study response</h3>
+                <p>Reports are visible to StudyLink administrators. Do not include personal or sensitive information.</p>
+              </div>
+              <div className="form-grid form-grid-two">
+                <label>
+                  Report reason
+                  <select value={reportReason} onChange={(event) => setReportReason(event.target.value)}>
+                    <option value="inaccurate">Inaccurate or misleading</option>
+                    <option value="unsafe">Unsafe or inappropriate</option>
+                    <option value="privacy">Privacy concern</option>
+                    <option value="other">Other concern</option>
+                  </select>
+                </label>
+                <label>
+                  Optional note
+                  <textarea
+                    className="studylink-input"
+                    value={reportDetails}
+                    onChange={(event) => setReportDetails(event.target.value)}
+                    maxLength={500}
+                    placeholder="Describe the issue without including personal information."
+                  />
+                </label>
+              </div>
+              {reportError ? <p className="form-error" role="alert">{reportError}</p> : null}
+              {reportMessage ? <p className="form-success" role="status">{reportMessage}</p> : null}
+              <button type="submit" className="button button-secondary" disabled={reporting}>
+                {reporting ? 'Submitting report…' : 'Submit response report'}
+              </button>
+            </form>
           </section>
         ) : (
           <section className="detail-panel">

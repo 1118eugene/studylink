@@ -1,326 +1,636 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Card } from '../components/Card';
-import { apiFetch } from '../lib/apiClient';
 import PageHeader from '../components/PageHeader';
+import { apiFetch } from '../lib/apiClient';
+import { getStoredUser } from '../lib/session';
 
-type ActivityItem = {
-  id: string;
+type Course = {
+  id: number;
+  code: string;
   title: string;
-  meta: string;
-  occurredAt: string;
+  category?: string;
+  isEnrolled: boolean;
+  enrolledCount?: number;
+};
+
+type StudyGroup = {
+  id: number;
+  name: string;
+  courseCode?: string;
+  members: number;
+  capacity: number | null;
+  isMember: boolean;
+  sessionCount: number;
+};
+
+type StudySession = {
+  id: number;
+  title: string;
+  startsAt: string | null;
+  status: string;
+  group: string;
+  courseCode: string;
+  location: string;
+  enrolledCount: number;
+  isEnrolled: boolean;
+};
+
+type LearningResource = {
+  id: number;
+  title: string;
+  type: string;
+  courseCode: string;
+  sourceNote: string;
+  downloads: number;
+};
+
+type Notification = {
+  id: number;
+  type: string;
+  title: string;
+  message: string;
+  created_at: string;
+  read_at: string | null;
+};
+
+type Profile = {
+  user: {
+    name: string;
+    university: string;
+    program: string;
+    major: string;
+    yearOfStudy: string;
+    role: string;
+  };
+};
+
+type AdminUser = {
+  id: number;
+  full_name: string;
+  email: string;
+  role: string;
+  is_suspended: boolean;
+  created_at: string | null;
+};
+
+type ContentReport = {
+  id: number;
+  content_type: string;
+  content_title: string | null;
+  reason: string;
+  status: string;
+  created_at: string;
+};
+
+type AuditEvent = {
+  id: number;
+  actor_name: string | null;
+  entity_type: string;
+  entity_id: string;
+  action: string;
+  created_at: string;
+  payload?: string | { responseHeadline?: string; reason?: string; details?: string } | null;
+};
+
+type ProviderStatus = {
+  mode: string;
+  connected: boolean;
+  responseSource: string;
+  externalRequestsTracked: boolean;
+  curatedLinks: number;
+  flaggedLinks: number;
+};
+
+type DashboardData = {
+  courses: Course[];
+  groups: StudyGroup[];
+  sessions: StudySession[];
+  resources: LearningResource[];
+  myResources: LearningResource[];
+  notifications: Notification[];
+  health: { status: string; database: string };
+  profile: Profile;
+  users?: AdminUser[];
+  reports?: ContentReport[];
+  auditEvents?: AuditEvent[];
+  provider?: ProviderStatus;
+};
+
+type Stat = {
+  label: string;
+  value: number;
+  detail: string;
   href: string;
 };
 
-const announcementList = [
-  { id: 'a1', title: 'New course outline templates are available.', detail: 'Course outline PDFs and weekly plans will help you keep every module organized.' },
-  { id: 'a2', title: 'Create or join a study group for your current course.', detail: 'Structured groups improve exam preparation and keep your study time focused.' },
-  { id: 'a3', title: 'Learning Hub now groups notes, videos, podcasts, and past papers together.', detail: 'Open one merged study area and switch content views from the same workspace.' },
+const functionalRequirements = [
+  { id: 'FR1', label: 'Registration and sign-in', status: 'Implemented', href: '/profile' },
+  { id: 'FR2', label: 'Profile and preferences', status: 'Implemented', href: '/profile' },
+  { id: 'FR3', label: 'Course browsing and search', status: 'Implemented', href: '/courses' },
+  { id: 'FR4', label: 'Course enrolment', status: 'Implemented', href: '/courses' },
+  { id: 'FR5', label: 'Study group creation', status: 'Implemented', href: '/groups/new' },
+  { id: 'FR6', label: 'Joining and leaving groups', status: 'Implemented', href: '/groups' },
+  { id: 'FR7', label: 'Session scheduling', status: 'Implemented', href: '/sessions' },
+  { id: 'FR8', label: 'Session responses and status', status: 'Implemented', href: '/sessions' },
+  { id: 'FR9', label: 'Learning resources and provenance', status: 'Partially implemented', href: '/learning?view=resources' },
+  { id: 'FR10', label: 'Content reporting', status: 'Implemented', href: '/admin/reports' },
+  { id: 'FR11', label: 'Moderation and account suspension', status: 'Implemented', href: '/admin/users' },
+  { id: 'FR12', label: 'Notifications and preferences', status: 'Implemented', href: '/profile' },
+  { id: 'FR13', label: 'Optional AI study support', status: 'Local prototype; external provider not connected', href: '/ask-ai' },
+  { id: 'FR14', label: 'Security audit logging', status: 'Partially implemented', href: '/admin/users' },
 ];
 
-const fallbackCourses = [
-  { id: 1, code: 'APT3060', category: 'Applied Computer Technology', title: 'Mobile Programming', description: 'Create polished mobile apps and learn practical software engineering workflows.', level: 'Year 4', deliveryMode: 'Blended', enrolledCount: 128, isEnrolled: true, relatedGroupCount: 2, upcomingSessionCount: 3 },
-  { id: 2, code: 'APT3025', category: 'Applied Computer Technology', title: 'Machine Learning', description: 'Understand supervised learning, evaluation, and applied AI thinking.', level: 'Year 4', deliveryMode: 'Online', enrolledCount: 94, isEnrolled: true, relatedGroupCount: 1, upcomingSessionCount: 2 },
-];
-
-const fallbackSessions = [
-  { id: 11, title: 'Retrofit & Room Review', group: 'Mobile Programming Study Circle', startsAt: new Date().toISOString(), time: 'Today, 14:00' },
-  { id: 12, title: 'ML Concept Sprint', group: 'Machine Learning Group', startsAt: null, time: 'Tomorrow, 16:30' },
-];
-
-const fallbackGroups = [
-  { id: 21, name: 'Mobile Programming Study Circle', courseCode: 'APT3060', description: 'A structured weekly group for questions, notes, and revision planning.' },
-  { id: 22, name: 'ML Exam Prep', courseCode: 'APT3025', description: 'Share solved examples, notes, and exam-style questions.' },
-];
-
-const fallbackResources = [
-  { id: 31, title: 'Course outline PDF', type: 'PDF', downloads: 5 },
-  { id: 32, title: 'Revision notes', type: 'Notes', downloads: 8 },
-];
-
-const fallbackActivity: ActivityItem[] = [
-  { id: 'fallback-course', title: 'Mobile Programming course hub is ready', meta: 'APT3060 - notes, PDFs, and quiz support', occurredAt: new Date().toISOString(), href: '/courses/1' },
-  { id: 'fallback-group', title: 'Join a structured study group', meta: 'Academic collaboration and WhatsApp-style support', occurredAt: new Date().toISOString(), href: '/groups' },
-];
-
-async function readJsonOrNull(path: string) {
+async function loadJson<T>(path: string): Promise<T> {
   const response = await apiFetch(path);
+  const payload = await response.json();
   if (!response.ok) {
-    return null;
+    throw new Error(payload.message || `Unable to load ${path}.`);
   }
+  return payload as T;
+}
 
-  return response.json();
+function isUpcoming(session: StudySession) {
+  return Boolean(session.startsAt
+    && new Date(session.startsAt).getTime() >= Date.now()
+    && !session.status.toLowerCase().includes('cancel'));
 }
 
 function Dashboard() {
-  const [courses, setCourses] = useState<any[]>([]);
-  const [sessions, setSessions] = useState<any[]>([]);
-  const [groups, setGroups] = useState<any[]>([]);
-  const [resources, setResources] = useState<any[]>([]);
-  const [activity, setActivity] = useState<ActivityItem[]>([]);
+  const user = getStoredUser();
+  const isAdmin = user?.role === 'admin';
+  const isModerator = user?.role === 'moderator';
+  const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    let mounted = true;
+    let active = true;
 
-    const loadDashboard = async () => {
+    async function loadDashboard() {
+      setLoading(true);
+      setError('');
       try {
-        const [coursesResult, sessionsResult, groupsResult, resourcesResult] = await Promise.allSettled([
-          readJsonOrNull('/api/courses'),
-          readJsonOrNull('/api/sessions'),
-          readJsonOrNull('/api/groups'),
-          readJsonOrNull('/api/resources'),
+        const [courses, groups, sessions, resources, myResources, notifications, health, profile] = await Promise.all([
+          loadJson<{ courses: Course[] }>('/api/courses'),
+          loadJson<{ groups: StudyGroup[] }>('/api/groups'),
+          loadJson<{ sessions: StudySession[] }>('/api/sessions'),
+          loadJson<{ resources: LearningResource[] }>('/api/resources'),
+          loadJson<{ resources: LearningResource[] }>('/api/my/resources'),
+          loadJson<{ notifications: Notification[] }>('/api/notifications'),
+          loadJson<{ status: string; database: string }>('/api/health'),
+          loadJson<Profile>('/api/profile'),
         ]);
 
-        if (!mounted) return;
+        const dashboard: DashboardData = {
+          courses: courses.courses,
+          groups: groups.groups,
+          sessions: sessions.sessions,
+          resources: resources.resources,
+          myResources: myResources.resources,
+          notifications: notifications.notifications,
+          health,
+          profile,
+        };
 
-        const coursesData = coursesResult.status === 'fulfilled' ? coursesResult.value : null;
-        const sessionsData = sessionsResult.status === 'fulfilled' ? sessionsResult.value : null;
-        const groupsData = groupsResult.status === 'fulfilled' ? groupsResult.value : null;
-        const resourcesData = resourcesResult.status === 'fulfilled' ? resourcesResult.value : null;
+        if (isAdmin) {
+          const [users, reports, audit, provider] = await Promise.all([
+            loadJson<{ users: AdminUser[] }>('/api/admin/users'),
+            loadJson<{ reports: ContentReport[] }>('/api/admin/reports'),
+            loadJson<{ events: AuditEvent[] }>('/api/admin/audit'),
+            loadJson<{ provider: ProviderStatus }>('/api/admin/ai-provider'),
+          ]);
+          dashboard.users = users.users;
+          dashboard.reports = reports.reports;
+          dashboard.auditEvents = audit.events;
+          dashboard.provider = provider.provider;
+        } else if (isModerator) {
+          const reports = await loadJson<{ reports: ContentReport[] }>('/api/admin/reports');
+          dashboard.reports = reports.reports;
+        }
 
-        const courseList = Array.isArray(coursesData?.courses) && coursesData.courses.length > 0 ? coursesData.courses : fallbackCourses;
-        const sessionList = Array.isArray(sessionsData?.sessions) && sessionsData.sessions.length > 0 ? sessionsData.sessions : fallbackSessions;
-        const groupList = Array.isArray(groupsData?.groups) && groupsData.groups.length > 0 ? groupsData.groups : fallbackGroups;
-        const resourceList = Array.isArray(resourcesData?.resources) && resourcesData.resources.length > 0 ? resourcesData.resources : fallbackResources;
-
-        setCourses(courseList);
-        setSessions(sessionList);
-        setGroups(groupList);
-        setResources(resourceList);
-
-        const [courseDetails, groupDetails, sessionDetails, resourceDetails] = await Promise.all([
-          Promise.all(courseList.slice(0, 4).map(async (course: any) => {
-            const data = await readJsonOrNull(`/api/courses/${course.id}`);
-            return data?.course || null;
-          })),
-          Promise.all(groupList.slice(0, 4).map(async (group: any) => {
-            const data = await readJsonOrNull(`/api/groups/${group.id}`);
-            return data?.group || null;
-          })),
-          Promise.all(sessionList.slice(0, 4).map(async (session: any) => {
-            const data = await readJsonOrNull(`/api/sessions/${session.id}`);
-            return data?.session || null;
-          })),
-          Promise.all(resourceList.slice(0, 4).map(async (resource: any) => {
-            const data = await readJsonOrNull(`/api/resources/${resource.id}`);
-            return data?.resource || null;
-          })),
-        ]);
-
-        const courseActivity = courseDetails.flatMap((course: any) =>
-          (course?.students || []).map((student: any) => ({
-            id: `course-${course.id}-${student.id}-${student.enrolledAt}`,
-            title: `${student.name} is active in ${course.code}`,
-            meta: `${course.title} - ${student.email}`,
-            occurredAt: student.enrolledAt,
-            href: `/courses/${course.id}`,
-          })),
-        );
-
-        const groupActivity = groupDetails.flatMap((group: any) =>
-          (group?.membersList || []).map((member: any) => ({
-            id: `group-${group.id}-${member.email}-${member.enrolledAt}`,
-            title: `${member.name} joined ${group.name}`,
-            meta: `${group.courseCode || 'Study Group'} - ${member.email}`,
-            occurredAt: member.enrolledAt,
-            href: `/groups/${group.id}`,
-          })),
-        );
-
-        const sessionActivity = sessionDetails.flatMap((session: any) =>
-          (session?.attendees || []).map((attendee: any) => ({
-            id: `session-${session.id}-${attendee.email}-${attendee.enrolledAt}`,
-            title: `${attendee.name} joined ${session.title}`,
-            meta: `${session.group || 'Study Session'} - ${attendee.email}`,
-            occurredAt: attendee.enrolledAt,
-            href: '/sessions',
-          })),
-        );
-
-        const resourceActivity = resourceDetails.flatMap((resource: any) =>
-          (resource?.accesses || []).map((access: any) => ({
-            id: `resource-${resource.id}-${access.email}-${access.enrolledAt}`,
-            title: `${access.name} opened ${resource.title}`,
-            meta: `${resource.type || 'Resource'} - ${access.email}`,
-            occurredAt: access.enrolledAt,
-            href: '/learning?view=resources',
-          })),
-        );
-
-        const mergedActivity = [...courseActivity, ...groupActivity, ...sessionActivity, ...resourceActivity]
-          .sort((left, right) => new Date(right.occurredAt).getTime() - new Date(left.occurredAt).getTime())
-          .slice(0, 6);
-
-        setActivity(mergedActivity.length > 0 ? mergedActivity : fallbackActivity);
-      } catch {
-        if (!mounted) return;
-        setCourses(fallbackCourses);
-        setSessions(fallbackSessions);
-        setGroups(fallbackGroups);
-        setResources(fallbackResources);
-        setActivity(fallbackActivity);
+        if (active) setData(dashboard);
+      } catch (loadError) {
+        if (active) {
+          setData(null);
+          setError(loadError instanceof Error ? loadError.message : 'Dashboard information could not be loaded.');
+        }
       } finally {
-        if (mounted) setLoading(false);
+        if (active) setLoading(false);
       }
-    };
+    }
 
-    loadDashboard();
-    return () => {
-      mounted = false;
-    };
-  }, []);
+    void loadDashboard();
+    return () => { active = false; };
+  }, [isAdmin, isModerator]);
 
-  const stats = [
-    { label: 'Courses enrolled', value: String(courses.filter((course) => course.isEnrolled).length), href: '/courses' },
-    { label: 'Study groups', value: String(groups.length), href: '/groups' },
-    { label: 'Upcoming sessions', value: String(sessions.length), href: '/sessions' },
-    { label: 'Learning resources', value: String(resources.length), href: '/learning?view=library' },
-  ];
+  const upcomingSessions = useMemo(
+    () => (data?.sessions || [])
+      .filter(isUpcoming)
+      .sort((left, right) => new Date(left.startsAt || 0).getTime() - new Date(right.startsAt || 0).getTime()),
+    [data?.sessions],
+  );
+  const unreadNotifications = data?.notifications.filter((notification) => !notification.read_at).length || 0;
+  const pendingReports = data?.reports?.filter((report) => report.status === 'pending') || [];
+  const displayUser = data?.profile.user || user;
 
-  const upcomingSessions = sessions.slice(0, 4);
-  const recentActivity = activity.slice(0, 4);
+  const stats: Stat[] = data ? isAdmin
+    ? [
+      { label: 'Registered accounts', value: data.users?.length || 0, detail: `${data.users?.filter((item) => item.role === 'student').length || 0} student accounts`, href: '/admin/users' },
+      { label: 'Study groups in directory', value: data.groups.length, detail: `${data.groups.reduce((total, item) => total + item.members, 0)} memberships`, href: '/groups' },
+      { label: 'Upcoming sessions', value: upcomingSessions.length, detail: `${data.sessions.length} scheduled in total`, href: '/sessions' },
+      { label: 'Reports awaiting review', value: pendingReports.length, detail: 'Student-submitted moderation queue', href: '/admin/reports' },
+      { label: 'Shared resources', value: data.resources.length, detail: `${data.resources.reduce((total, item) => total + item.downloads, 0)} recorded opens`, href: '/learning?view=resources' },
+      { label: 'Suspended accounts', value: data.users?.filter((item) => item.is_suspended).length || 0, detail: 'Access can be restored by an administrator', href: '/admin/users' },
+    ]
+    : [
+      { label: 'My courses', value: data.courses.filter((course) => course.isEnrolled).length, detail: `${data.courses.length} courses available`, href: '/courses' },
+      { label: 'My study groups', value: data.groups.filter((group) => group.isMember).length, detail: `${data.groups.length} groups in the directory`, href: '/groups' },
+      { label: 'My upcoming sessions', value: upcomingSessions.filter((session) => session.isEnrolled).length, detail: `${upcomingSessions.length} upcoming across StudyLink`, href: '/sessions' },
+      { label: 'Saved resources', value: data.myResources.length, detail: `${data.resources.length} resources in the shared library`, href: '/learning?view=library' },
+      { label: 'Unread notifications', value: unreadNotifications, detail: 'Based on your account preferences', href: '/profile' },
+    ]
+    : [];
+
+  const title = isAdmin ? 'Administrator overview' : isModerator ? 'Moderator overview' : 'Your study overview';
+  const description = isAdmin
+    ? 'A live operational view of accounts, academic activity, moderation, audit events, and the optional AI integration.'
+    : 'Your enrolled courses, study groups, scheduled sessions, saved resources, and account notifications in one place.';
 
   return (
     <section className="dashboard-page workspace-page">
       <div className="container workspace-stack">
         <PageHeader
           className="page-header--dashboard"
-          eyebrow="Welcome back"
-          title="StudyLink keeps your academic ecosystem compact and productive."
-          description="A slimmer dashboard with quick stats, upcoming sessions, and direct access to courses, library, and groups."
-          actions={<div className="dashboard-summary-actions">
-            <Link to="/courses" className="button button-primary">Continue learning</Link>
-            <Link to="/courses/1#ask" className="button button-secondary">Ask StudyLink AI</Link>
-            <Link to="/learning?view=library" className="button button-secondary">Open learning hub</Link>
-          </div>}
+          eyebrow={`${displayUser?.role || 'student'} workspace · ${displayUser?.university || 'StudyLink'}`}
+          title={title}
+          description={description}
+          stats={[
+            { label: 'Signed in as', value: displayUser?.name || 'StudyLink user' },
+            { label: 'Programme', value: displayUser?.program || displayUser?.major || displayUser?.yearOfStudy || 'Not set in profile' },
+          ]}
+          actions={(
+            <div className="dashboard-summary-actions">
+              <Link to="/profile" className="button button-secondary">Review my profile</Link>
+              {isAdmin ? <Link to="/admin/ai-provider" className="button button-primary">AI service console</Link> : <Link to="/ask-ai" className="button button-primary">Open StudyLink AI</Link>}
+            </div>
+          )}
         />
 
-        <div className="dashboard-stats-grid">
-          {stats.map((stat) => (
-            <Link key={stat.label} to={stat.href} className="stat-card stat-card-link compact-stat-card">
-              <div className="stat-content">
-                <p className="stat-label">{stat.label}</p>
-                <p className="stat-value">{stat.value}</p>
-              </div>
-            </Link>
-          ))}
-        </div>
+        {error ? (
+          <div className="dashboard-error" role="alert">
+            <strong>Dashboard data is unavailable.</strong>
+            <p>{error}</p>
+            <button type="button" className="button button-secondary button-sm" onClick={() => window.location.reload()}>Reload dashboard</button>
+          </div>
+        ) : null}
 
-        <div className="dashboard-layout">
-          <section className="dashboard-section dashboard-primary-panel">
-            <div className="section-header">
-              <h2>Recent activity</h2>
-              <span className="panel-pill">Latest updates</span>
-            </div>
-            {loading ? (
-              <div className="workspace-loading-card"><p>Loading dashboard activity...</p></div>
-            ) : recentActivity.length === 0 ? (
-              <div className="empty-state">
-                <p className="empty-text">No recent activity available yet.</p>
-                <p className="empty-help">Enroll in a course or join a study group to start tracking your academic actions.</p>
-              </div>
-            ) : (
-              <div className="activity-feed">
-                {recentActivity.map((item) => (
-                  <Link key={item.id} to={item.href} className="activity-card activity-card-link">
-                    <div>
-                      <p className="activity-title">{item.title}</p>
-                      <p className="activity-meta">{item.meta}</p>
+        {loading ? <div className="workspace-loading-card" role="status">Loading your latest dashboard information…</div> : null}
+
+        {data && !loading ? (
+          <>
+            <section aria-label="Dashboard summary">
+              <div className="dashboard-stats-grid">
+                {stats.map((stat) => (
+                  <Link key={stat.label} to={stat.href} className="stat-card stat-card-link dashboard-stat-detail">
+                    <div className="stat-content">
+                      <p className="stat-label">{stat.label}</p>
+                      <p className="stat-value">{stat.value}</p>
+                      <span className="dashboard-stat-caption">{stat.detail}</span>
                     </div>
-                    <span className="activity-time">{new Date(item.occurredAt).toLocaleString()}</span>
                   </Link>
                 ))}
               </div>
-            )}
-          </section>
+            </section>
 
-          <section className="dashboard-section">
-            <div className="section-header">
-              <h2>Upcoming sessions</h2>
-              <Link to="/sessions" className="view-all-link">View sessions</Link>
-            </div>
-            {upcomingSessions.length === 0 ? (
-              <div className="empty-state">
-                <p className="empty-text">No upcoming sessions found.</p>
-                <p className="empty-help">Create or join a study session to keep your calendar active.</p>
-              </div>
+            {isAdmin ? (
+              <AdminDashboard data={data} upcomingSessions={upcomingSessions} pendingReports={pendingReports} />
             ) : (
-              <div className="detail-card-grid">
-                {upcomingSessions.map((session) => (
-                  <Card key={session.id} variant="outlined" className="detail-summary-card">
-                    <strong>{session.title}</strong>
-                    <p>{session.group || 'Study session'}</p>
-                    <span>{session.startsAt ? new Date(session.startsAt).toLocaleString() : session.time || 'Time pending'}</span>
-                  </Card>
-                ))}
-              </div>
+              <StudentDashboard
+                data={data}
+                upcomingSessions={upcomingSessions.filter((session) => session.isEnrolled)}
+                unreadNotifications={unreadNotifications}
+                isModerator={isModerator}
+              />
             )}
-          </section>
-        </div>
 
-        <div className="dashboard-layout">
-          <section className="dashboard-section">
-            <div className="section-header">
-              <h2>Announcements</h2>
-              <span className="panel-pill">Campus insights</span>
-            </div>
-            <div className="announcement-list">
-              {announcementList.map((announcement) => (
-                <Card key={announcement.id} variant="outlined" className="detail-summary-card">
-                  <strong>{announcement.title}</strong>
-                  <p>{announcement.detail}</p>
-                </Card>
-              ))}
-            </div>
-          </section>
+            <section className="detail-panel dashboard-service-panel">
+              <div className="section-header">
+                <div>
+                  <p className="workspace-eyebrow">External actor · AI Provider</p>
+                  <h2>StudyLink AI service and privacy status</h2>
+                </div>
+                <span className="dashboard-status-pill dashboard-status-limited">Optional prototype</span>
+              </div>
+              <p>
+                The report defines the AI provider as an external service—not a person who signs in to StudyLink.
+                The current app generates course guidance from its local catalogue and curated links; no external
+                AI provider is connected, and no student prompt is sent to one.
+              </p>
+              {isAdmin && data.provider ? (
+                <div className="dashboard-detail-grid">
+                  <StatusDetail label="Provider connection" value={data.provider.connected ? 'Connected' : 'Not connected'} />
+                  <StatusDetail label="Current response source" value={data.provider.responseSource} />
+                  <StatusDetail label="Saved curated links" value={data.provider.curatedLinks} />
+                  <StatusDetail label="Links flagged for review" value={data.provider.flaggedLinks} />
+                  <StatusDetail label="External prompt requests" value={data.provider.externalRequestsTracked ? 'Tracked' : 'Not applicable; no provider connected'} />
+                  <StatusDetail label="AI support mode" value={data.provider.mode} />
+                </div>
+              ) : null}
+              <div className="detail-action-row">
+                <Link to="/ask-ai" className="button button-secondary button-sm">Review student AI support</Link>
+                {isAdmin ? <Link to="/admin/ai-provider" className="button button-primary button-sm">Open integration details</Link> : null}
+              </div>
+            </section>
 
-          <section className="dashboard-section">
-            <div className="section-header">
-              <h2>Quick shortcuts</h2>
-              <span className="panel-pill">Navigate faster</span>
-            </div>
-            <div className="quick-actions quick-actions-grid">
-              <Link to="/courses" className="quick-action-btn quick-action-card">
-                <div>
-                  <strong>Courses</strong>
-                  <p>Open your enrolled and available course catalog.</p>
-                </div>
-                <span className="action-icon">-&gt;</span>
-              </Link>
-              <Link to="/learning?view=library" className="quick-action-btn quick-action-card">
-                <div>
-                  <strong>Learning Hub</strong>
-                  <p>Find notes, PDFs, podcasts, quizzes, and curated resources in one place.</p>
-                </div>
-                <span className="action-icon">-&gt;</span>
-              </Link>
-              <Link to="/courses/1#ask" className="quick-action-btn quick-action-card">
-                <div>
-                  <strong>Ask StudyLink AI</strong>
-                  <p>Open a course and ask the AI tutor for explanations, quizzes, and summaries.</p>
-                </div>
-                <span className="action-icon">-&gt;</span>
-              </Link>
-              <Link to="/groups" className="quick-action-btn quick-action-card">
-                <div>
-                  <strong>Study groups</strong>
-                  <p>Review active groups and join collaborative sessions.</p>
-                </div>
-                <span className="action-icon">-&gt;</span>
-              </Link>
-              <Link to="/sessions" className="quick-action-btn quick-action-card">
-                <div>
-                  <strong>Sessions</strong>
-                  <p>Check your upcoming sessions and join live review meetings.</p>
-                </div>
-                <span className="action-icon">-&gt;</span>
-              </Link>
-            </div>
-          </section>
-        </div>
+            {isAdmin ? <RequirementCoverage /> : null}
+          </>
+        ) : null}
       </div>
     </section>
+  );
+}
+
+function StudentDashboard({
+  data,
+  upcomingSessions,
+  unreadNotifications,
+  isModerator,
+}: {
+  data: DashboardData;
+  upcomingSessions: StudySession[];
+  unreadNotifications: number;
+  isModerator: boolean;
+}) {
+  const enrolledCourses = data.courses.filter((course) => course.isEnrolled);
+  const joinedGroups = data.groups.filter((group) => group.isMember);
+  const latestNotifications = data.notifications.slice(0, 5);
+
+  return (
+    <>
+      {isModerator ? (
+        <section className="detail-panel">
+          <div className="section-header">
+            <h2>Moderation workload</h2>
+            <Link to="/admin/reports" className="view-all-link">Open report queue</Link>
+          </div>
+          <p>{data.reports?.filter((report) => report.status === 'pending').length || 0} reports currently await review.</p>
+        </section>
+      ) : null}
+
+      <div className="dashboard-layout">
+        <section className="detail-panel">
+          <div className="section-header">
+            <h2>My courses and study groups</h2>
+            <Link to="/courses" className="view-all-link">Browse courses</Link>
+          </div>
+          {enrolledCourses.length === 0 && joinedGroups.length === 0 ? (
+            <p className="dashboard-empty-copy">You are not enrolled in a course or study group yet. Browse courses or discover a group to get started.</p>
+          ) : (
+            <div className="dashboard-record-list">
+              {enrolledCourses.map((course) => (
+                <Link key={course.id} to={`/courses/${course.id}`} className="dashboard-record-row">
+                  <span><strong>{course.code}</strong><small>{course.title}</small></span>
+                  <span className="dashboard-record-meta">{course.category || 'Course hub'}</span>
+                </Link>
+              ))}
+              {joinedGroups.map((group) => (
+                <Link key={group.id} to={`/groups/${group.id}`} className="dashboard-record-row">
+                  <span><strong>{group.name}</strong><small>{group.courseCode || 'Study group'}</small></span>
+                  <span className="dashboard-record-meta">{group.members}{group.capacity ? ` / ${group.capacity}` : ''} members</span>
+                </Link>
+              ))}
+            </div>
+          )}
+        </section>
+
+        <section className="detail-panel">
+          <div className="section-header">
+            <h2>My upcoming sessions</h2>
+            <Link to="/sessions" className="view-all-link">Open calendar</Link>
+          </div>
+          {upcomingSessions.length === 0 ? <p className="dashboard-empty-copy">No future sessions you have joined. Check your groups to find the next study session.</p> : (
+            <div className="dashboard-record-list">
+              {upcomingSessions.slice(0, 5).map((session) => (
+                <div key={session.id} className="dashboard-record-row dashboard-record-static">
+                  <span><strong>{session.title}</strong><small>{session.group} · {session.courseCode || 'Study group'}</small></span>
+                  <span className="dashboard-record-meta">{session.startsAt ? new Date(session.startsAt).toLocaleString() : 'Time not set'}<br />{session.location || 'Location to be confirmed'}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
+      </div>
+
+      <div className="dashboard-layout">
+        <section className="detail-panel">
+          <div className="section-header">
+            <h2>Notifications</h2>
+            <span className="panel-pill">{unreadNotifications} unread</span>
+          </div>
+          {latestNotifications.length === 0 ? <p className="dashboard-empty-copy">No account notifications are available yet.</p> : (
+            <div className="dashboard-record-list">
+              {latestNotifications.map((notification) => (
+                <div key={notification.id} className="dashboard-record-row dashboard-record-static">
+                  <span><strong>{notification.title}</strong><small>{notification.message}</small></span>
+                  <span className="dashboard-record-meta">{new Date(notification.created_at).toLocaleString()}<br />{notification.read_at ? 'Read' : 'Unread'} · {notification.type}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
+
+        <section className="detail-panel">
+          <div className="section-header">
+            <h2>Saved learning resources</h2>
+            <Link to="/learning?view=library" className="view-all-link">Open Learning Hub</Link>
+          </div>
+          {data.myResources.length === 0 ? <p className="dashboard-empty-copy">Your saved-resource list is empty. Open a shared resource to add it to your library.</p> : (
+            <div className="dashboard-record-list">
+              {data.myResources.slice(0, 5).map((resource) => (
+                <Link key={resource.id} to={`/resources/${resource.id}`} className="dashboard-record-row">
+                  <span><strong>{resource.title}</strong><small>{resource.courseCode || 'Unassigned course'} · {resource.type}</small></span>
+                  <span className="dashboard-record-meta">{resource.sourceNote || 'Source note not provided'}</span>
+                </Link>
+              ))}
+            </div>
+          )}
+        </section>
+      </div>
+    </>
+  );
+}
+
+function AdminDashboard({
+  data,
+  upcomingSessions,
+  pendingReports,
+}: {
+  data: DashboardData;
+  upcomingSessions: StudySession[];
+  pendingReports: ContentReport[];
+}) {
+  const recentAudit = data.auditEvents || [];
+  const users = data.users || [];
+
+  return (
+    <>
+      <div className="dashboard-layout">
+        <section className="detail-panel">
+          <div className="section-header">
+            <h2>Moderation queue</h2>
+            <Link to="/admin/reports" className="view-all-link">Review all reports</Link>
+          </div>
+          {pendingReports.length === 0 ? <p className="dashboard-empty-copy">No content reports are waiting for review.</p> : (
+            <div className="dashboard-record-list">
+              {pendingReports.slice(0, 5).map((report) => (
+                <Link key={report.id} to="/admin/reports" className="dashboard-record-row">
+                  <span><strong>{report.content_title || 'Content report'}</strong><small>{report.content_type} · {report.reason}</small></span>
+                  <span className="dashboard-record-meta">{new Date(report.created_at).toLocaleString()}</span>
+                </Link>
+              ))}
+            </div>
+          )}
+        </section>
+
+        <section className="detail-panel">
+          <div className="section-header">
+            <h2>Upcoming academic sessions</h2>
+            <Link to="/sessions" className="view-all-link">View sessions</Link>
+          </div>
+          {upcomingSessions.length === 0 ? <p className="dashboard-empty-copy">There are no upcoming sessions with a future date.</p> : (
+            <div className="dashboard-record-list">
+              {upcomingSessions.slice(0, 5).map((session) => (
+                <div key={session.id} className="dashboard-record-row dashboard-record-static">
+                  <span><strong>{session.title}</strong><small>{session.group} · {session.courseCode || 'Study group'}</small></span>
+                  <span className="dashboard-record-meta">{new Date(session.startsAt || '').toLocaleString()}<br />{session.enrolledCount} enrolled</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
+      </div>
+
+      <div className="dashboard-layout">
+        <section className="detail-panel">
+          <div className="section-header">
+            <h2>Recent audit events</h2>
+            <Link to="/admin/users" className="view-all-link">Manage accounts</Link>
+          </div>
+          {recentAudit.length === 0 ? <p className="dashboard-empty-copy">No audit events have been recorded yet.</p> : (
+            <div className="dashboard-record-list">
+              {recentAudit.slice(0, 8).map((event) => (
+                <div key={event.id} className="dashboard-record-row dashboard-record-static">
+                  <span>
+                    <strong>{event.action.replace(/_/g, ' ')}</strong>
+                    <small>{event.actor_name || 'Former or unknown user'} · {event.entity_type} #{event.entity_id}</small>
+                    {getAiReportSummary(event.payload)}
+                  </span>
+                  <span className="dashboard-record-meta">{new Date(event.created_at).toLocaleString()}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
+
+        <section className="detail-panel">
+          <div className="section-header">
+            <h2>User access and account status</h2>
+            <Link to="/admin/users" className="view-all-link">Open user administration</Link>
+          </div>
+          <div className="dashboard-record-list">
+            {users.slice(0, 8).map((adminUser) => (
+              <div key={`${adminUser.id}-${adminUser.email}`} className="dashboard-record-row dashboard-record-static">
+                <span><strong>{adminUser.full_name}</strong><small>{adminUser.email}</small></span>
+                <span className={`dashboard-status-pill ${adminUser.is_suspended ? 'dashboard-status-limited' : 'dashboard-status-ok'}`}>
+                  {adminUser.role} · {adminUser.is_suspended ? 'Suspended' : 'Active'}
+                </span>
+              </div>
+            ))}
+            {users.length === 0 ? <p className="dashboard-empty-copy">No user accounts were returned.</p> : null}
+          </div>
+        </section>
+      </div>
+
+      <section className="detail-panel">
+        <div className="section-header">
+          <div>
+            <p className="workspace-eyebrow">Live service checks</p>
+            <h2>Application and data health</h2>
+          </div>
+          <span className={`dashboard-status-pill ${data.health.status === 'ok' ? 'dashboard-status-ok' : 'dashboard-status-limited'}`}>
+            API {data.health.status}
+          </span>
+        </div>
+        <div className="dashboard-detail-grid">
+          <StatusDetail label="API status" value={data.health.status} />
+          <StatusDetail label="Database adapter" value={data.health.database} />
+          <StatusDetail label="Student accounts" value={users.filter((item) => item.role === 'student').length} />
+          <StatusDetail label="Administrator / moderator accounts" value={users.filter((item) => item.role !== 'student').length} />
+          <StatusDetail label="Groups and memberships" value={`${data.groups.length} groups · ${data.groups.reduce((total, item) => total + item.members, 0)} memberships`} />
+          <StatusDetail label="Resources and recorded opens" value={`${data.resources.length} resources · ${data.resources.reduce((total, item) => total + item.downloads, 0)} opens`} />
+        </div>
+      </section>
+    </>
+  );
+}
+
+function getAiReportSummary(payload: AuditEvent['payload']) {
+  if (!payload) return null;
+  let details = payload;
+  if (typeof payload === 'string') {
+    try {
+      details = JSON.parse(payload) as Exclude<AuditEvent['payload'], string | null | undefined>;
+    } catch {
+      return null;
+    }
+  }
+  if (!details || typeof details !== 'object' || !('reason' in details)) return null;
+  const report = details as { responseHeadline?: string; reason?: string; details?: string };
+  return (
+    <small>
+      {report.responseHeadline || 'AI response'} · {report.reason || 'Reason not supplied'}
+      {report.details ? ` · ${report.details}` : ''}
+    </small>
+  );
+}
+
+function RequirementCoverage() {
+  return (
+    <details className="detail-panel dashboard-requirements">
+      <summary>
+        <span>
+          <strong>Report-to-app coverage</strong>
+          <small>Functional requirements FR1–FR14 and their current prototype status</small>
+        </span>
+        <span className="panel-pill">14 requirements</span>
+      </summary>
+      <div className="dashboard-requirement-list">
+        {functionalRequirements.map((requirement) => (
+          <Link key={requirement.id} to={requirement.href} className="dashboard-requirement-row">
+            <strong>{requirement.id}</strong>
+            <span>{requirement.label}</span>
+            <span className={`dashboard-status-pill ${requirement.status === 'Implemented' ? 'dashboard-status-ok' : 'dashboard-status-limited'}`}>
+              {requirement.status}
+            </span>
+          </Link>
+        ))}
+      </div>
+      <p className="dashboard-requirement-note">
+        Statuses reflect the current prototype and the project traceability record. In particular, the report’s
+        external AI provider is not connected, resource storage still needs durable deployment storage, and audit
+        coverage remains incomplete.
+      </p>
+    </details>
+  );
+}
+
+function StatusDetail({ label, value }: { label: string; value: string | number }) {
+  return (
+    <Card variant="outlined" className="dashboard-detail-item">
+      <span>{label}</span>
+      <strong>{value}</strong>
+    </Card>
   );
 }
 

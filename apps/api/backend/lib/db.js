@@ -608,6 +608,20 @@ async function localQuery(text, params = []) {
     return localRows([{ ...entry }]);
   }
 
+  if (sql.includes('from audit_logs a') && sql.includes('left join users u')) {
+    const events = [...localState.audit_logs]
+      .sort((left, right) => {
+        const byDate = new Date(right.created_at).getTime() - new Date(left.created_at).getTime();
+        return byDate || Number(right.id) - Number(left.id);
+      })
+      .slice(0, 25)
+      .map((event) => ({
+        ...event,
+        actor_name: findUser(event.actor_user_id)?.full_name || null,
+      }));
+    return localRows(events);
+  }
+
   if (sql.includes('from study_groups g order by g.created_at desc, g.id desc')) {
     return localRows(localState.groups.map((group) => ({
       ...group,
