@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { addNotification } from '../lib/notifications';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { apiFetch } from '../lib/apiClient';
+import { apiFetch, openResourceUrl } from '../lib/apiClient';
 import { getAllCatalogResources } from '../lib/studylinkContent';
 import ReportContent from '../components/ReportContent';
 import { Card } from '../components/Card';
@@ -43,6 +43,7 @@ function ResourceDetail() {
   const [resource, setResource] = useState<ResourceItem | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [accessError, setAccessError] = useState('');
 
   useEffect(() => {
     let mounted = true;
@@ -105,6 +106,7 @@ function ResourceDetail() {
 
   const openResource = async () => {
     if (!resource) return;
+    setAccessError('');
 
     if (resource.isApiResource) {
       try {
@@ -116,7 +118,11 @@ function ResourceDetail() {
 
     const openUrl = resource.url || resource.fallbackUrl;
     if (openUrl) {
-      window.open(openUrl, '_blank', 'noopener,noreferrer');
+      try {
+        await openResourceUrl(openUrl);
+      } catch (openError) {
+        setAccessError(openError instanceof Error ? openError.message : 'Unable to open this resource.');
+      }
     }
   };
 
@@ -165,11 +171,12 @@ function ResourceDetail() {
                   Open in new tab
                 </button>
               ) : (
-                <a href={resource.url} target="_blank" rel="noopener noreferrer" className="button button-primary">
+                <button type="button" onClick={openResource} className="button button-primary">
                   Open resource
-                </a>
+                </button>
               )
             ) : null}
+              {accessError ? <p className="form-error" role="alert">{accessError}</p> : null}
               {resource.url && resource.url.startsWith('data:') ? (
                 <button
                   type="button"
@@ -182,7 +189,7 @@ function ResourceDetail() {
                       const resp = await apiFetch('/api/uploads', { method: 'POST', body: JSON.stringify({ filename, data: body }) });
                       if (resp.ok) {
                         const data = await resp.json();
-                        window.open(data.url, '_blank', 'noopener,noreferrer');
+                        await openResourceUrl(data.url);
                         addNotification({ id: `download-${Date.now()}`, title: 'Saved', message: 'Resource saved and opened.', createdAt: new Date().toISOString() });
                       } else {
                         addNotification({ id: `download-fail-${Date.now()}`, title: 'Save failed', message: 'Could not save resource.' , createdAt: new Date().toISOString() });
@@ -247,7 +254,7 @@ function ResourceDetail() {
             <p>This resource is stored in the StudyLink backend and may launch an external link or hosted file.</p>
             <p>
               <strong>Source URL:</strong>{' '}
-              <a href={resource.url} target="_blank" rel="noopener noreferrer">Open original source</a>
+              <button type="button" className="button button-secondary button-sm" onClick={openResource}>Open original source</button>
             </p>
           </section>
         ) : (

@@ -9,7 +9,7 @@ export const getStoredToken = () => {
   return localStorage.getItem('token') || '';
 };
 
-async function tryFetch(url: string, init: RequestInit) {
+async function tryFetch(url: string, init: RequestInit): Promise<Response | null> {
   try {
     return await fetch(url, init);
   } catch (err) {
@@ -17,7 +17,7 @@ async function tryFetch(url: string, init: RequestInit) {
   }
 }
 
-export const apiFetch = async (path: string, options: RequestInit = {}) => {
+export const apiFetch = async (path: string, options: RequestInit = {}): Promise<Response> => {
   const headers = new Headers(options.headers || {});
   const hasBody = typeof options.body !== 'undefined' && options.body !== null;
   const isFormData = typeof FormData !== 'undefined' && options.body instanceof FormData;
@@ -65,3 +65,50 @@ export const apiFetch = async (path: string, options: RequestInit = {}) => {
   // Otherwise return the primary response (e.g., 401/403/client errors)
   return resp;
 };
+export function isProtectedUploadUrl(value: string) {
+  try {
+    const url = new URL(value, typeof window === 'undefined' ? 'http://localhost' : window.location.origin);
+    const apiOrigin = API_BASE && typeof window !== 'undefined'
+      ? new URL(API_BASE, window.location.origin).origin
+      : (typeof window === 'undefined' ? '' : window.location.origin);
+    const isKnownOrigin = url.origin === apiOrigin
+      || (typeof window !== 'undefined' && url.origin === window.location.origin);
+    return isKnownOrigin && /^\/(?:api\/)?uploads\/[A-Za-z0-9][A-Za-z0-9_.-]*$/.test(url.pathname);
+  } catch {
+    return false;
+  }
+}
+
+export async function openResourceUrl(value: string) {
+  if (!isProtectedUploadUrl(value)) {
+    window.open(value, '_blank', 'noopener,noreferrer');
+    return;
+  }
+
+  const parsedUrl = new URL(value, window.location.origin);
+  const filename = parsedUrl.pathname.split('/').pop();
+  if (!filename) {
+    throw new Error('The uploaded file URL is invalid.');
+  }
+
+  const popup = window.open('about:blank', '_blank');
+  if (!popup) {
+    throw new Error('Allow pop-ups for StudyLink to open this file.');
+  }
+  popup.opener = null;
+
+  try {
+    const response = await apiFetch(`/api/uploads/${encodeURIComponent(filename)}`);
+    if (!response.ok) {
+      const payload = await response.json().catch(() => null);
+      throw new Error(payload?.message || 'The uploaded file could not be opened.');
+    }
+
+    const objectUrl = URL.createObjectURL(await response.blob());
+    popup.location.replace(objectUrl);
+    window.setTimeout(() => URL.revokeObjectURL(objectUrl), 60_000);
+  } catch (error) {
+    popup.close();
+    throw error;
+  }
+}

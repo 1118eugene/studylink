@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { apiFetch } from '../lib/apiClient';
+import { apiFetch, openResourceUrl } from '../lib/apiClient';
 import { buildCourseContent, buildStudyLinkAiResponse } from '../lib/studylinkContent';
 import { addNotification } from '../lib/notifications';
 import PageHeader from '../components/PageHeader';
@@ -62,6 +62,18 @@ function CourseDetail() {
     () => buildStudyLinkAiResponse(submittedQuestion, course?.code),
     [course?.code, submittedQuestion],
   );
+
+  const openResource = (url?: string) => {
+    if (!url) return;
+    void openResourceUrl(url).catch((error) => {
+      addNotification({
+        id: `resource-open-error-${Date.now()}`,
+        title: 'Unable to open resource',
+        message: error instanceof Error ? error.message : 'Please try opening the resource again.',
+        createdAt: new Date().toISOString(),
+      });
+    });
+  };
 
   const [curatedResults, setCuratedResults] = useState<any[]>([]);
   const [fetchingCurated, setFetchingCurated] = useState(false);
@@ -136,14 +148,9 @@ function CourseDetail() {
             <span>{item.audience}</span>
             <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.75rem', flexWrap: 'wrap' }}>
               {itemUrl ? (
-                <a
-                  href={itemUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="button button-secondary button-sm"
-                >
+                <button type="button" onClick={() => openResource(itemUrl)} className="button button-secondary button-sm">
                   {buttonLabel}
-                </a>
+                </button>
               ) : null}
               {item.fallbackUrl && externalUrl ? (
                 <a
@@ -167,7 +174,7 @@ function CourseDetail() {
                       const resp = await apiFetch('/api/uploads', { method: 'POST', body: JSON.stringify({ filename, data: body }) });
                       if (resp.ok) {
                         const data = await resp.json();
-                        window.open(data.url, '_blank', 'noopener,noreferrer');
+                        await openResourceUrl(data.url);
                         addNotification({ id: `download-${Date.now()}`, title: 'Saved', message: 'Resource saved and opened.', createdAt: new Date().toISOString() });
                       } else {
                         addNotification({ id: `download-fail-${Date.now()}`, title: 'Save failed', message: 'Could not save resource.', createdAt: new Date().toISOString() });
@@ -194,7 +201,7 @@ function CourseDetail() {
                       const resp = await apiFetch('/api/uploads', { method: 'POST', body: JSON.stringify({ filename, data: body }) });
                       if (resp.ok) {
                         const data = await resp.json();
-                        window.open(data.url, '_blank', 'noopener,noreferrer');
+                        await openResourceUrl(data.url);
                         addNotification({ id: `download-${Date.now()}`, title: 'Saved', message: 'Resource saved and opened.', createdAt: new Date().toISOString() });
                       } else {
                         addNotification({ id: `download-fail-${Date.now()}`, title: 'Save failed', message: 'Could not save resource.', createdAt: new Date().toISOString() });
@@ -443,7 +450,7 @@ function CourseDetail() {
                 <article key={resource.id} className="detail-summary-card">
                   <strong>{resource.title}</strong>
                   <p>{resource.description}</p>
-                  <button type="button" className="button button-secondary button-sm" onClick={() => window.open(resource.url, '_blank', 'noopener,noreferrer')}>
+                  <button type="button" className="button button-secondary button-sm" onClick={() => openResource(resource.url)}>
                     Open resource
                   </button>
                 </article>
@@ -573,9 +580,9 @@ function CourseDetail() {
                       </div>
                       <p style={{ marginTop: '0.35rem' }}>{resource.description}</p>
                       <div style={{ marginTop: '0.5rem', display: 'flex', gap: '0.5rem' }}>
-                        <button type="button" className="button button-secondary button-sm" onClick={() => window.open(resource.url, '_blank', 'noopener,noreferrer')}>{isExternal ? 'Open external' : 'Open'}</button>
+                        <button type="button" className="button button-secondary button-sm" onClick={() => openResource(resource.url)}>{isExternal ? 'Open external' : 'Open'}</button>
                         {resource.fallbackUrl ? (
-                          <button type="button" className="button button-tertiary button-sm" onClick={() => window.open(resource.fallbackUrl, '_blank', 'noopener,noreferrer')}>Open in-app</button>
+                          <button type="button" className="button button-tertiary button-sm" onClick={() => openResource(resource.fallbackUrl)}>Open in-app</button>
                         ) : null}
                       </div>
                     </article>
@@ -593,7 +600,7 @@ function CourseDetail() {
                         <strong style={{ fontSize: '0.95rem' }}>{r.label}</strong>
                         <p style={{ marginTop: '0.35rem' }}>{r.source} · {r.type}</p>
                         <div style={{ marginTop: '0.5rem', display: 'flex', gap: '0.5rem' }}>
-                          <a className="button button-secondary button-sm" href={r.url} target="_blank" rel="noreferrer">Open</a>
+                          <button type="button" className="button button-secondary button-sm" onClick={() => openResource(r.url)}>Open</button>
                           <button
                             type="button"
                             className="button button-primary button-sm"

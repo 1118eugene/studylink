@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { apiFetch } from '../lib/apiClient';
+import { apiFetch, openResourceUrl } from '../lib/apiClient';
 import { buildMergedCourses, getAllCatalogResources, getCatalogCourseByCode, getResourcesForCourse } from '../lib/studylinkContent';
 import { Card } from '../components/Card';
 import PageHeader from '../components/PageHeader';
+import { addNotification } from '../lib/notifications';
 
 type ResourceItem = {
   id: string | number;
@@ -258,7 +259,16 @@ function LearningHub() {
   const handleAccess = async (resource: ResourceItem) => {
     const resourceUrl = resource.url || resource.fallbackUrl;
     if (resourceUrl) {
-      window.open(resourceUrl, '_blank', 'noopener,noreferrer');
+      try {
+        await openResourceUrl(resourceUrl);
+      } catch (error) {
+        addNotification({
+          id: `resource-open-error-${Date.now()}`,
+          title: 'Unable to open resource',
+          message: error instanceof Error ? error.message : 'Please try opening the resource again.',
+          createdAt: new Date().toISOString(),
+        });
+      }
       return;
     }
 

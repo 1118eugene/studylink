@@ -455,6 +455,24 @@ app.patch('/api/profile', requireAuth, async (req, res) => {
     return res.status(404).json({ message: 'Profile not found.' });
   }
 
+  const updatedFields = [
+    'name',
+    'university',
+    'major',
+    'program',
+    'yearOfStudy',
+    'bio',
+    'profileVisibility',
+    'notificationPreferences',
+  ].filter((field) => Object.prototype.hasOwnProperty.call(req.body || {}, field));
+  if (updatedFields.length > 0) {
+    await query(
+      `INSERT INTO audit_logs (actor_user_id, entity_type, entity_id, action, payload)
+       VALUES ($1, $2, $3, $4, $5);`,
+      [req.user.id, 'user', String(req.user.id), 'profile_updated', JSON.stringify({ fields: updatedFields })],
+    );
+  }
+
   return res.json(profile);
 });
 
@@ -1864,19 +1882,10 @@ app.get('/', (_req, res) => {
   });
 });
 
-if (hasClientBuild) {
-  app.use(express.static(clientDistPath));
-  app.get(/^(?!\/api).*/, (_req, res) => {
-    res.sendFile(clientIndexPath);
-  });
-}
-
-// Serve uploaded files
 const uploadsPath = process.env.STUDYLINK_UPLOADS_PATH || path.join(process.cwd(), 'public', 'uploads');
 if (!fs.existsSync(uploadsPath)) {
   fs.mkdirSync(uploadsPath, { recursive: true });
 }
-app.use('/uploads', express.static(uploadsPath));
 
 app.post('/api/uploads', requireAuth, uploadRateLimiter, async (req, res) => {
   const { filename, data } = req.body || {};
@@ -1899,8 +1908,33 @@ app.post('/api/uploads', requireAuth, uploadRateLimiter, async (req, res) => {
   const safeName = `${Date.now()}_${path.basename(name).replace(/[^a-zA-Z0-9_.-]/g, '_')}`;
   const outPath = path.join(uploadsPath, safeName);
   fs.writeFileSync(outPath, buffer, { flag: 'wx' });
-  return res.status(201).json({ url: `/uploads/${safeName}` });
+  return res.status(201).json({ url: `/api/uploads/${safeName}` });
 });
+
+app.get(['/uploads/:filename', '/api/uploads/:filename'], requireAuth, (req, res) => {
+  const { filename } = req.params;
+  if (!/^[A-Za-z0-9][A-Za-z0-9_.-]*$/.test(filename)) {
+    return res.status(400).json({ message: 'Invalid upload filename.' });
+  }
+
+  const filePath = path.resolve(uploadsPath, filename);
+  if (path.dirname(filePath) !== path.resolve(uploadsPath) || !fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) {
+    return res.status(404).json({ message: 'Uploaded file not found.' });
+  }
+
+  res.set({
+    'Cache-Control': 'private, no-store',
+    'X-Content-Type-Options': 'nosniff',
+  });
+  return res.sendFile(filePath);
+});
+
+if (hasClientBuild) {
+  app.use(express.static(clientDistPath));
+  app.get(/^(?!\/api).*/, (_req, res) => {
+    res.sendFile(clientIndexPath);
+  });
+}
 
 app.use((_req, res) => {
   res.status(404).json({ message: 'Route not found. Use /api/health or the frontend app.' });

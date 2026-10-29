@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { apiFetch } from '../lib/apiClient';
+import { apiFetch, isProtectedUploadUrl, openResourceUrl } from '../lib/apiClient';
 import { getCourseById } from '../lib/academic';
 import PageHeader from '../components/PageHeader';
 
@@ -23,8 +23,19 @@ function normalizeCourse(course: any): CourseHubCourse {
   };
 };
 
-function PdfPreview({ url }: { url: string }) {
+function PdfPreview({ url, onError }: { url: string; onError: (message: string) => void }) {
   if (!url) return null;
+  if (isProtectedUploadUrl(url)) {
+    return (
+      <button
+        type="button"
+        className="button button-secondary button-sm"
+        onClick={() => { void openResourceUrl(url).catch((error) => onError(error instanceof Error ? error.message : 'Unable to open this resource.')); }}
+      >
+        Open uploaded preview
+      </button>
+    );
+  }
   if (url.endsWith('.pdf')) {
     return (
       <iframe title="pdf-preview" src={url} style={{ width: '100%', height: 520, border: 'none' }} />
@@ -44,6 +55,14 @@ function CourseHub() {
   const [newUrl, setNewUrl] = useState('');
   const [newFile, setNewFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
+  const [resourceError, setResourceError] = useState('');
+
+  const openResource = (url: string) => {
+    setResourceError('');
+    void openResourceUrl(url).catch((error) => {
+      setResourceError(error instanceof Error ? error.message : 'Unable to open this resource.');
+    });
+  };
 
   useEffect(() => {
     if (!id) return;
@@ -164,11 +183,12 @@ function CourseHub() {
                 <div key={r.id} className="card">
                   <strong>{r.title}</strong>
                   <div style={{ marginTop: 6 }}>
-                    <a href={r.url} target="_blank" rel="noreferrer">Open</a>
+                    <button type="button" className="button button-secondary button-sm" onClick={() => openResource(r.url)}>Open</button>
                   </div>
                 </div>
               ))}
             </div>
+            {resourceError ? <p className="form-error" role="alert">{resourceError}</p> : null}
 
             <div style={{ marginTop: 12 }}>
               <h4>Add resource</h4>
@@ -182,7 +202,7 @@ function CourseHub() {
 
             <div style={{ marginTop: 16 }}>
               <h4>Preview</h4>
-              {course.resources && course.resources[0] ? <PdfPreview url={course.resources[0].url} /> : <p>No preview available</p>}
+              {course.resources && course.resources[0] ? <PdfPreview url={course.resources[0].url} onError={setResourceError} /> : <p>No preview available</p>}
             </div>
           </aside>
         </div>

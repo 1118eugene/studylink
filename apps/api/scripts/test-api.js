@@ -51,6 +51,11 @@ async function request(baseUrl, endpoint, { token, method = 'GET', body } = {}) 
   return { response, payload };
 }
 
+async function requestUploadedFile(baseUrl, endpoint, token) {
+  const headers = token ? { Authorization: `Bearer ${token}` } : {};
+  return fetch(`${baseUrl}${endpoint}`, { headers });
+}
+
 async function expectStatus(baseUrl, endpoint, expectedStatus, options) {
   const result = await request(baseUrl, endpoint, options);
   assert.equal(
@@ -184,7 +189,7 @@ async function main() {
 
     const profile = await expectStatus(baseUrl, '/api/profile', 200, { token: student1Token });
     assert.equal(profile.user.program, 'Computing');
-    await expectStatus(baseUrl, '/api/profile', 200, {
+    const updatedProfile = await expectStatus(baseUrl, '/api/profile', 200, {
       token: student1Token,
       method: 'PATCH',
       body: {
@@ -192,6 +197,15 @@ async function main() {
         notificationPreferences: { groups: false, sessions: true, moderation: true },
       },
     });
+    assert.equal(updatedProfile.user.profileVisibility, 'private');
+    assert.deepEqual(updatedProfile.user.notificationPreferences, { groups: false, sessions: true, moderation: true });
+    const profileAudit = (await expectStatus(baseUrl, '/api/admin/audit', 200, { token: adminToken })).events
+      .find((event) => event.action === 'profile_updated');
+    assert.ok(profileAudit, 'profile preference changes should be auditable');
+    const profileAuditPayload = typeof profileAudit.payload === 'string' ? JSON.parse(profileAudit.payload) : profileAudit.payload;
+    assert.ok(profileAuditPayload.fields.includes('profileVisibility'));
+    assert.ok(profileAuditPayload.fields.includes('notificationPreferences'));
+    assert.equal(profileAuditPayload.profileVisibility, undefined, 'audit payloads must not include the preference values');
 
     const courses = (await expectStatus(baseUrl, '/api/courses', 200, { token: student1Token })).courses;
     assert.ok(courses.length > 0, 'default local courses should be available');
@@ -281,6 +295,27 @@ async function main() {
       400,
       `uploads over 5 MiB must be rejected: ${oversizedUpload.payload.message || 'no API error message returned'}\n${output}`,
     );
+    const uploadedContent = 'StudyLink private upload integration test.';
+    const uploadedFile = await expectStatus(baseUrl, '/api/uploads', 201, {
+      token: student1Token,
+      method: 'POST',
+      body: { filename: 'study-notes.txt', data: Buffer.from(uploadedContent).toString('base64') },
+    });
+    assert.match(uploadedFile.url, /^\/api\/uploads\/[A-Za-z0-9][A-Za-z0-9_.-]*$/);
+    const uploadedFilename = uploadedFile.url.split('/').pop();
+    assert.equal((await requestUploadedFile(baseUrl, uploadedFile.url)).status, 401, 'uploads must not be readable without authentication');
+    assert.equal((await requestUploadedFile(baseUrl, `/uploads/${uploadedFilename}`)).status, 401, 'legacy upload URLs must also require authentication');
+    const downloadedFile = await requestUploadedFile(baseUrl, uploadedFile.url, student1Token);
+    assert.equal(downloadedFile.status, 200);
+    assert.equal(await downloadedFile.text(), uploadedContent);
+    assert.equal(downloadedFile.headers.get('cache-control'), 'private, no-store');
+    const legacyDownloadedFile = await requestUploadedFile(baseUrl, `/uploads/${uploadedFilename}`, student1Token);
+    assert.equal(legacyDownloadedFile.status, 200, 'existing resource links should remain readable for signed-in users');
+    assert.equal(await legacyDownloadedFile.text(), uploadedContent);
+    const missingFile = await requestUploadedFile(baseUrl, '/api/uploads/missing-notes.txt', student1Token);
+    assert.equal(missingFile.status, 404);
+    const invalidFilename = await requestUploadedFile(baseUrl, '/api/uploads/..%2Fserver.js', student1Token);
+    assert.ok([400, 404].includes(invalidFilename.status), 'invalid upload paths must not be readable');
 
     await expectStatus(baseUrl, '/api/admin/users', 403, { token: student1Token });
     await expectStatus(baseUrl, `/api/admin/users/${student2Signup.user.id}/suspension`, 200, {
@@ -293,7 +328,7 @@ async function main() {
       body: { email: 'student2@test.studylink.local', password: 'LocalTestStudent!456' },
     });
 
-    console.log('API integration tests passed: auth, profile preferences, course enrollment, group capacity/requirements/leave, session RSVP, moderation notifications, uploads, and suspension.');
+    console.log('API integration tests passed: auth, profile preferences/audit, course enrollment, group capacity/requirements/leave, session RSVP, moderation notifications, protected uploads, and suspension.');
   } finally {
     if (child.exitCode === null) {
       const stopped = new Promise((resolve) => child.once('exit', resolve));

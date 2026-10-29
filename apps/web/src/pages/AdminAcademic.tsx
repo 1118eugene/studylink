@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { apiFetch } from '../lib/apiClient';
+import { apiFetch, openResourceUrl } from '../lib/apiClient';
 
 function AdminAcademic() {
   const [schools, setSchools] = useState<any[]>([]);
@@ -18,6 +18,14 @@ function AdminAcademic() {
   const [resFile, setResFile] = useState<File | null>(null);
   const [resUploading, setResUploading] = useState(false);
   const [courseResources, setCourseResources] = useState<any[]>([]);
+  const [resourceError, setResourceError] = useState('');
+
+  const openResource = (url: string) => {
+    setResourceError('');
+    void openResourceUrl(url).catch((error) => {
+      setResourceError(error instanceof Error ? error.message : 'Unable to open this resource.');
+    });
+  };
 
   useEffect(() => {
     refresh();
@@ -197,8 +205,9 @@ function AdminAcademic() {
               <div>
                 <strong>Course resources</strong>
                 <ul>
-                  {courseResources.map((r) => <li key={r.id}><a href={r.url} target="_blank" rel="noreferrer">{r.title}</a></li>)}
+                  {courseResources.map((r) => <li key={r.id}><button type="button" className="button button-secondary button-sm" onClick={() => openResource(r.url)}>{r.title}</button></li>)}
                 </ul>
+                {resourceError ? <p className="form-error" role="alert">{resourceError}</p> : null}
               </div>
             </div>
           </aside>

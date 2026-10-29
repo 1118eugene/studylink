@@ -15,19 +15,19 @@ The report's AI Provider is an external service behind the application gateway, 
 | ID | Requirement area from the report | Evidence in the prototype | Status / remaining work |
 |---|---|---|---|
 | FR1 | Account registration, sign-in, and authenticated access | API auth routes, bearer authentication, signup/login screens | Implemented; production secret and account lifecycle operations need deployment configuration. |
-| FR2 | Student profiles and academic information | Profile API and web/mobile profile screens | Implemented; verify the full profile field set against institutional policy. |
-| FR3 | Profile visibility and notification preferences | Profile preference fields/API; local and PostgreSQL persistence | Implemented; preferences should be checked for every notification type as new types are added. |
+| FR2 | Student profiles and academic information | Profile API and web/mobile profile screens include university, major, program, year, and biography | Implemented; verify the full profile field set against institutional policy. |
+| FR3 | Profile visibility and notification preferences | Editable web profile controls, validated profile API, local and PostgreSQL persistence | Implemented for current visibility and notification types; add controls when new notification types are introduced. |
 | FR4 | Browse courses and academic catalogue | Course endpoints and academic school/program/course catalogue | Implemented; catalogue content must be maintained by deployment administrators. |
 | FR5 | Enroll in and withdraw from courses | Course enrollment API and web/mobile actions | Implemented for the app course catalogue; separate academic catalogue enrollment is not currently provided. |
 | FR6 | Create, edit, and remove study groups | Group API and web/mobile flows with owner/admin controls | Implemented. |
 | FR7 | Join, leave, and enforce group requirements/capacity | API checks membership, acceptance, closed groups, capacity, and owner protection | Implemented; covered in local-store integration tests. |
 | FR8 | Schedule sessions and manage attendance/RSVP | Session API and clients support create/edit/delete, RSVP, and cancellation | Implemented; session creation requires group membership or ownership. |
-| FR9 | Share and discover resources with provenance | Resource metadata includes source note and course code; upload endpoint validates type and size | Partially implemented; durable storage and private download authorization are deployment gaps. |
+| FR9 | Share and discover resources with provenance | Resource metadata includes source note and course code; upload endpoint validates type and size; uploaded files require an authenticated download and are not publicly served | Partially implemented; deployment storage is local/ephemeral without configured durable object storage, and resource-level access policies remain to be defined. |
 | FR10 | Report inappropriate group/resource content and moderate reports | Report queue, moderator/admin decisions, remove/dismiss actions | Implemented; moderation workflow has local integration coverage. |
-| FR11 | Suspend user accounts | Admin-only suspension endpoint and audit event | Implemented at API level; administration interface and operational appeal/reinstatement policy need review. |
+| FR11 | Suspend user accounts | Admin-only suspension endpoint, audit event, and administrator user-management interface | Implemented; operational appeal and reinstatement policy remain to be defined. |
 | FR12 | Notify users about relevant activity and moderation outcomes | User-scoped notifications and preference checks; web/mobile notification surfaces | Implemented for current group/session/moderation events; push delivery is not included. |
 | FR13 | Optional AI-assisted resource discovery with privacy awareness | Local course-guidance prototype, visible privacy/verification notice, response-report submission, and admin provider-status console | Prototype only; external AI is not connected. Prompt/report data retention and privacy review remain. |
-| FR14 | Audit sensitive actions | API audit events include authentication, moderation, suspension, and AI-response reports; administrators can review recent events in the dashboard | Partially implemented; define retention and complete coverage for all sensitive operations. |
+| FR14 | Audit sensitive actions | API audit events include authentication, profile changes (field names only), moderation, suspension, and AI-response reports; administrators can review recent events in the dashboard | Partially implemented; define retention and complete coverage for all sensitive operations. |
 
 ## Non-functional requirements
 

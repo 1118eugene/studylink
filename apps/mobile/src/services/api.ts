@@ -19,6 +19,10 @@ export function setApiToken(value: string) {
   token = value;
 }
 
+export function getApiToken() {
+  return token;
+}
+
 export function setUnauthorizedHandler(handler: (() => void) | undefined) {
   unauthorizedHandler = handler;
 }
