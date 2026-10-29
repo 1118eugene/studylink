@@ -60,7 +60,7 @@ The frontend URL above is hosted on Vercel. Use these Vercel project settings:
 - Root directory: repository root (`.`)
 - Framework preset: Vite
 - Build command: `npm run build`
-- Output directory: `dist`
+- Output directory: `apps/web/dist` (also declared in the repository's `vercel.json`)
 - Environment variable: `VITE_API_URL=https://studylinkbackend-4a7r.onrender.com`
 
 Connect the Vercel project to `1118eugene/studylink` with `main` as its production branch and enable automatic deployments. Vercel then builds and publishes the frontend when changes are pushed or merged to `main`.
