@@ -6,6 +6,8 @@ This matrix groups the report's functional and non-functional requirements by th
 
 The authenticated dashboard opens after sign-in and presents role-specific, API-backed information. Students see their course enrolments, group memberships, joined future sessions, saved resources, and account notifications. Administrators see account and content totals, upcoming sessions, reports awaiting review, recent audit events, API/database health, and the AI integration console. Moderators see their report-review workload alongside their own study information.
 
+The dashboard's expandable report-to-app coverage section includes FR1–FR14 and NFR1–NFR11, with the requirement area, implementation evidence, current prototype status, and remaining work. Keep this presentation aligned with the matrix below when requirements change.
+
 The report's AI Provider is an external service behind the application gateway, not a user account. Its status is represented honestly: the current build has no connected external provider, does not send student prompts to one, and does not claim provider uptime or request analytics. The administrator AI service console shows persisted curated-link and curation-flag counts and records.
 
 ## Functional requirements

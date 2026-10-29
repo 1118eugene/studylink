@@ -124,21 +124,43 @@ type Stat = {
   href: string;
 };
 
-const functionalRequirements = [
-  { id: 'FR1', label: 'Registration and sign-in', status: 'Implemented', href: '/profile' },
-  { id: 'FR2', label: 'Profile and preferences', status: 'Implemented', href: '/profile' },
-  { id: 'FR3', label: 'Course browsing and search', status: 'Implemented', href: '/courses' },
-  { id: 'FR4', label: 'Course enrolment', status: 'Implemented', href: '/courses' },
-  { id: 'FR5', label: 'Study group creation', status: 'Implemented', href: '/groups/new' },
-  { id: 'FR6', label: 'Joining and leaving groups', status: 'Implemented', href: '/groups' },
-  { id: 'FR7', label: 'Session scheduling', status: 'Implemented', href: '/sessions' },
-  { id: 'FR8', label: 'Session responses and status', status: 'Implemented', href: '/sessions' },
-  { id: 'FR9', label: 'Learning resources and provenance', status: 'Partially implemented', href: '/learning?view=resources' },
-  { id: 'FR10', label: 'Content reporting', status: 'Implemented', href: '/admin/reports' },
-  { id: 'FR11', label: 'Moderation and account suspension', status: 'Implemented', href: '/admin/users' },
-  { id: 'FR12', label: 'Notifications and preferences', status: 'Implemented', href: '/profile' },
-  { id: 'FR13', label: 'Optional AI study support', status: 'Local prototype; external provider not connected', href: '/ask-ai' },
-  { id: 'FR14', label: 'Security audit logging', status: 'Partially implemented', href: '/admin/users' },
+type Requirement = {
+  id: string;
+  title: string;
+  evidence: string;
+  status: string;
+  href?: string;
+};
+
+const functionalRequirements: Requirement[] = [
+  { id: 'FR1', title: 'Account registration, sign-in, and authenticated access', evidence: 'API auth routes, bearer authentication, signup/login screens', status: 'Implemented; production secret and account lifecycle operations need deployment configuration.', href: '/login' },
+  { id: 'FR2', title: 'Student profiles and academic information', evidence: 'Profile API and web/mobile profile screens', status: 'Implemented; verify the full profile field set against institutional policy.', href: '/profile' },
+  { id: 'FR3', title: 'Profile visibility and notification preferences', evidence: 'Profile preference fields/API; local and PostgreSQL persistence', status: 'Implemented; preferences should be checked for every notification type as new types are added.', href: '/profile' },
+  { id: 'FR4', title: 'Browse courses and academic catalogue', evidence: 'Course endpoints and academic school/program/course catalogue', status: 'Implemented; catalogue content must be maintained by deployment administrators.', href: '/courses' },
+  { id: 'FR5', title: 'Enroll in and withdraw from courses', evidence: 'Course enrollment API and web/mobile actions', status: 'Implemented for the app course catalogue; separate academic catalogue enrollment is not currently provided.', href: '/courses' },
+  { id: 'FR6', title: 'Create, edit, and remove study groups', evidence: 'Group API and web/mobile flows with owner/admin controls', status: 'Implemented.', href: '/groups' },
+  { id: 'FR7', title: 'Join, leave, and enforce group requirements/capacity', evidence: 'API checks membership, acceptance, closed groups, capacity, and owner protection', status: 'Implemented; covered in local-store integration tests.', href: '/groups' },
+  { id: 'FR8', title: 'Schedule sessions and manage attendance/RSVP', evidence: 'Session API and clients support create/edit/delete, RSVP, and cancellation', status: 'Implemented; session creation requires group membership or ownership.', href: '/sessions' },
+  { id: 'FR9', title: 'Share and discover resources with provenance', evidence: 'Resource metadata includes source note and course code; upload endpoint validates type and size', status: 'Partially implemented; durable storage and private download authorization are deployment gaps.', href: '/learning?view=resources' },
+  { id: 'FR10', title: 'Report inappropriate group/resource content and moderate reports', evidence: 'Report queue, moderator/admin decisions, remove/dismiss actions', status: 'Implemented; moderation workflow has local integration coverage.', href: '/admin/reports' },
+  { id: 'FR11', title: 'Suspend user accounts', evidence: 'Admin-only suspension endpoint and audit event', status: 'Implemented at API level; administration interface and operational appeal/reinstatement policy need review.', href: '/admin/users' },
+  { id: 'FR12', title: 'Notify users about relevant activity and moderation outcomes', evidence: 'User-scoped notifications and preference checks; web/mobile notification surfaces', status: 'Implemented for current group/session/moderation events; push delivery is not included.', href: '/profile' },
+  { id: 'FR13', title: 'Optional AI-assisted resource discovery with privacy awareness', evidence: 'Local course-guidance prototype, visible privacy/verification notice, response-report submission, and admin provider-status console', status: 'Prototype only; external AI is not connected. Prompt/report data retention and privacy review remain.', href: '/ask-ai' },
+  { id: 'FR14', title: 'Audit sensitive actions', evidence: 'API audit events include authentication, moderation, suspension, and AI-response reports; administrators can review recent events in the dashboard', status: 'Partially implemented; define retention and complete coverage for all sensitive operations.', href: '/admin/users' },
+];
+
+const nonFunctionalRequirements: Requirement[] = [
+  { id: 'NFR1', title: 'Usability', evidence: 'Consistent web/mobile task surfaces, validation messages, loading/error states', status: 'Prototype implemented; conduct usability testing with representative students.' },
+  { id: 'NFR2', title: 'Accessibility', evidence: 'Semantic controls and accessible labels are used in parts of the UI', status: 'Not certified; complete keyboard, screen-reader, contrast, and WCAG review.' },
+  { id: 'NFR3', title: 'Security', evidence: 'Server-side auth/role checks, input checks, upload restrictions, rate limits, production secret requirement', status: 'Baseline controls implemented; threat model, dependency review, and penetration testing remain.' },
+  { id: 'NFR4', title: 'Privacy', evidence: 'Profile visibility, notification preferences, no external AI calls in current prototype', status: 'Partially addressed; define data retention, consent, export/deletion, and hosting policy.' },
+  { id: 'NFR5', title: 'Performance', evidence: 'Query-side aggregation and bounded notifications/uploads', status: 'Not benchmarked; establish latency and load targets and test with realistic data.' },
+  { id: 'NFR6', title: 'Reliability', evidence: 'API error handling and local/PostgreSQL adapters', status: 'Partially addressed; local JSON is demo-only and hosted backups/monitoring/recovery remain.' },
+  { id: 'NFR7', title: 'Portability', evidence: 'Separate Vite, Expo, and Express workspaces; Expo web support', status: 'Implemented; verify deployment matrix and supported browsers/devices.' },
+  { id: 'NFR8', title: 'Low data usage', evidence: 'Web/mobile clients avoid large media downloads in core flows; uploads capped at 5 MiB', status: 'Partially addressed; measure network usage and add explicit offline/low-bandwidth behavior if required.' },
+  { id: 'NFR9', title: 'Modularity', evidence: 'Separate app/API/shared workspaces and route/data layers', status: 'Implemented structurally; continue to keep business rules in the API.' },
+  { id: 'NFR10', title: 'Maintainability', evidence: 'TypeScript checks, migrations, workspace scripts, API tests, architecture docs', status: 'Implemented baseline; expand automated coverage and CI as the team workflow matures.' },
+  { id: 'NFR11', title: 'Logging and monitoring', evidence: 'Server errors, audit rows, and local prototype analytics', status: 'Partially addressed; central structured logging, alerting, and retention are not configured.' },
 ];
 
 async function loadJson<T>(path: string): Promise<T> {
@@ -596,33 +618,55 @@ function getAiReportSummary(payload: AuditEvent['payload']) {
 }
 
 function RequirementCoverage() {
+  const requirementCount = functionalRequirements.length + nonFunctionalRequirements.length;
+
   return (
     <details className="detail-panel dashboard-requirements">
       <summary>
         <span>
           <strong>Report-to-app coverage</strong>
-          <small>Functional requirements FR1–FR14 and their current prototype status</small>
+          <small>Functional and non-functional requirements, evidence, and remaining work</small>
         </span>
-        <span className="panel-pill">14 requirements</span>
+        <span className="panel-pill">{requirementCount} requirements</span>
       </summary>
-      <div className="dashboard-requirement-list">
-        {functionalRequirements.map((requirement) => (
-          <Link key={requirement.id} to={requirement.href} className="dashboard-requirement-row">
-            <strong>{requirement.id}</strong>
-            <span>{requirement.label}</span>
-            <span className={`dashboard-status-pill ${requirement.status === 'Implemented' ? 'dashboard-status-ok' : 'dashboard-status-limited'}`}>
-              {requirement.status}
-            </span>
-          </Link>
-        ))}
-      </div>
+      <section className="dashboard-requirement-section" aria-labelledby="functional-requirements-heading">
+        <h3 id="functional-requirements-heading">Functional requirements (FR1–FR14)</h3>
+        <div className="dashboard-requirement-list">
+          {functionalRequirements.map((requirement) => <RequirementRow key={requirement.id} requirement={requirement} />)}
+        </div>
+      </section>
+      <section className="dashboard-requirement-section" aria-labelledby="non-functional-requirements-heading">
+        <h3 id="non-functional-requirements-heading">Non-functional requirements (NFR1–NFR11)</h3>
+        <div className="dashboard-requirement-list">
+          {nonFunctionalRequirements.map((requirement) => <RequirementRow key={requirement.id} requirement={requirement} />)}
+        </div>
+      </section>
       <p className="dashboard-requirement-note">
-        Statuses reflect the current prototype and the project traceability record. In particular, the report’s
-        external AI provider is not connected, resource storage still needs durable deployment storage, and audit
-        coverage remains incomplete.
+        Statuses reflect the current prototype and project traceability record; they are not independent certification.
+        The external AI provider is not connected, hosted database availability is currently blocked, and resource
+        storage and audit coverage still have documented gaps.
       </p>
     </details>
   );
+}
+
+function RequirementRow({ requirement }: { requirement: Requirement }) {
+  const row = (
+    <>
+      <strong>{requirement.id}</strong>
+      <span className="dashboard-requirement-copy">
+        <span>{requirement.title}</span>
+        <small>{requirement.evidence}</small>
+      </span>
+      <span className={`dashboard-status-pill ${requirement.status.startsWith('Implemented') && !requirement.status.includes('Partially') ? 'dashboard-status-ok' : 'dashboard-status-limited'}`}>
+        {requirement.status}
+      </span>
+    </>
+  );
+
+  return requirement.href
+    ? <Link to={requirement.href} className="dashboard-requirement-row">{row}</Link>
+    : <div className="dashboard-requirement-row">{row}</div>;
 }
 
 function StatusDetail({ label, value }: { label: string; value: string | number }) {
